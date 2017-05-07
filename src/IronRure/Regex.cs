@@ -25,29 +25,21 @@ namespace IronRure
             // Convert the pattern to a utf-8 encoded string.
             var patBytes = Encoding.UTF8.GetBytes(pattern);
 
-            // Compile the regex. We get back a raw handle to the underlying
-            // Rust object.
-            var err = RureFfi.rure_error_new();
-            _raw = RureFfi.rure_compile(
-                patBytes,
-                new UIntPtr((uint)patBytes.Length),
-                0U,
-                IntPtr.Zero,
-                err);
-            
-            // If the regex failed to compile find out what the problem was.
-            string message = null;
-            if (_raw == IntPtr.Zero)
+            using (var err = new Error())
             {
-                var errMessage = RureFfi.rure_error_message(err);
-                message = Marshal.PtrToStringAnsi(errMessage);
+                // Compile the regex. We get back a raw handle to the underlying
+                // Rust object.
+                _raw = RureFfi.rure_compile(
+                    patBytes,
+                    new UIntPtr((uint)patBytes.Length),
+                    0U,
+                    IntPtr.Zero,
+                    err.Raw);
+                
+                // If the regex failed to compile find out what the problem was.
+                if (_raw == IntPtr.Zero)
+                    throw new RegexCompilationException(err.Message);
             }
-            
-            // TODO: Rather than this dance we should create disposable
-            //       wrappers around `err` and other unmanaged resources.
-            RureFfi.rure_error_free(err);
-            if (message != null)
-                throw new RegexCompilationException(message);
         }
 
         ~Regex() => Dispose(false);
