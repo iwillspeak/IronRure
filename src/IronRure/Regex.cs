@@ -15,7 +15,7 @@ namespace IronRure
     ///     Managed wrapper around the rust regex class.
     ///   </para>
     /// </summary>
-    public class Regex : IDisposable
+    public class Regex : UnmanagedResource
     {
         /// <summary>
         ///   Create a new regex instance from the given pattern.
@@ -41,6 +41,13 @@ namespace IronRure
         {}
 
         private Regex(string pattern, IntPtr options, uint flags)
+            : base(Compile(pattern, options, flags))
+        {}
+
+        /// <summary>
+        ///   Compiles the given regex and returns the unmanaged pointer to it.
+        /// </summary>
+        private static IntPtr Compile(string pattern, IntPtr options, uint flags)
         {
             // Convert the pattern to a utf-8 encoded string.
             var patBytes = Encoding.UTF8.GetBytes(pattern);
@@ -49,7 +56,7 @@ namespace IronRure
             {
                 // Compile the regex. We get back a raw handle to the underlying
                 // Rust object.
-                _raw = RureFfi.rure_compile(
+                var raw = RureFfi.rure_compile(
                     patBytes,
                     new UIntPtr((uint)patBytes.Length),
                     flags,
@@ -57,12 +64,12 @@ namespace IronRure
                     err.Raw);
                 
                 // If the regex failed to compile find out what the problem was.
-                if (_raw == IntPtr.Zero)
+                if (raw == IntPtr.Zero)
                     throw new RegexCompilationException(err.Message);
+
+                return raw;
             }
         }
-
-        ~Regex() => Dispose(false);
 
         /// <summary>
         ///   Test if this Regex matches <paramref name="haystack" />, starting
@@ -75,8 +82,8 @@ namespace IronRure
             var haystackBytes = Encoding.UTF8.GetBytes(haystack);
 
             return RureFfi.rure_is_match(
-                _raw, haystackBytes, 
-                new UIntPtr((uint)haystackBytes.Length), 
+                Raw, haystackBytes,
+                new UIntPtr((uint)haystackBytes.Length),
                 new UIntPtr(offset));
         }
 
@@ -97,7 +104,7 @@ namespace IronRure
             var matchInfo = new RureMatch();
 
             var matched = RureFfi.rure_find(
-                _raw, haystackBytes,
+                Raw, haystackBytes,
                 new UIntPtr((uint)haystackBytes.Length),
                 new UIntPtr(offset),
                 out matchInfo);
@@ -111,23 +118,10 @@ namespace IronRure
         /// <param name="haystack">The string to search for this pattern</param>
         public Match Find(string haystack) => Find(haystack, 0);
 
-        public void Dispose()
+        protected override void Free(IntPtr resource)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            RureFfi.rure_free(resource);
         }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            var toFree = Interlocked.Exchange(ref _raw, IntPtr.Zero);
-            if (toFree != IntPtr.Zero)
-                RureFfi.rure_free(toFree);
-        }
-
-        /// <summary>
-        ///   The handle to the Rust regex instance.
-        /// </summary>
-        private IntPtr _raw;
 
         /// <summary>
         ///   The default flags for the regex

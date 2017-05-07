@@ -9,26 +9,15 @@ namespace IronRure
     ///   error strings get disposed of correctly even when there's
     ///   Exceptions about.
     /// </sumary>
-    public class Error : IDisposable
+    public class Error : UnmanagedResource
     {
         public Error()
-        {
-            _raw = RureFfi.rure_error_new();
-        }
+            : base(RureFfi.rure_error_new())
+        {}
 
-        ~Error() => Dispose(false);
-
-        public void Dispose()
+        protected override void Free(IntPtr resource)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            var toFree = Interlocked.Exchange(ref _raw, IntPtr.Zero);
-            if (toFree != IntPtr.Zero)
-                RureFfi.rure_error_free(toFree);
+            RureFfi.rure_error_free(resource);
         }
 
         /// <summary>
@@ -39,12 +28,6 @@ namespace IronRure
         ///   </para>
         /// </summary>
         public string Message =>
-            Marshal.PtrToStringAnsi(RureFfi.rure_error_message(_raw));
-
-        private IntPtr _raw;
-        /// <summary>
-        ///   The raw unmanaged pointer this class manages the lifetime of.
-        /// </summary>
-        public IntPtr Raw => _raw;
+            Marshal.PtrToStringAnsi(RureFfi.rure_error_message(Raw));
     }
 }
