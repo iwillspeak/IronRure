@@ -66,6 +66,31 @@ namespace IronRure
         /// <param name="haystack">The string to search for this pattern</param>
         public bool IsMatch(string haystack) => IsMatch(haystack, 0);
 
+        /// <summary>
+        ///   Find the extent of the first match.
+        /// </summary>
+        /// <param name="haystack">The string to search for this pattern</param>
+        /// <param name="offset">The offset to start searching at</param>
+        public Match Find(string haystack, uint offset)
+        {
+            var haystackBytes = Encoding.UTF8.GetBytes(haystack);
+            var matchInfo = new RureMatch();
+
+            var matched = RureFfi.rure_find(
+                _raw, haystackBytes,
+                new UIntPtr((uint)haystackBytes.Length),
+                new UIntPtr(offset),
+                out matchInfo);
+            
+            return new Match(matched, (int)matchInfo.start, (int)matchInfo.end);
+        }
+
+        /// <summary>
+        ///   Find the extent of the first match.
+        /// </summary>
+        /// <param name="haystack">The string to search for this pattern</param>
+        public Match Find(string haystack) => Find(haystack, 0);
+
         public void Dispose()
         {
             Dispose(true);

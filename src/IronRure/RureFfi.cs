@@ -58,6 +58,30 @@ namespace IronRure
         [DllImport("rure")]
         public static extern bool rure_is_match(IntPtr re, byte[] haystack, UIntPtr length,
                                                 UIntPtr start);
+        
+        /// <summary>
+        ///   rure_find returns true if and only if re matches anywhere in haystack.
+        ///   If a match is found, then its start and end offsets (in bytes) are set
+        ///   on the match pointer given.
+        ///  
+        ///   haystack may contain arbitrary bytes, but ASCII compatible text is more
+        ///   useful. UTF-8 is even more useful. Other text encodings aren't supported.
+        ///   length should be the number of bytes in haystack.
+        ///  
+        ///   start is the position at which to start searching. Note that setting the
+        ///   start position is distinct from incrementing the pointer, since the regex
+        ///   engine may look at bytes before the start position to determine match
+        ///   information. For example, if the start position is greater than 0, then the
+        ///   \A ("begin text") anchor can never match.
+        ///  
+        ///   rure_find should be preferred to rure_find_captures since it may be faster.
+        ///  
+        ///   N.B. The performance of this search is not impacted by the presence of
+        ///   capturing groups in your regular expression.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern bool rure_find(IntPtr re, byte[] haystack, UIntPtr length,
+                                            UIntPtr start, out RureMatch match);
 
         /// <summary>
         ///   rure_options_new allocates space for options.

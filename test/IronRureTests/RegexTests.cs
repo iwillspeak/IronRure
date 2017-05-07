@@ -49,5 +49,24 @@ namespace IronRureTests
             Assert.False(reg.IsMatch("xxxhello", 3));
             Assert.True(reg.IsMatch("hello world", 6));
         }
+
+        [Fact]
+        public void Regex_Find_ReturnsValidMatchInfo()
+        {
+            var reg = new Regex(@"\d{2,4}");
+
+            {
+                var match = reg.Find("300");
+                Assert.True(match.Matched);
+                Assert.Equal(0, match.Start);
+                Assert.Equal(3, match.End);
+            }
+            {
+                var match = reg.Find("this 1 has 3 numbers in 32 chars");
+                Assert.True(match.Matched);
+                Assert.Equal(24, match.Start);
+                Assert.Equal(26, match.End);
+            }
+        }
     }
 }
