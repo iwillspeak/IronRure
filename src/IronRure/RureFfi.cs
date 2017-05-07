@@ -95,6 +95,40 @@ namespace IronRure
         /// </summary>
         [DllImport("rure")]
         public static extern IntPtr rure_options_new();
+        
+        /// <summary>
+        ///   rure_options_free frees the given options.
+        ///
+        ///   This must be called at most once.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern void rure_options_free(IntPtr options);
+
+        /// <summary>
+        ///   rure_options_size_limit sets the appoximate size limit of the compiled
+        ///   regular expression.
+        ///  
+        ///   This size limit roughly corresponds to the number of bytes occupied by a
+        ///   single compiled program. If the program would exceed this number, then a
+        ///   compilation error will be returned from rure_compile.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern void rure_options_size_limit(IntPtr options, UIntPtr limit);
+
+        /// <summary>
+        ///   rure_options_dfa_size_limit sets the approximate size of the cache used by
+        ///   the DFA during search.
+        ///  
+        ///   This roughly corresponds to the number of bytes that the DFA will use while
+        ///   searching.
+        ///  
+        ///   Note that this is a *per thread* limit. There is no way to set a global
+        ///   limit. In particular, if a regular expression is used from multiple threads
+        ///   simultaneously, then each thread may use up to the number of bytes
+        ///   specified here.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern void rure_options_dfa_size_limit(IntPtr options, UIntPtr limit);
 
         /// <summary>
         /// rure_error_new allocates space for an error.
