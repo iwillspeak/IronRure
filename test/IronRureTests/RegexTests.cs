@@ -23,6 +23,25 @@ namespace IronRureTests
         }
 
         [Fact]
+        public void Regex_CreateWithOptions_Succeeds()
+        {
+            using (var reg = new Regex(@"\w+", new Options().WithSize(512).WithDfaSize(512)))
+            {
+                Assert.True(reg.IsMatch("hello"));
+                Assert.False(reg.IsMatch("!@£$"));
+            }
+        }
+
+        [Fact]
+        public void Regex_CreateWithFlags_Succeeds()
+        {
+            using (var reg = new Regex("", new Options(), Regex.DefaultFlags))
+            {
+                Assert.True(reg.IsMatch(""));
+            }
+        }
+
+        [Fact]
         public void Regex_CreateWithInvalidPattern_ThrowsException()
         {
             Assert.Throws<RegexCompilationException>(() => new Regex(")"));

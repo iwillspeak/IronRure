@@ -21,6 +21,26 @@ namespace IronRure
         ///   Create a new regex instance from the given pattern.
         /// </summary>
         public Regex(string pattern)
+            : this(pattern, IntPtr.Zero, (uint)DefaultFlags)
+        {}
+
+        /// <summary>
+        ///   Create a new regex instance from the given pattern, and with the
+        ///   given regex options applied.
+        /// </summary>
+        public Regex(string pattern, Options opts)
+            : this(pattern, opts.Raw, (uint)DefaultFlags)
+        {}
+
+        /// <summary>
+        ///   Create a new regex instance from the given pattern, with the given
+        ///   options applied and with the given flags enabled.
+        /// </summary>
+        public Regex(string pattern, Options opts, RureFlags flags)
+            : this(pattern, opts.Raw, (uint)flags)
+        {}
+
+        private Regex(string pattern, IntPtr options, uint flags)
         {
             // Convert the pattern to a utf-8 encoded string.
             var patBytes = Encoding.UTF8.GetBytes(pattern);
@@ -32,8 +52,8 @@ namespace IronRure
                 _raw = RureFfi.rure_compile(
                     patBytes,
                     new UIntPtr((uint)patBytes.Length),
-                    0U,
-                    IntPtr.Zero,
+                    flags,
+                    options,
                     err.Raw);
                 
                 // If the regex failed to compile find out what the problem was.
@@ -107,6 +127,11 @@ namespace IronRure
         /// <summary>
         ///   The handle to the Rust regex instance.
         /// </summary>
-        private static IntPtr _raw;
+        private IntPtr _raw;
+
+        /// <summary>
+        ///   The default flags for the regex
+        /// </summary>
+        public static RureFlags DefaultFlags => RureFlags.Unicode;
     }
 }
