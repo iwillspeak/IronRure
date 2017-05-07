@@ -52,6 +52,28 @@ namespace IronRure
 
         ~Regex() => Dispose(false);
 
+        /// <summary>
+        ///   Test if this Regex matches <paramref name="haystack" />, starting
+        ///   at the given <paramref name="offset" />.
+        /// </summary>
+        /// <param name="haystack">The string to search for this pattern</param>
+        /// <param name="offset">The offset to start searching at</param>
+        public bool IsMatch(string haystack, uint offset)
+        {
+            var haystackBytes = Encoding.UTF8.GetBytes(haystack);
+
+            return RureFfi.rure_is_match(
+                _raw, haystackBytes, 
+                new UIntPtr((uint)haystackBytes.Length), 
+                new UIntPtr(offset));
+        }
+
+        /// <summary>
+        ///   Test if this Regex matches <paramref name="haystack" />
+        /// </summary>
+        /// <param name="haystack">The string to search for this pattern</param>
+        public bool IsMatch(string haystack) => IsMatch(haystack, 0);
+
         public void Dispose()
         {
             Dispose(true);

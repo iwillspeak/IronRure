@@ -24,7 +24,7 @@ namespace IronRure
         ///   The compiled expression returned may be used from multiple threads
         ///   simultaneously.
         /// </summary>
-        [DllImport("rure.dll")]
+        [DllImport("rure")]
         public static extern IntPtr rure_compile(byte[] pattern, UIntPtr length,
                     uint flags, IntPtr options,
                     IntPtr error);
@@ -34,8 +34,30 @@ namespace IronRure
         ///  
         ///   This must be called at most once for any rure.
         /// </summary>
-        [DllImport("rure.dll")]
+        [DllImport("rure")]
         public static extern void rure_free(IntPtr reg);
+
+        /// <summary>
+        /// rure_is_match returns true if and only if re matches anywhere in haystack.
+        ///
+        /// haystack may contain arbitrary bytes, but ASCII compatible text is more
+        /// useful. UTF-8 is even more useful. Other text encodings aren't supported.
+        /// length should be the number of bytes in haystack.
+        ///
+        /// start is the position at which to start searching. Note that setting the
+        /// start position is distinct from incrementing the pointer, since the regex
+        /// engine may look at bytes before the start position to determine match
+        /// information. For example, if the start position is greater than 0, then the
+        /// \A ("begin text") anchor can never match.
+        ///
+        /// rure_is_match should be preferred to rure_find since it may be faster.
+        ///
+        /// N.B. The performance of this search is not impacted by the presence of
+        /// capturing groups in your regular expression.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern bool rure_is_match(IntPtr re, byte[] haystack, UIntPtr length,
+                                                UIntPtr start);
 
         /// <summary>
         ///   rure_options_new allocates space for options.
@@ -47,7 +69,7 @@ namespace IronRure
         ///   safe to call rure_compile from multiple threads simultaneously using the
         ///   same options pointer.
         /// </summary>
-        [DllImport("rure.dll")]
+        [DllImport("rure")]
         public static extern IntPtr rure_options_new();
 
         /// <summary>
@@ -61,7 +83,7 @@ namespace IronRure
         /// It is not safe to use errors from multiple threads simultaneously. An error
         /// value may be reused on subsequent calls to rure_compile.
         /// </summary>
-        [DllImport("rure.dll")]
+        [DllImport("rure")]
         public static extern IntPtr rure_error_new();
 
         /// <summary>
@@ -69,7 +91,7 @@ namespace IronRure
         ///
         /// This must be called at most once.
         /// </summary>
-        [DllImport("rure.dll")]
+        [DllImport("rure")]
         public static extern void rure_error_free(IntPtr error);
 
         /// <summary>
@@ -80,7 +102,7 @@ namespace IronRure
         ///   rure_error_free is called. If err is used in subsequent calls to
         ///   rure_compile, then this pointer may change or become invalid.
         /// </summary>
-        [DllImport("rure.dll")]
+        [DllImport("rure")]
         public static extern IntPtr rure_error_message(IntPtr err);
     }
 }
