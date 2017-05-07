@@ -4,9 +4,21 @@
     <TargetFramework>netstandard1.4</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Content Include="..\..\thirdparty\regex\regex-capi\target\release\rure.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-</ItemGroup>
+  <Choose>
+	<!-- I know :-/ -->
+	<When Condition=" '$(OS)'=='Unix' ">
+	  <ItemGroup>
+		<Content Include="..\..\thirdparty\regex\regex-capi\target\release\librure.dylib">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	  </ItemGroup>
+	</When>
+	<Otherwise>
+	  <ItemGroup>
+		<Content Include="..\..\thirdparty\regex\regex-capi\target\release\rure.dll">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	  </ItemGroup>
+	</Otherwise>
+  </Choose>
 </Project>
