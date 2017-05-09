@@ -15,17 +15,20 @@ namespace IronRure
         {
             var patBytes = patterns.Select(Encoding.UTF8.GetBytes).ToArray();
             var patLengths = patBytes.Select(byts => new UIntPtr((uint)byts.Length)).ToArray();
-            var patBytePointers = patBytes.Select(GCHandle.Alloc).ToArray();
-            var patBytePinnedPointers = patBytePointers.Select(h => GCHandle.ToIntPtr(h)).ToArray();
+            var patByteHandles = patBytes.Select(a => GCHandle.Alloc(a, GCHandleType.Pinned)).ToArray();
+            var patBytePinnedPointers = patByteHandles.Select(h => h.AddrOfPinnedObject()).ToArray();
 
             using (var err = new Error())
             {
                 var compiled = RureFfi.rure_compile_set(patBytePinnedPointers,
                                                         patLengths,
                                                         new UIntPtr((uint)patLengths.Length),
-                                                        0U,
+                                                        (uint)Regex.DefaultFlags,
                                                         IntPtr.Zero,
                                                         err.Raw);
+
+                foreach (var handle in patByteHandles)
+                    handle.Free();
                 
                 if (compiled != IntPtr.Zero)
                     return compiled;
