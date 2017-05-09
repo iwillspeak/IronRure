@@ -166,50 +166,57 @@ namespace IronRure
         [DllImport("rure")]
         public static extern void rure_set_free(IntPtr re);
 
-// /*
-//  * rure_is_match returns true if and only if any regexes within the set
-//  * match anywhere in the haystack. Once a match has been located, the
-//  * matching engine will quit immediately.
-//  *
-//  * haystack may contain arbitrary bytes, but ASCII compatible text is more
-//  * useful. UTF-8 is even more useful. Other text encodings aren't supported.
-//  * length should be the number of bytes in haystack.
-//  *
-//  * start is the position at which to start searching. Note that setting the
-//  * start position is distinct from incrementing the pointer, since the regex
-//  * engine may look at bytes before the start position to determine match
-//  * information. For example, if the start position is greater than 0, then the
-//  * \A ("begin text") anchor can never match.
-//  */
-// bool rure_set_is_match(rure_set *re, const uint8_t *haystack, size_t length,
-//                        size_t start);
+        /// <summary>
+        ///   rure_is_match returns true if and only if any regexes within the set
+        ///   match anywhere in the haystack. Once a match has been located, the
+        ///   matching engine will quit immediately.
+        ///   
+        ///   haystack may contain arbitrary bytes, but ASCII compatible text is more
+        ///   useful. UTF-8 is even more useful. Other text encodings aren't supported.
+        ///   length should be the number of bytes in haystack.
+        ///   
+        ///   start is the position at which to start searching. Note that setting the
+        ///   start position is distinct from incrementing the pointer, since the regex
+        ///   engine may look at bytes before the start position to determine match
+        ///   information. For example, if the start position is greater than 0, then the
+        ///   \A ("begin text") anchor can never match.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern bool rure_set_is_match(IntPtr re,
+                                                    byte[] haystack,
+                                                    UIntPtr length,
+                                                    UIntPtr start);
 
-// /*
-//  * rure_set_matches compares each regex in the set against the haystack and
-//  * modifies matches with the match result of each pattern. Match results are
-//  * ordered in the same way as the rure_set was compiled. For example,
-//  * index 0 of matches corresponds to the first pattern passed to
-//  * `rure_compile_set`.
-//  *
-//  * haystack may contain arbitrary bytes, but ASCII compatible text is more
-//  * useful. UTF-8 is even more useful. Other text encodings aren't supported.
-//  * length should be the number of bytes in haystack.
-//  *
-//  * start is the position at which to start searching. Note that setting the
-//  * start position is distinct from incrementing the pointer, since the regex
-//  * engine may look at bytes before the start position to determine match
-//  * information. For example, if the start position is greater than 0, then the
-//  * \A ("begin text") anchor can never match.
-//  *
-//  * matches must be greater than or equal to the number of patterns the
-//  * rure_set was compiled with.
-//  *
-//  * Only use this function if you specifically need to know which regexes
-//  * matched within the set. To determine if any of the regexes matched without
-//  * caring which, use rure_set_is_match.
-//  */
-// bool rure_set_matches(rure_set *re, const uint8_t *haystack, size_t length,
-//                       size_t start, bool *matches);
+        /// <summary>
+        ///   rure_set_matches compares each regex in the set against the haystack and
+        ///   modifies matches with the match result of each pattern. Match results are
+        ///   ordered in the same way as the rure_set was compiled. For example,
+        ///   index 0 of matches corresponds to the first pattern passed to
+        ///   `rure_compile_set`.
+        ///   
+        ///   haystack may contain arbitrary bytes, but ASCII compatible text is more
+        ///   useful. UTF-8 is even more useful. Other text encodings aren't supported.
+        ///   length should be the number of bytes in haystack.
+        ///   
+        ///   start is the position at which to start searching. Note that setting the
+        ///   start position is distinct from incrementing the pointer, since the regex
+        ///   engine may look at bytes before the start position to determine match
+        ///   information. For example, if the start position is greater than 0, then the
+        ///   \A ("begin text") anchor can never match.
+        ///   
+        ///   matches must be greater than or equal to the number of patterns the
+        ///   rure_set was compiled with.
+        ///   
+        ///   Only use this function if you specifically need to know which regexes
+        ///   matched within the set. To determine if any of the regexes matched without
+        ///   caring which, use rure_set_is_match.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern bool rure_set_matches(IntPtr re,
+                                                   byte[] haystack,
+                                                   UIntPtr length,
+                                                   UIntPtr start,
+                                                   [Out] bool[] matches);
 
         /// <summary>
         /// rure_error_new allocates space for an error.
