@@ -90,8 +90,32 @@ namespace IronRure
         /// <summary>
         ///   Test if this Regex matches <paramref name="haystack" />
         /// </summary>
-        /// <param name="haystack">The string to search for this pattern</param>
+        /// <param name="haystack">The UTF8 bytes to search for this pattern</param>
         public bool IsMatch(string haystack) => IsMatch(haystack, 0);
+
+        /// <summary>
+        ///   Find the extent of the first match.
+        /// </summary>
+        /// <param name="haystack">The UTF8 bytes to search for this pattern</param>
+        /// <param name="offset">The offset to start searching at</param>
+        public Match Find(byte[] haystack, uint offset)
+        {
+            var matchInfo = new RureMatch();
+
+            var matched = RureFfi.rure_find(
+                Raw, haystack,
+                new UIntPtr((uint)haystack.Length),
+                new UIntPtr(offset),
+                out matchInfo);
+            
+            return new Match(matched, (uint)matchInfo.start, (uint)matchInfo.end);
+        }
+
+        /// <summary>
+        ///   Find the extent of the first match.
+        /// </summary>
+        /// <param name="haystack">The string to search for this pattern</param>
+        public Match Find(byte[] haystack) => Find(haystack, 0);
 
         /// <summary>
         ///   Find the extent of the first match.
@@ -101,15 +125,7 @@ namespace IronRure
         public Match Find(string haystack, uint offset)
         {
             var haystackBytes = Encoding.UTF8.GetBytes(haystack);
-            var matchInfo = new RureMatch();
-
-            var matched = RureFfi.rure_find(
-                Raw, haystackBytes,
-                new UIntPtr((uint)haystackBytes.Length),
-                new UIntPtr(offset),
-                out matchInfo);
-            
-            return new Match(matched, (int)matchInfo.start, (int)matchInfo.end);
+            return Find(haystackBytes, offset);
         }
 
         /// <summary>

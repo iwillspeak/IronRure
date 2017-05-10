@@ -7,7 +7,7 @@ namespace IronRure
     /// </summary>
     public class Match
     {
-        public Match(bool matched, int start, int end)
+        public Match(bool matched, uint start, uint end)
         {
             Matched = matched;
             Start = start;
@@ -18,9 +18,9 @@ namespace IronRure
         public bool Matched { get; }
 
         /// <summary>The start of the match, in bytes</summary>
-        public int Start { get; }
+        public uint Start { get; }
 
         /// <summary>The end of the match, in bytes</summary>
-        public int End { get; }
+        public uint End { get; }
     }
 }
