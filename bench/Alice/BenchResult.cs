@@ -10,8 +10,10 @@ namespace Alice
         {
             Name = name;
             _ticks = ticks;
+            _ticks.Sort();
             Mean = _ticks.Sum() / _ticks.Count;
-            Median = _ticks[_ticks.Count / 2];
+            var idx = (_ticks.Count / 2);
+            Median = _ticks.Count % 2 == 0 ? (_ticks[idx] + _ticks[idx - 1]) / 2 : _ticks[idx];
             Variance = Math.Sqrt(_ticks.Select(t => Math.Pow(t - Mean, 2)).Sum() / _ticks.Count);
         }
 
@@ -26,7 +28,10 @@ namespace Alice
         private List<long> _ticks;
         public IEnumerable<long> Ticks => _ticks;
 
-        public override string ToString() =>
-            $"{Name}: {string.Join(",\t", _ticks)} (mean: {Mean}, median: {Median}, r: {Variance:0.00})";
+        public override string ToString()
+        {
+            var ticks = string.Join(",", _ticks.Select(t => string.Format("{0,10}", t)));
+            return $"{Name,15}: {ticks} (mean: {Mean,10}, median: {Median,10}, r: {Variance:0.00})";
+        }
     }
 }
