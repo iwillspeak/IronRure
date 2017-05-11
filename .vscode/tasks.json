@@ -20,6 +20,13 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "taskName": "bench",
+            "command": "dotnet",
+            "args": [ "run", "--project", "bench/Alice/Alice.csproj" ],
+            "showOutput": "always",
+            "problemMatcher": "$msCompile"
+        },
+        {
             "taskName": "test",
             "args": [
                 "test/IronRureTests/IronRureTests.csproj"

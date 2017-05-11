@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Reflection;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 using NetRegex = System.Text.RegularExpressions.Regex;
 
@@ -39,6 +40,8 @@ namespace Alice
 
             // IronRure iteration doesn't handle 0-length matches yet
             // BenchRegex("dotstar", ".*", text);
+
+            Console.WriteLine("Benchmark completed");
         }
 
         /// <summary>
@@ -53,49 +56,57 @@ namespace Alice
             var net = new NetRegex(pattern);
             var bytes = Encoding.UTF8.GetBytes(text);
 
+            Console.WriteLine("{0} ({1})", name, pattern);
+
+            var results = new List<BenchResult>();
+            
             // by doing the search this way we have to convert all 172k into
             // a .NET string for each step in the search. Surprisingly this
             // is _still_ faster than .NET in some cases.
-            Bench($"rure::{name}", () => {
+            results.Add(Bench($"rure::{name}", () => {
                     var match = rure.Find(text);
                     while (match.Matched)
                     {
                         match = rure.Find(text, match.End);
                     }
-                });
-            var rureMs = Bench($"byts::{name}", () => {
+                }));
+            results.Add(Bench($"byts::{name}", () => {
                     var match = rure.Find(bytes);
                     while (match.Matched)
                     {
                         match = rure.Find(bytes, match.End);
                     }
-                });
-            var netMs = Bench($".net::{name}", () => {
+                }));
+            results.Add(Bench($".net::{name}", () => {
                     var match = net.Match(text);
                     while (match.Success)
                     {
                         match = match.NextMatch();
                     }
-                });
+                }));
 
-            Console.WriteLine("{0}, {1}: Winner {2}",
-                              netMs, rureMs, (netMs <= rureMs) ? ".NET" : "Rure");
+            foreach (var r in results)
+                Console.WriteLine(r);
         }
 
         /// <summary>
         ///   Benchmark an Action. Executes the action repeatedly and
-        ///   returns the number of Stopwatch ticks taken for all
-        ///   executions bar the first.
+        ///   returns a results object detailing the outcome.
         /// </summary>
-        private static long Bench(string name, Action benchee)
+        private static BenchResult Bench(string name, Action benchee)
         {
-            benchee();
-            var sw = Stopwatch.StartNew();
+            var sw = new Stopwatch();
+            var resultTicks = new List<long>(4);
             for (int i = 0; i < 4; i++)
+            {
+                sw.Start();
                 benchee();
-            sw.Stop();
-            Console.WriteLine("{0}: elapsed: {1}", name, sw.Elapsed);
-            return sw.ElapsedTicks;
+                sw.Stop();
+                resultTicks.Add(sw.ElapsedTicks);
+                sw.Reset();
+            }
+
+            return new BenchResult(name, resultTicks);
         }
 
         private static string AliceFilename = "Alice's_Adventures_in_Wonderland.txt";
