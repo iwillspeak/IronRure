@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Linq;
 using System.Reflection;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -85,8 +86,20 @@ namespace Alice
                     }
                 }));
 
+            var winner = results.OrderBy(r => r.Median).First();
+
             foreach (var r in results)
-                Console.WriteLine(r);
+            {
+                if (r == winner)
+                {
+                    Console.WriteLine("{0}, Winner", r);
+                }
+                else
+                {
+                    var diff = r.Median / (double)winner.Median;
+                    Console.WriteLine("{0}, {1:0.0}x slower", r, diff);
+                }             
+            }
         }
 
         /// <summary>
