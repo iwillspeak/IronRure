@@ -96,7 +96,7 @@ namespace Alice
                 }
                 else
                 {
-                    var diff = r.Median / (double)winner.Median;
+                    var diff = (r.Median - winner.Median) / (double)winner.Median;
                     Console.WriteLine("{0}, {1:0.0}x slower", r, diff);
                 }             
             }
