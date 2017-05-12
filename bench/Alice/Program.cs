@@ -23,9 +23,13 @@ namespace Alice
 
             BenchRegex("legged", @"\b(\w+)-legged", text);
             BenchRegex("alice", @"Alice", text);
+            BenchRegex("alice_rooted", @"^Alice", text);
+            BenchRegex("alice_rooted2", @"Alice$", text);
             BenchRegex("numbers", @"\d+", text);
+            BenchRegex("abwords", "a[^x]{20}b", text);
             BenchRegex("email", @"\w+@\w+.\w+", text);
             BenchRegex("quotes", "\"[^\"]+\"", text);
+            BenchRegex("quotes2", "\"[^\"]{0,30}[?!.]\"", text);
             BenchRegex("quote_said", "\"[^\"]+\"\\s+said", text);
             BenchRegex("section", @"(\*\s+){4}\*", text);
             BenchRegex("repeated_negation", @"[a-q][^u-z]{13}x", text);
@@ -36,10 +40,12 @@ namespace Alice
             BenchRegex("nomatch_uncommon", @"zqj", text);
             BenchRegex("nomatch_common", @"aei", text);
             BenchRegex("common", "(?i)the", text);
+            BenchRegex("short_lines", "^.{16,20}$", text);
             BenchRegex("dotplus", ".+", text);
             BenchRegex("dotplus_nl", "(?s).+", text);
             BenchRegex("alice_hattter", "Alice.{0,25}Hatter|Hatter.{0,25}Alice", text);
-
+            BenchRegex("name_suffixes", "([A-Za-z]lice|[A-Za-z]heshire)[^a-zA-Z]", text);
+            
             // IronRure iteration doesn't handle 0-length matches yet
             // BenchRegex("dotstar", ".*", text);
 
