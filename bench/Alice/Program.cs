@@ -32,6 +32,7 @@ namespace Alice
             BenchRegex("ing_suffix", @"[a-zA-Z]+ing", text);
             BenchRegex("name_alt", @"Alice|Adventure", text);
             BenchRegex("name_alt2", @"Alice|Hatter|Cheshire|Dinah", text);
+            BenchRegex("name_alt3", @".{0,3}(Alice|Hatter|Cheshire|Dinah)", text);
             BenchRegex("nomatch_uncommon", @"zqj", text);
             BenchRegex("nomatch_common", @"aei", text);
             BenchRegex("common", "(?i)the", text);
