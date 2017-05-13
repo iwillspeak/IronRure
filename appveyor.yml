@@ -3,5 +3,8 @@ install:
   - dotnet restore
 platform:
   - x86
-  - x64
   - Any CPU
+build_script:
+  - dotnet build
+test_script:
+  - ps: ForEach ($proj in (Get-ChildItem -Path test -Recurse -Filter '*.csproj')) { dotnet test $proj.FullName }
