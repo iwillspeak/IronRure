@@ -1,24 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
   </PropertyGroup>
-
-  <Choose>
-	<!-- I know :-/ -->
-	<When Condition=" '$(OS)'=='Unix' ">
-	  <ItemGroup>
-		<Content Include="..\..\thirdparty\regex\regex-capi\target\release\librure.dylib">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	  </ItemGroup>
-	</When>
-	<Otherwise>
-	  <ItemGroup>
-		<Content Include="..\..\thirdparty\regex\regex-capi\target\release\rure.dll">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	  </ItemGroup>
-	</Otherwise>
-  </Choose>
+  <ItemGroup>
+    <PackageReference Include="IronRure.Batteries-Darwin" Version="0.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+	<None Update="runtimes\osx\native\*">
+	  <PackagePath>runtimes/osx/native/</PackagePath>
+	  <Pack>true</Pack>
+	</None>
+  </ItemGroup>
 </Project>

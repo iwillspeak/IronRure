@@ -77,14 +77,14 @@ namespace IronRureTests
             {
                 var match = reg.Find("300");
                 Assert.True(match.Matched);
-                Assert.Equal(0, match.Start);
-                Assert.Equal(3, match.End);
+                Assert.Equal(0U, match.Start);
+                Assert.Equal(3U, match.End);
             }
             {
                 var match = reg.Find("this 1 has 3 numbers in 32 chars");
                 Assert.True(match.Matched);
-                Assert.Equal(24, match.Start);
-                Assert.Equal(26, match.End);
+                Assert.Equal(24U, match.Start);
+                Assert.Equal(26U, match.End);
             }
         }
     }

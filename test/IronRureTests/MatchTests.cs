@@ -12,8 +12,8 @@ namespace IronRureTests
         {
             var match = new Match(true, 1, 3);
             Assert.True(match.Matched);
-            Assert.Equal(1, match.Start);
-            Assert.Equal(3, match.End);
+            Assert.Equal(1U, match.Start);
+            Assert.Equal(3U, match.End);
         }
 
         [Fact]
