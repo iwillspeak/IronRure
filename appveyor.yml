@@ -1,0 +1,7 @@
+version: '1.0.{build}'
+install:
+  - dotnet restore
+platform:
+  - x86
+  - x64
+  - Any CPU
