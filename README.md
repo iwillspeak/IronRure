@@ -57,6 +57,10 @@ Assert.Equal("10", caps[dates["month"]].ExtractedString);
 Assert.Equal("1961", caps[dates["year"]].ExtractedString);
 ```
 
+## Performance
+
+In general IronRure out-performs .NET Regex, although milage may vary depending on the exact pattern and text. For more details checkout [the benchmarks](https://github.com/iwillspeak/IronRure/tree/master/bench/Alice).
+
 ## Syntax and Semantics
 
 For more information about the pattern syntax see [the underlying Rust crate documentation](https://doc.rust-lang.org/regex/).
