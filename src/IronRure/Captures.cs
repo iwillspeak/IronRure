@@ -7,9 +7,11 @@ namespace IronRure
     /// </summary>
     public class Captures : UnmanagedResource
     {
-        internal Captures(Regex re)
+        internal Captures(Regex re, byte[] haystack)
             : base(RureFfi.rure_captures_new(re.Raw))
-        {}
+        {
+            _haystack = haystack;
+        }
 
         protected override void Free(IntPtr resource)
         {
@@ -30,7 +32,7 @@ namespace IronRure
                 var matched = RureFfi.rure_captures_at(Raw,
                                                        new UIntPtr((uint)index),
                                                        out match);
-                return new Match(matched, (uint)match.start, (uint)match.end);
+                return new Match(_haystack, matched, (uint)match.start, (uint)match.end);
             }
         }
 
@@ -40,5 +42,7 @@ namespace IronRure
         public int Length => (int)RureFfi.rure_captures_len(Raw);
 
         public bool Matched { get; internal set; }
+
+        private byte[] _haystack;
     }
 }

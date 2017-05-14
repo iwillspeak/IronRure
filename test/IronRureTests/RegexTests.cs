@@ -158,5 +158,18 @@ namespace IronRureTests
                 Assert.True(captures[3].Matched);
             }
         }
+
+        [Fact]
+        public void Regex_DateWithNamedCaptures_ExtractsExpectedValues()
+        {
+            var dates = new Regex(@"(?P<day>\d{2})/(?P<month>\d{2})/(?P<year>\d{4})");
+
+            var haystack = "The first satellite was launched on 04/10/1961";
+            var caps = dates.Captures(haystack);
+            Assert.True(caps.Matched);
+            Assert.Equal("04", caps[dates["day"]].ExtractedString);
+            Assert.Equal("10", caps[dates["month"]].ExtractedString);
+            Assert.Equal("1961", caps[dates["year"]].ExtractedString);
+        }
     }
 }

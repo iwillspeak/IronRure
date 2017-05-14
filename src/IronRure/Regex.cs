@@ -109,7 +109,7 @@ namespace IronRure
                 new UIntPtr(offset),
                 out matchInfo);
             
-            return new Match(matched, (uint)matchInfo.start, (uint)matchInfo.end);
+            return new Match(haystack, matched, (uint)matchInfo.start, (uint)matchInfo.end);
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace IronRure
         /// <param name="offset">The offset to start searching at</param>
         public Captures Captures(byte[] haystack, uint offset)
         {
-            var caps = new Captures(this);
+            var caps = new Captures(this, haystack);
             var matched = RureFfi.rure_find_captures(Raw,
                                                      haystack,
                                                      new UIntPtr((uint)haystack.Length),
