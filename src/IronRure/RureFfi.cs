@@ -84,6 +84,93 @@ namespace IronRure
                                             UIntPtr start, out RureMatch match);
 
         /// <summary>
+        ///   rure_find_captures returns true if and only if re matches anywhere in
+        ///   haystack. If a match is found, then all of its capture locations are stored
+        ///   in the captures pointer given.
+        ///  
+        ///   haystack may contain arbitrary bytes, but ASCII compatible text is more
+        ///   useful. UTF-8 is even more useful. Other text encodings aren't supported.
+        ///   length should be the number of bytes in haystack.
+        ///  
+        ///   start is the position at which to start searching. Note that setting the
+        ///   start position is distinct from incrementing the pointer, since the regex
+        ///   engine may look at bytes before the start position to determine match
+        ///   information. For example, if the start position is greater than 0, then the
+        ///   \A ("begin text") anchor can never match.
+        ///  
+        ///   Only use this function if you specifically need access to capture locations.
+        ///   It is not necessary to use this function just because your regular
+        ///   expression contains capturing groups.
+        ///  
+        ///   Capture locations can be accessed using the rure_captures_* functions.
+        ///  
+        ///   N.B. The performance of this search can be impacted by the number of
+        ///   capturing groups. If you're using this function, it may be beneficial to
+        ///   use non-capturing groups (e.g., `(?:re)`) where possible.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern bool rure_find_captures(IntPtr re, byte[] hasytack, UIntPtr length,
+                                                     UIntPtr start, IntPtr captures);
+
+        /// <summary>
+        ///   rure_capture_name_index returns the capture index for the name given. If
+        ///   no such named capturing group exists in re, then -1 is returned.
+        ///  
+        ///   The capture index may be used with rure_captures_at.
+        ///  
+        ///   This function never returns 0 since the first capture group always
+        ///   corresponds to the entire match and is always unnamed.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern int rure_capture_name_index(IntPtr re, byte[] name);
+
+        /// <summary>
+        ///   rure_captures_new allocates storage for all capturing groups in re.
+        ///  
+        ///   An rure_captures value may be reused on subsequent calls to
+        ///   rure_find_captures or rure_iter_next_captures.
+        ///  
+        ///   An rure_captures value may be freed independently of re, although any
+        ///   particular rure_captures should be used only with the re given here.
+        ///  
+        ///   It is not safe to use an rure_captures value from multiple threads
+        ///   simultaneously.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern IntPtr rure_captures_new(IntPtr re);
+
+        /// <summary>
+        ///   rure_captures_free frees the given captures.
+        ///  
+        ///   This must be called at most once.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern void rure_captures_free(IntPtr captures);
+
+        /// <summary>
+        ///   rure_captures_at returns true if and only if the capturing group at the
+        ///   index given was part of a match. If so, the given match pointer is populated
+        ///   with the start and end location (in bytes) of the capturing group.
+        ///  
+        ///   If no capture group with the index i exists, then false is
+        ///   returned. (A capturing group exists if and only if i is less than
+        ///   rure_captures_len(captures).)
+        ///  
+        ///   Note that index 0 corresponds to the full match.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern bool rure_captures_at(IntPtr captures,
+                                                   UIntPtr i,
+                                                   out RureMatch match);
+
+        /// <summary>
+        ///   rure_captures_len returns the number of capturing groups in the given
+        ///   captures.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern UIntPtr rure_captures_len(IntPtr captures);
+
+        /// <summary>
         ///   rure_options_new allocates space for options.
         ///  
         ///   Options may be freed immediately after a call to rure_compile, but otherwise

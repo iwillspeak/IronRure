@@ -170,6 +170,57 @@ namespace IronRure
             return FindAll(haystackBytes);
         }
 
+        /// <summary>
+        ///   Get Capture Index from Name
+        /// </summary>
+        public int this[string capture] =>
+            RureFfi.rure_capture_name_index(Raw, Encoding.UTF8.GetBytes(capture));
+
+        /// <summary>
+        ///   Captures - Find the extent of the capturing groups in the pattern
+        ///   in a given haystack.
+        /// </summary>
+        /// <param name="haystack">The string to search for this pattern</param>
+        /// <param name="offset">The offset to start searching at</param>
+        public Captures Captures(byte[] haystack, uint offset)
+        {
+            var caps = new Captures(this);
+            var matched = RureFfi.rure_find_captures(Raw,
+                                                     haystack,
+                                                     new UIntPtr((uint)haystack.Length),
+                                                     new UIntPtr(offset),
+                                                     caps.Raw);
+
+            caps.Matched = matched;
+            return caps;
+        }
+
+        /// <summary>
+        ///   Captures - Find the extent of the capturing groups in the pattern
+        ///   in a given haystack.
+        /// </summary>
+        /// <param name="haystack">The string to search for this pattern</param>
+        public Captures Captures(byte[] haystack) => Captures(haystack, 0);
+        
+        /// <summary>
+        ///   Captures - Find the extent of the capturing groups in the pattern
+        ///   in a given haystack.
+        /// </summary>
+        /// <param name="haystack">The string to search for this pattern</param>
+        /// <param name="offset">The offset to start searching at</param>
+        public Captures Captures(string haystack, uint offset)
+        {
+            var haystackBytes = Encoding.UTF8.GetBytes(haystack);
+            return Captures(haystackBytes, offset);
+        }
+
+        /// <summary>
+        ///   Captures - Find the extent of the capturing groups in the pattern
+        ///   in a given haystack.
+        /// </summary>
+        /// <param name="haystack">The string to search for this pattern</param>
+        public Captures Captures(string haystack) => Captures(haystack, 0);
+
         protected override void Free(IntPtr resource)
         {
             RureFfi.rure_free(resource);

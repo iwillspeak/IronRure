@@ -108,5 +108,55 @@ namespace IronRureTests
             Assert.Equal(8U, matches[2].Start);
             Assert.Equal(10U, matches[2].End);
         }
+
+        [Fact]
+        public void Regex_WhenNotAlCapturesAreCaptured_IndividualMatchIsCorrect()
+        {
+            var reg = new Regex(@"\b(\w)(\d)?(\w)\b");
+
+            using (var captures = reg.Captures("this is a test"))
+            {
+                Assert.True(captures.Matched);
+
+                Assert.True(captures[0].Matched);
+                Assert.True(captures[1].Matched);
+                Assert.False(captures[2].Matched);
+                Assert.True(captures[3].Matched);
+            }
+        }
+
+        [Fact]
+        public void Regex_GetCaptureName_ReturnsCorrectCapturesIndex()
+        {
+            var reg = new Regex(@"(?P<foo>[a](?P<bar>\d))(4)(?P<baz>(.{2}))(?:b)(?P<t>7)");
+
+            Assert.Equal(1, reg["foo"]);
+            Assert.Equal(2, reg["bar"]);
+            Assert.Equal(4, reg["baz"]);
+            Assert.Equal(6, reg["t"]);
+        }
+
+        [Fact]
+        public void Regex_FindWithCaptures_ReturnsValidCaptureInfo()
+        {
+            var dates = new Regex(@"(\d{2})/(\d{2})/(\d{4})");
+
+            using (var captures = dates.Captures("hello on 14/05/2017!"))
+            {
+                Assert.True(captures.Matched);
+
+                var match = captures[0];
+                Assert.True(captures.Matched);
+                /// FIXME: Waiting for rust-lang/regex#365
+                ///Assert.Equal(4, captures.Length);
+
+                Assert.Equal(9U, match.Start);
+                Assert.Equal(19U, match.End);
+
+                Assert.True(captures[1].Matched);
+                Assert.True(captures[2].Matched);
+                Assert.True(captures[3].Matched);
+            }
+        }
     }
 }
