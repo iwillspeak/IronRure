@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -86,6 +87,26 @@ namespace IronRureTests
                 Assert.Equal(24U, match.Start);
                 Assert.Equal(26U, match.End);
             }
+        }
+
+        [Fact]
+        public void Regex_FindAll_ReturnsIteratorOfMatches()
+        {
+            var reg = new Regex(@"\d+");
+
+            var matches = reg.FindAll("").ToArray();
+
+            Assert.Equal(0, matches.Length);
+
+            matches = reg.FindAll("4 + 8 = 12").ToArray();
+
+            Assert.Equal(3, matches.Length);
+            Assert.Equal(0U, matches[0].Start);
+            Assert.Equal(1U, matches[0].End);
+            Assert.Equal(4U, matches[1].Start);
+            Assert.Equal(5U, matches[1].End);
+            Assert.Equal(8U, matches[2].Start);
+            Assert.Equal(10U, matches[2].End);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Text;
@@ -133,6 +134,41 @@ namespace IronRure
         /// </summary>
         /// <param name="haystack">The string to search for this pattern</param>
         public Match Find(string haystack) => Find(haystack, 0);
+
+        /// <summary>
+        ///   Find All Matches
+        ///   <para>Returns an iterator over each match in the pattern</para>
+        /// </summary>
+        /// <param name="haystack">The string to search for this pattern</param>
+        public IEnumerable<Match> FindAll(byte[] haystack)
+        {
+            var len = haystack.Length;
+            var match = Find(haystack);
+
+            while (match.Matched)
+            {
+                yield return match;
+
+                var nextStart = match.Start == match.End ?
+                    match.End + 1 : match.End;
+
+                if (nextStart > len)
+                    yield break;
+
+                match = Find(haystack, nextStart);
+            }
+        }
+
+        /// <summary>
+        ///   Find All Matches
+        ///   <para>Returns an iterator over each match in the pattern</para>
+        /// </summary>
+        /// <param name="haystack">The string to search for this pattern</param>
+        public IEnumerable<Match> FindAll(string haystack)
+        {
+            var haystackBytes = Encoding.UTF8.GetBytes(haystack);
+            return FindAll(haystackBytes);
+        }
 
         protected override void Free(IntPtr resource)
         {

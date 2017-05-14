@@ -45,9 +45,7 @@ namespace Alice
             BenchRegex("dotplus_nl", "(?s).+", text);
             BenchRegex("alice_hattter", "Alice.{0,25}Hatter|Hatter.{0,25}Alice", text);
             BenchRegex("name_suffixes", "([A-Za-z]lice|[A-Za-z]heshire)[^a-zA-Z]", text);
-            
-            // IronRure iteration doesn't handle 0-length matches yet
-            // BenchRegex("dotstar", ".*", text);
+            BenchRegex("dotstar", ".*", text);
 
             Console.WriteLine("Benchmark completed");
         }
@@ -72,18 +70,12 @@ namespace Alice
             // a .NET string for each step in the search. Surprisingly this
             // is _still_ faster than .NET in some cases.
             results.Add(Bench($"rure::{name}", () => {
-                    var match = rure.Find(text);
-                    while (match.Matched)
-                    {
-                        match = rure.Find(text, match.End);
-                    }
+                    foreach (var match in rure.FindAll(text))
+                        ;
                 }));
             results.Add(Bench($"byts::{name}", () => {
-                    var match = rure.Find(bytes);
-                    while (match.Matched)
-                    {
-                        match = rure.Find(bytes, match.End);
-                    }
+                    foreach (var match in rure.FindAll(bytes))
+                        ;
                 }));
             results.Add(Bench($".net::{name}", () => {
                     var match = net.Match(text);
