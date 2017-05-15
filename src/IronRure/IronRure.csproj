@@ -4,7 +4,7 @@
     <Version>0.1.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="IronRure.Batteries-Darwin" Version="0.0.2" />
-    <PackageReference Include="IronRure.Batteries-Windows" Version="0.0.1" />
+    <PackageReference Include="IronRure.Batteries-Darwin" Version="0.0.3" />
+    <PackageReference Include="IronRure.Batteries-Windows" Version="0.0.3" />
   </ItemGroup>
 </Project>

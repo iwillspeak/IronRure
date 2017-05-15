@@ -147,8 +147,7 @@ namespace IronRureTests
 
                 var match = captures[0];
                 Assert.True(captures.Matched);
-                /// FIXME: Waiting for rust-lang/regex#365
-                ///Assert.Equal(4, captures.Length);
+                Assert.Equal(4, captures.Length);
 
                 Assert.Equal(9U, match.Start);
                 Assert.Equal(19U, match.End);
