@@ -1,6 +1,6 @@
 # 🚀⚙️✨ IronRure - Rusty Regexs for .NET ✨⚙️🚀
 
-Rure is the [**Ru**st **R**egular **E**expression crate](https://github.com/rust-lang/regex). This repo aims to provide a set of bindings so that it can be used from .NET.
+Rure is the [**Ru**st **R**egular **E**xpression crate](https://github.com/rust-lang/regex). This repo aims to provide a set of bindings so that it can be used from .NET.
 
 ## Getting Started
 
