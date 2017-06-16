@@ -46,9 +46,41 @@ namespace IronRure.DropIn
         {
             Options = options;
             var rureOptions = new IronRure.Options();
-            var rureFlags = default(IronRure.RureFlags);
+            var rureFlags = RureFlagsFromOptions(options);
             _pattern = new IronRure.Regex(pattern, rureOptions, rureFlags);
             MatchTimeout = timeout;
+        }
+
+        /// <summary>
+        ///   Convert a set of RegexOptions into their corresponding
+        ///   RureFlags values.
+        /// </summary>
+        private static RureFlags RureFlagsFromOptions(RegexOptions options)
+        {
+            var flags = default(RureFlags);
+            if (options.HasFlag(RegexOptions.IgnoreCase))
+                flags |= RureFlags.Casei;
+            if (options.HasFlag(RegexOptions.IgnorePatternWhitespace))
+                flags |= RureFlags.Space;
+            if (options.HasFlag(RegexOptions.Multiline))
+                flags |= RureFlags.Multi;
+            if (options.HasFlag(RegexOptions.Singleline))
+                flags |= RureFlags.Dotnl;
+            return flags;
+        }
+
+        /// <summary>
+        ///   Check for a Match in the given string
+        /// </summary>
+        public bool IsMatch(string haystack) => IsMatch(haystack, 0);
+
+        /// <summary>
+        ///   Check for a match in the given string at the given
+        ///   offset.
+        /// </summary>
+        public bool IsMatch(string haystack, Int32 offset)
+        {
+            return _pattern.IsMatch(haystack, (uint)offset);
         }
 
         /// <summary>

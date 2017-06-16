@@ -24,5 +24,16 @@ namespace IronRure.DropInTests
         {
             var regex = new Regex(@"\b[at]\w+", RegexOptions.None, TimeSpan.FromMinutes(1));
         }
+
+        [Fact]
+        public void MatchWithSimpleWordPattern()
+        {
+            var regex = new Regex("Hello", RegexOptions.IgnoreCase);
+
+            Assert.True(regex.IsMatch("hello world!"));
+            Assert.False(regex.IsMatch("goodbye then"));
+            Assert.True(regex.IsMatch("so I said hello to her", 10));
+            Assert.False(regex.IsMatch("not a hello in sight", 7));
+        }
     }
 }
