@@ -165,6 +165,16 @@ namespace IronRureTests
             Assert.Equal(4, reg["baz"]);
             Assert.Equal(6, reg["t"]);
         }
+        
+        [Fact]
+        public void Regex_IndexIntoCaptureWithGroupName_ReturnsCorrectMatch()
+        {
+            var reg = new Regex(@"(?P<h>hello) (?P<w>world)");
+
+            var caps = reg.Captures("hello world");
+            Assert.Equal("hello", caps["h"].ExtractedString);
+            Assert.Equal("world", caps["w"].ExtractedString);
+        }
 
         [Fact]
         public void Regex_FindWithCaptures_ReturnsValidCaptureInfo()
