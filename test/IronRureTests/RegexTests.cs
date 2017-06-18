@@ -110,6 +110,36 @@ namespace IronRureTests
         }
 
         [Fact]
+        public void Regex_FindAllWithEmptuRegex()
+        {
+            var reg = new Regex("");
+
+            var matches = reg.FindAll("hello").ToArray();
+
+            Assert.Equal(6, matches.Length);
+        }
+
+        [Fact]
+        public void Regex_CaptureAll_RetursIteratorOfCaptures()
+        {
+            var reg = new Regex(@"(\d) [+=*/\-] (\d)");
+
+            var caps = reg.CaptureAll("2 * 8 - 9 = 7").ToArray();
+
+            Assert.Equal(2, caps.Length);
+
+            {
+                var cap = caps[0];
+                Assert.Equal("2 * 8", cap[0].ExtractedString);
+            }
+            {
+                var cap = caps[1];
+                Assert.Equal("9", cap[1].ExtractedString);
+                Assert.Equal("7", cap[2].ExtractedString);
+            }
+        }
+
+        [Fact]
         public void Regex_WhenNotAlCapturesAreCaptured_IndividualMatchIsCorrect()
         {
             var reg = new Regex(@"\b(\w)(\d)?(\w)\b");

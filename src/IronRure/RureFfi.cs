@@ -125,6 +125,90 @@ namespace IronRure
         public static extern int rure_capture_name_index(IntPtr re, byte[] name);
 
         /// <summary>
+        ///   rure_iter_new creates a new iterator.
+        ///
+        ///   An iterator will report all successive non-overlapping
+        ///   matches of re.  When calling iterator functions, the
+        ///   same haystack and length must be supplied to all
+        ///   invocations. (Strict pointer equality is, however, not
+        ///   required.)
+        /// </summary>
+        [DllImport("rure")]
+        public static extern IntPtr rure_iter_new(IntPtr re);
+
+        /// <summary>
+        ///   rure_iter_free frees the iterator given.
+        ///
+        ///   It must be called at most once.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern void rure_iter_free(IntPtr it);
+
+        /// <summary>
+        ///   rure_iter_next advances the iterator and returns true if
+        ///   and only if a match was found. If a match is found, then
+        ///   the match pointer is set with the start and end location
+        ///   of the match, in bytes.
+        ///
+        ///   If no match is found, then subsequent calls will return
+        ///   false indefinitely.
+        ///
+        ///   haystack may contain arbitrary bytes, but ASCII
+        ///   compatible text is more useful. UTF-8 is even more
+        ///   useful. Other text encodings aren't supported.  length
+        ///   should be the number of bytes in haystack. The given
+        ///   haystack must be logically equivalent to all other
+        ///   haystacks given to this iterator.
+        ///
+        ///   rure_iter_next should be preferred to
+        ///   rure_iter_next_captures since it may be faster.
+        ///
+        ///   N.B. The performance of this search is not impacted by
+        ///   the presence of capturing groups in your regular
+        ///   expression.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern bool rure_iter_next(IntPtr it,
+                                                 byte[] haystack,
+                                                 UIntPtr length,
+                                                 out RureMatch match);
+
+        /// <summary>
+        ///   rure_iter_next_captures advances the iterator and
+        ///   returns true if and only if a match was found. If a
+        ///   match is found, then all of its capture locations are
+        ///   stored in the captures pointer given.
+        ///
+        ///   If no match is found, then subsequent calls will return
+        ///   false indefinitely.
+        ///
+        ///   haystack may contain arbitrary bytes, but ASCII
+        ///   compatible text is more useful. UTF-8 is even more
+        ///   useful. Other text encodings aren't supported.  length
+        ///   should be the number of bytes in haystack. The given
+        ///   haystack must be logically equivalent to all other
+        ///   haystacks given to this iterator.
+        /// 
+        ///   Only use this function if you specifically need access
+        ///   to capture locations.  It is not necessary to use this
+        ///   function just because your regular expression contains
+        ///   capturing groups.
+        /// 
+        ///   Capture locations can be accessed using the
+        ///   rure_captures_* functions.
+        /// 
+        ///   N.B. The performance of this search can be impacted by
+        ///   the number of capturing groups. If you're using this
+        ///   function, it may be beneficial to use non-capturing
+        ///   groups (e.g., `(?:re)`) where possible.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern bool rure_iter_next_captures(IntPtr it,
+                                                          byte[] haystack,
+                                                          UIntPtr length,
+                                                          IntPtr captures);
+
+        /// <summary>
         ///   rure_captures_new allocates storage for all capturing groups in re.
         ///  
         ///   An rure_captures value may be reused on subsequent calls to
