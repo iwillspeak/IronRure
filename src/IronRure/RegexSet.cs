@@ -45,24 +45,34 @@ namespace IronRure
         /// <summary>
         ///   Is Match - Checks if any of the patterns in the set match.
         /// </summary>
-        public bool IsMatch(string haystack)
+        public bool IsMatch(string haystack) =>
+            IsMatch(Encoding.UTF8.GetBytes(haystack));
+
+        /// <summary>
+        ///   Is match - Check if any of the patterns in the set match.
+        /// </summary>
+        public bool IsMatch(byte[] haystack)
         {
-            var haystackBytes = Encoding.UTF8.GetBytes(haystack);
-            return RureFfi.rure_set_is_match(Raw, haystackBytes,
-                                             new UIntPtr((uint)haystackBytes.Length),
+            return RureFfi.rure_set_is_match(Raw, haystack,
+                                             new UIntPtr((uint)haystack.Length),
                                              UIntPtr.Zero);
         }
 
         /// <summary>
         ///   Matches - Retrieve information about which patterns in the set match.
         /// </summary>
-        public SetMatch Matches(string haystack)
+        public SetMatch Matches(string haystack) =>
+            Matches(Encoding.UTF8.GetBytes(haystack));
+
+        /// <summary>
+        ///   Matches - Retrieve information abut which patterns in the set match.
+        /// </summary>
+        public SetMatch Matches(byte[] haystack)
         {
-            var haystackBytes = Encoding.UTF8.GetBytes(haystack);
             var results = new bool[_arity];
             var overall = RureFfi.rure_set_matches(Raw,
-                                                   haystackBytes,
-                                                   new UIntPtr((uint)haystackBytes.Length),
+                                                   haystack,
+                                                   new UIntPtr((uint)haystack.Length),
                                                    UIntPtr.Zero,
                                                    results);
             return new SetMatch(overall, results);
