@@ -165,6 +165,20 @@ namespace IronRureTests
             Assert.Equal(4, reg["baz"]);
             Assert.Equal(6, reg["t"]);
         }
+
+        [Fact]
+        public void Regex_CaptureNamesIter_ReturnsCorrectNames()
+        {
+            var regex = new Regex(@"(?P<foo>[a](?P<bar>\d))(4)(?P<baz>(.{2}))(?:b)(?P<t>7)");
+
+            var names = regex.CaptureNames().ToArray();
+
+            Assert.Contains("foo", names);
+            Assert.Contains("bar", names);
+            Assert.Contains("baz", names);
+            Assert.Contains("t", names);
+            Assert.Equal(4, names.Length);
+        }
         
         [Fact]
         public void Regex_IndexIntoCaptureWithGroupName_ReturnsCorrectMatch()

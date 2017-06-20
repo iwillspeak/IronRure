@@ -169,6 +169,15 @@ namespace IronRure
             RureFfi.rure_capture_name_index(Raw, Encoding.UTF8.GetBytes(capture));
 
         /// <summary>
+        ///   Get an enumeration of all the named captures in this pattern.
+        /// </summary>
+        public IEnumerable<string> CaptureNames()
+        {
+            return new CaptureNamesEnumerable(this);
+        }
+
+
+        /// <summary>
         ///   Captures - Find the extent of the capturing groups in the pattern
         ///   in a given haystack.
         /// </summary>

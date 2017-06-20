@@ -125,6 +125,35 @@ namespace IronRure
         public static extern int rure_capture_name_index(IntPtr re, byte[] name);
 
         /// <summary>
+        ///   rure_iter_capture_names_new creates a new capture_names
+        ///   iterator.
+        ///   
+        ///   An iterator will report all successive capture group
+        ///   names of re.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern IntPtr rure_iter_capture_names_new(IntPtr re);
+        
+        /// <summary>
+        ///   rure_iter_capture_names_free frees the iterator given.
+        ///  
+        ///   It must be called at most once.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern void rure_iter_capture_names_free(IntPtr it);
+
+        /// <summary>
+        ///   rure_iter_capture_names_next advances the iterator and
+        ///   returns true if and only if another capture group name
+        ///   exists.
+        ///
+        ///   The value of the capture group name is written to the
+        ///   provided pointer.
+        /// </summary>
+        [DllImport("rure")]
+        public static extern bool rure_iter_capture_names_next(IntPtr it, out IntPtr name);
+
+        /// <summary>
         ///   rure_iter_new creates a new iterator.
         ///
         ///   An iterator will report all successive non-overlapping
