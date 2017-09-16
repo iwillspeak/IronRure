@@ -3,9 +3,6 @@ image: Visual Studio 2017
 install:
   - dotnet --version
   - dotnet restore
-platform:
-  - x86
-  - Any CPU
 build_script:
   - dotnet build
 test_script:
