@@ -5,5 +5,9 @@ install:
   - dotnet restore
 build_script:
   - dotnet build
+  - dotnet pack -o artifacts_nuget
 test_script:
-  - ps: ForEach ($proj in (Get-ChildItem -Path test -Recurse -Filter '*.csproj')) { dotnet test $proj.FullName }
+  - ps: ForEach ($proj in (Get-ChildItem -Path test -Recurse -Filter '*.csproj')) { dotnet test --no-build $proj.FullName }
+artifacts:
+  - path: '**/artifacts_nuget/*.nupkg'
+    name: NuGet Packages
