@@ -80,5 +80,19 @@ namespace IronRureTets
                 Assert.Equal(new [] { false, false, true, true, true}, match.Matches);
             }
         }
+
+        [Fact]
+        public void RegexSet_Match_WithOptions()
+        {
+            var opts = new Options()
+                .WithDfaSize(100);
+            using (var regs = new RegexSet(Regex.DefaultFlags, opts, "foo+", "ba?r"))
+            {
+                Assert.True(regs.IsMatch("foooooooooooo"));
+                var match = regs.Matches("br");
+                Assert.True(match.Matched);
+                Assert.Equal(new[] { false, true }, match.Matches);
+            }
+        }
     }
 }

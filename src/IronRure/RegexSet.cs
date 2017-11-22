@@ -9,16 +9,21 @@ namespace IronRure
     {
         public RegexSet(params string[] patterns)
             : this(Regex.DefaultFlags, patterns)
-        {
-        }
+        {}
 
         public RegexSet(RureFlags flags, params string[] patterns)
-            : base(CompileSet(patterns, flags))
+            : base(CompileSet(patterns, flags, IntPtr.Zero))
         {
             _arity = patterns.Length;
         }
 
-        private static IntPtr CompileSet(string[] patterns, RureFlags flags)
+        public RegexSet(RureFlags flags, Options options, params string[] patterns)
+            : base(CompileSet(patterns, flags, options.Raw))
+        {
+            _arity = patterns.Length;
+        }
+
+        private static IntPtr CompileSet(string[] patterns, RureFlags flags, IntPtr options)
         {
             var patBytes = patterns.Select(Encoding.UTF8.GetBytes).ToArray();
             var patLengths = patBytes
@@ -34,7 +39,7 @@ namespace IronRure
                                                         patLengths,
                                                         new UIntPtr((uint)patLengths.Length),
                                                         (uint)flags,
-                                                        IntPtr.Zero,
+                                                        options,
                                                         err.Raw);
 
                 foreach (var handle in patByteHandles)
