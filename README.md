@@ -8,7 +8,7 @@ IronRure targets the .NET Standard runtime. It's available to install on NuGet:
 
     > Install-Package IronRure
 
-If you're targeting Windows or macOS then it's [batteries included](https://github.com/iwillspeak/IronRure-Batteries). If not then you'll need to supply your own compiled version of `rure`.
+If you're targeting Linux, Windows or macOS then it's [batteries included](https://github.com/iwillspeak/IronRure-Batteries). If not then you'll need to supply your own compiled version of `rure`.
 
 ## Usage
 
