@@ -8,12 +8,17 @@ namespace IronRure
     public class RegexSet : UnmanagedResource
     {
         public RegexSet(params string[] patterns)
-            : base(CompileSet(patterns))
+            : this(Regex.DefaultFlags, patterns)
+        {
+        }
+
+        public RegexSet(RureFlags flags, params string[] patterns)
+            : base(CompileSet(patterns, flags))
         {
             _arity = patterns.Length;
         }
 
-        private static IntPtr CompileSet(string[] patterns)
+        private static IntPtr CompileSet(string[] patterns, RureFlags flags)
         {
             var patBytes = patterns.Select(Encoding.UTF8.GetBytes).ToArray();
             var patLengths = patBytes
@@ -28,7 +33,7 @@ namespace IronRure
                 var compiled = RureFfi.rure_compile_set(patBytePinnedPointers,
                                                         patLengths,
                                                         new UIntPtr((uint)patLengths.Length),
-                                                        (uint)Regex.DefaultFlags,
+                                                        (uint)flags,
                                                         IntPtr.Zero,
                                                         err.Raw);
 

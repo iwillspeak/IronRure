@@ -416,6 +416,7 @@ namespace IronRure
                                                    byte[] haystack,
                                                    UIntPtr length,
                                                    UIntPtr start,
+                                                   [MarshalAs(UnmanagedType.LPArray, ArraySubType=UnmanagedType.I1)]
                                                    [Out] bool[] matches);
 
         /// <summary>
