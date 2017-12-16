@@ -8,7 +8,7 @@ Our program will accept a regular expression and list of file names from the com
 
 ## Using this Tutorial
 
-Throught this tutorial I will be demonstrating how to create a simple program using the [`dotnet` toolchain](https://www.microsoft.com/net/learn/get-started). Throughout I will use `$ foo` to represent commands which should be from the command line. To follow this tutorial you should make sure you have access to:
+Throughout this tutorial I will be demonstrating how to create a simple program using the [`dotnet` toolchain](https://www.microsoft.com/net/learn/get-started). Throughout I will use `$ foo` to represent commands which should be from the command line. To follow this tutorial you should make sure you have access to:
 
  * A terminal or console from which you can run the `dotnet` command line too.
  * A text editor.
@@ -17,7 +17,7 @@ You should be able to follow this tutorial on Windows, macOS, and Linux.
 
 ## Creating the Project
 
-The first step in creating a new project is to set up a blank folder to work in. Begin by creating a new folder, either from the command line or through your operating system's file browser. Once you have a new clean directory open a command line, change to the folder, and create a new dotnet project:
+The first step in creating a new project is to set up a blank folder to work in. Begin by creating a new folder, either from the command line or through your operating system's file browser. Once you have a new clean directory open a command line, change to the folder, and create a new .NET Core console project:
 
     $ dotnet new console
 
@@ -30,7 +30,7 @@ Once `dotnet` completes you should have a folder structure something like this:
 └── obj/
 ```
 
-Next we need to add a reference to `IronRure` to the project. `IronRure` is available on [Nuget](nuget.org), so we can install it with `dotnet add package`:
+Next we need to add a reference to `IronRure` to the project. `IronRure` is available on [NuGet](https://www.nuget.org/packages/IronRure/), so we can install it with `dotnet add package`:
 
     $ dotnet add package IronRure
 
@@ -38,7 +38,7 @@ If all goes well you should see some information about the package being downloa
 
 ## Using IronRure
 
-Now we have the project strucutre created, and a reference to IronRure added it's time to use it. Begin by adding the follwing line to the start of `Program.cs`:
+Now we have the project structure created, and a reference to IronRure added it's time to use it. Begin by adding the following line to the start of `Program.cs`:
 
 ```csharp
 using IronRure
@@ -92,7 +92,7 @@ You should see output similar to this:
     Program.cs:13:            foreach (var path in args.Skip(1))
     Program.cs:16:                foreach (var line in File.ReadLines(path))
 
-That's it. If you've been following along you've just written your first C# program using the `IronRure` regular expression package.
+That's it! If you've been following along you've just written your first C# program using the `IronRure` regular expression package.
 
 ## Example Source Code
 
