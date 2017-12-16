@@ -10,6 +10,12 @@ IronRure targets the .NET Standard runtime. It's available to install on NuGet:
 
 If you're targeting Linux, Windows or macOS then it's [batteries included](https://github.com/iwillspeak/IronRure-Batteries). If not then you'll need to supply your own compiled version of `rure`.
 
+## Tutorials
+
+Walkthroughs and example code to get to know the basic features of IronRure.
+
+* [Re-create `grep` with IronRure](examples/grep/)
+
 ## Usage
 
 The simplest operation is to check if a pattern matches anywhere in a given string:
