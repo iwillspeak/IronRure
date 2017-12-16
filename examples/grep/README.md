@@ -4,11 +4,11 @@ This tutorial demonstrates simple use of the `IronRure` regular expression packa
 
     ourgrep <pattern> <file>...
 
-Our program will support accept a regular expression and list of file names from the command line. For each file it prints out the lines which match the regular expression.
+Our program will accept a regular expression and list of file names from the command line. For each file it prints out the lines which match the regular expression.
 
 ## Using this Tutorial
 
-Throught this tutorial I will be demonstrating how to create a simple program using the [`dotnet` toolchain](https://www.microsoft.com/net/learn/get-started). Throught i will use `$ foo` to represent commands which should be from the command line. To follow this tutorial you should make sure you have access to:
+Throught this tutorial I will be demonstrating how to create a simple program using the [`dotnet` toolchain](https://www.microsoft.com/net/learn/get-started). Throughout I will use `$ foo` to represent commands which should be from the command line. To follow this tutorial you should make sure you have access to:
 
  * A terminal or console from which you can run the `dotnet` command line too.
  * A text editor.
@@ -21,7 +21,7 @@ The first step in creating a new project is to set up a blank folder to work in.
 
     $ dotnet new console
 
-If all goes well you should have a folder structure something like this:
+Once `dotnet` completes you should have a folder structure something like this:
 
 ```
 .
@@ -68,13 +68,13 @@ Finally in the body of the main method add the following `foreach` loops:
 ```csharp
 foreach (var path in args.Skip(1))
 {
-	int lineNo = 1;
-	foreach (var line in File.ReadLines(path))
+    int lineNo = 1;
+    foreach (var line in File.ReadLines(path))
     {
         if (reg.IsMatch(line))
         {
             Console.WriteLine("{0}:{1}:{2}", path, lineNo, line);
-		}
+        }
         lineNo++;
     }
 }
@@ -92,7 +92,7 @@ You should see output similar to this:
     Program.cs:13:            foreach (var path in args.Skip(1))
     Program.cs:16:                foreach (var line in File.ReadLines(path))
 
-That's it. If you've been follwing along you've just written your first C# program using the `IronRure` regular expression package.
+That's it. If you've been following along you've just written your first C# program using the `IronRure` regular expression package.
 
 ## Example Source Code
 
