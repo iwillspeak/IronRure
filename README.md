@@ -15,6 +15,7 @@ If you're targeting Linux, Windows or macOS then it's [batteries included](https
 Walkthroughs and example code to get to know the basic features of IronRure.
 
 * [Re-create `grep` with IronRure](examples/grep/)
+* [Filtering User Input with `RegexSet`](examples/filtering/)
 
 ## Usage
 
