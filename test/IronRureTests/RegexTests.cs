@@ -43,6 +43,15 @@ namespace IronRureTests
         }
 
         [Fact]
+        public void Regex_CreateWithFlagsOnly_Succeeds()
+        {
+            using (var reg = new Regex(@"Δ", RureFlags.Unicode | RureFlags.Casei))
+            {
+                Assert.True(reg.IsMatch("δ"));
+            }
+        }
+
+        [Fact]
         public void Regex_CreateWithInvalidPattern_ThrowsException()
         {
             Assert.Throws<RegexCompilationException>(() => new Regex(")"));

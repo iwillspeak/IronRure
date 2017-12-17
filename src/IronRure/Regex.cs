@@ -34,6 +34,13 @@ namespace IronRure
         {}
 
         /// <summary>
+        ///   Create a new regex instance from the given pattern and flags.
+        /// </summary>
+        public Regex(string pattern, RureFlags flags)
+            : this(pattern, IntPtr.Zero, (uint)flags)
+        {}
+
+        /// <summary>
         ///   Create a new regex instance from the given pattern, with the given
         ///   options applied and with the given flags enabled.
         /// </summary>
