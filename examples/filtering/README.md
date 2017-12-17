@@ -93,3 +93,44 @@ You should now be able to test this out. Run the program and type some text in. 
 
 To stop press `C-d` (control + d) on macOS and Linux or `C-z` (control + z) on Windows.
 
+## Replacing just the Bad Words
+
+Filtering out the entire line if someone uses a bad word seems a bit over the top. Lets update our program so that only the bad words themselves are removed. Replace the contents of the `while` loop with the following:
+
+```csharp
+var match = set.Matches(line);
+if (match.Matched)
+{
+    for (int i = 0; i < match.Matches.Length; i++)
+    {
+        if (match.Matches[i])
+        {
+            foreach (var found in expressions[i].FindAll(line))
+            {
+                line = line.Replace(found.ExtractedString, new string('*', found.ExtractedString.Length));
+            }
+        }
+    }
+}
+Console.WriteLine(line);
+```
+
+Instead of using `set.IsMatch` we use `set.Matches` to find out which of our patterns have matched in a given line. for each pattern that has matched we replace just the bits of the line where that expression matched.
+
+Try this out by running the program again. Try typing some lines which contain a mixture of good and bad words:
+
+    $ dotnet run
+    red, green, refactor is my motto
+    ***, *****, refactor is my motto
+    what if I say red red red?
+    what if I say *** *** ***?
+
+Notice how if a given pattern matches more than once on a given line all are replaced. That's it, you've created a simple user input filter which should scale to large numbers of blocked words easily by using `RegexSet` to quickly find which patterns need to be replaced.
+
+## Exercise
+
+Try allowing patterns to be configured by being passed on the command line, or reading them from a file.
+
+## Example Source Code
+
+The source code for this example can be found [next to this file GitHub](./).

@@ -16,14 +16,21 @@ namespace filtering
             string line;
             while ((line = Console.ReadLine()) != null)
             {
-                if (set.IsMatch(line))
+                var match = set.Matches(line);
+                if (match.Matched)
                 {
-                    Console.WriteLine(new String('*', line.Length));
+                    for (int i = 0; i < match.Matches.Length; i++)
+                    {
+                        if (match.Matches[i])
+                        {
+                            foreach (var found in expressions[i].FindAll(line))
+                            {
+                                line = line.Replace(found.ExtractedString, new string('*', found.ExtractedString.Length));
+                            }
+                        }
+                    }
                 }
-                else
-                {
-                    Console.WriteLine(line);
-                }
+                Console.WriteLine(line);
             }
         }
     }
