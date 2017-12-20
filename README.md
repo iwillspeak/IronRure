@@ -71,3 +71,7 @@ In general IronRure out-performs .NET Regex, although milage may vary depending 
 ## Syntax and Semantics
 
 For more information about the pattern syntax see [the underlying Rust crate documentation](https://doc.rust-lang.org/regex/).
+
+## Windows Gotchas
+
+The windows build of [`IronRure-Batteries`](https://github.com/iwillspeak/IronRure-Batteries) requires the `vc140` redistributable to work. This means you need to have Visual Studio 2015 or the [Visual Studio 2015 C++ Runtime](https://www.microsoft.com/en-gb/download/details.aspx?id=48145) installed for it to load. If not you'll get an exception which claims that `rure.dll` can't be found.
