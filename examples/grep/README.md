@@ -10,7 +10,7 @@ Our program will accept a regular expression and list of file names from the com
 
 Throughout this tutorial I will be demonstrating how to create a simple program using the [`dotnet` toolchain](https://www.microsoft.com/net/learn/get-started). Throughout I will use `$ foo` to represent commands which should be from the command line. To follow this tutorial you should make sure you have access to:
 
- * A terminal or console from which you can run the `dotnet` command line too.
+ * A terminal or console from which you can run the `dotnet` command line tool.
  * A text editor.
 
 You should be able to follow this tutorial on Windows, macOS, and Linux.
@@ -96,4 +96,4 @@ That's it! If you've been following along you've just written your first C# prog
 
 ## Example Source Code
 
-The source code for this example can be found [next to this file GitHub](./).
+The source code for this example can be found [next to this file on GitHub](./).
