@@ -6,7 +6,7 @@ In this tutorial we will be creating a program which uses IronRure's `RegexSet` 
 
 Throughout this tutorial I will be demonstrating how to create a simple program using the [`dotnet` toolchain](https://www.microsoft.com/net/learn/get-started). Throughout I will use `$ foo` to represent commands which should be from the command line. To follow this tutorial you should make sure you have access to:
 
- * A terminal or console from which you can run the `dotnet` command line too.
+ * A terminal or console from which you can run the `dotnet` command line tool.
  * A text editor.
 
 You should be able to follow this tutorial on Windows, macOS, and Linux.
@@ -133,4 +133,4 @@ Try allowing patterns to be configured by being passed on the command line, or r
 
 ## Example Source Code
 
-The source code for this example can be found [next to this file GitHub](./).
+The source code for this example can be found [next to this file on GitHub](./).
