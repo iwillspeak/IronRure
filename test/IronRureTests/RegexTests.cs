@@ -243,5 +243,23 @@ namespace IronRureTests
 
             Assert.Equal("* ate 9 because it wanted 3 square meals", numbers.Replace(haystack, "*"));
         }
+
+        [Fact]
+        public void Regex_ReplaceAllWithLiteralString_ReplacesAllMatches()
+        {
+            var numbers = new Regex(@"\d+");
+
+            var haystack = "1, 2, 3 and 4";
+            Assert.Equal("#, #, # and #", numbers.ReplaceAll(haystack, "#"));
+        }
+
+        [Fact]
+        public void Regex_ReplaceWithCount_ReplacesOnlyRequestedMatches()
+        {
+            var words = new Regex(@"\b\w+\b");
+
+            var haystack = "super six 4, this is super six four.";
+            Assert.Equal("$ $ $, this is super six four.", words.Replacen(haystack, "$", 3));
+        }
     }
 }
