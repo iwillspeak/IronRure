@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Linq;
 using System.Text;
 
 /// <summary>
@@ -260,6 +261,41 @@ namespace IronRure
         {
             var haystackBytes = Encoding.UTF8.GetBytes(haystack);
             return CaptureAll(haystackBytes);
+        }
+
+        /// <summary>
+        ///   Replace the first match with a literal string.
+        /// </summary>
+        /// <param name="haystack">The value to replace matches in</param>
+        /// <param name="replacement">The value to replace with</param>
+        public string Replace(string haystack, string replacement) =>
+            Replacen(haystack, replacement, 1);
+            
+        private string Replacen(string haystack, string replacement, int count)
+        {
+            var resultBytes = new List<byte>();
+            var haystackBytes = Encoding.UTF8.GetBytes(haystack);
+            var replacementBytes = Encoding.UTF8.GetBytes(replacement);
+
+            var lastMatch = 0;
+
+            foreach (var match in FindAll(haystackBytes))
+            {
+                resultBytes.AddRange(haystackBytes
+                                     .Skip(lastMatch)
+                                     .Take((int)match.Start - lastMatch));
+                lastMatch = (int)match.End;
+                resultBytes.AddRange(replacementBytes);
+
+                // If we have run out of replacements then give up
+                if (--count <= 0)
+                    break;
+            }
+
+            resultBytes.AddRange(haystackBytes
+                                 .Skip(lastMatch));
+                
+            return Encoding.UTF8.GetString(resultBytes.ToArray());
         }
 
         protected override void Free(IntPtr resource)

@@ -233,5 +233,15 @@ namespace IronRureTests
             Assert.Equal("10", caps[dates["month"]].ExtractedString);
             Assert.Equal("1961", caps[dates["year"]].ExtractedString);
         }
+
+        [Fact]
+        public void Regex_ReplaceWithLiteralString_ReplacesFirstMatch()
+        {
+            var numbers = new Regex(@"\d+");
+
+            var haystack = "7 ate 9 because it wanted 3 square meals";
+
+            Assert.Equal("* ate 9 because it wanted 3 square meals", numbers.Replace(haystack, "*"));
+        }
     }
 }
