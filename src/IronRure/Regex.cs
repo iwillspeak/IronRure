@@ -270,8 +270,22 @@ namespace IronRure
         /// <param name="replacement">The value to replace with</param>
         public string Replace(string haystack, string replacement) =>
             Replacen(haystack, replacement, 1);
+
+        /// <summary>
+        ///   Replace All Matches with a literal string.
+        /// </summary>
+        /// <param name="haystack">The value to replace matches in</param>
+        /// <param name="replacement">The value to replace with</param>
+        public string ReplaceAll(string haystack, string replacement) =>
+            Replacen(haystack, replacement, -1);
             
-        private string Replacen(string haystack, string replacement, int count)
+        /// <summary>
+        ///   Replace with Count
+        /// </summary>
+        /// <param name="haystack">The value to replace matches in</param>
+        /// <param name="replacement">The value to replace with</param>
+        /// <param name="count">The number of matches to replace</param>
+        public string Replacen(string haystack, string replacement, int count)
         {
             var resultBytes = new List<byte>();
             var haystackBytes = Encoding.UTF8.GetBytes(haystack);
@@ -288,7 +302,7 @@ namespace IronRure
                 resultBytes.AddRange(replacementBytes);
 
                 // If we have run out of replacements then give up
-                if (--count <= 0)
+                if (count != -1 && --count <= 0)
                     break;
             }
 
