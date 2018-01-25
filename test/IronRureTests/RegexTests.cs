@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using System.Globalization;
 
 using IronRure;
 
@@ -260,6 +261,18 @@ namespace IronRureTests
 
             var haystack = "super six 4, this is super six four.";
             Assert.Equal("$ $ $, this is super six four.", words.Replacen(haystack, "$", 3));
+        }
+
+        [Fact]
+        public void Regex_ReplaceWithComputedReplacement_InsertsCorrectReplacement()
+        {
+            var longWords = new Regex(@"\b\w{1,5}\b");
+
+            var haystack = "hello replacing world!";
+
+            Assert.Equal("##### replacing #####!",
+                         longWords.ReplaceAll(haystack,
+                                              m => new String('#', (int)(m.End - m.Start))));
         }
     }
 }
