@@ -5,6 +5,24 @@ namespace IronRure
 {
     public static class RureFfi
     {
+#if NET45
+        using System.Io;
+        
+        static RureFfi()
+        {
+            var currentLocation = new Uri(typeof(RureFfi).Assembly.CodeBase).LocalPath;
+
+            LoadLibrary(Path.Combine(
+                Path.GetDirectoryName(currentLocation),
+                Environment.Is64Bitprocess() ? "rure_x64" : "rure_x86",
+                "rure.dll"
+            ));
+        }
+
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr LoadLibrary(string dllToLoad);
+#endif
+
         /// <summary>
         ///   rure_compile compiles the given pattern into a regular expression. The
         ///   pattern must be valid UTF-8 and the length corresponds to the number of
