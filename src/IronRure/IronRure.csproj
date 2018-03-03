@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.4;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard1.4;net47</TargetFrameworks>
     <Version>0.9.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="IronRure.Batteries-Darwin" Version="2.6.0" />
-    <PackageReference Include="IronRure.Batteries-Windows" Version="2.6.0" />
+    <PackageReference Include="IronRure.Batteries-Windows" Version="2.6.1" />
     <PackageReference Include="IronRure.Batteries-Linux" Version="2.6.0" />
   </ItemGroup>
 </Project>
