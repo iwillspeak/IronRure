@@ -1,20 +1,19 @@
 using System;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace IronRure
 {
     public static class RureFfi
     {
-#if NET45
-        using System.Io;
-        
+#if NET47
         static RureFfi()
         {
             var currentLocation = new Uri(typeof(RureFfi).Assembly.CodeBase).LocalPath;
 
             LoadLibrary(Path.Combine(
                 Path.GetDirectoryName(currentLocation),
-                Environment.Is64Bitprocess() ? "rure_x64" : "rure_x86",
+                Environment.Is64BitProcess ? "rure_x64" : "rure_x86",
                 "rure.dll"
             ));
         }
