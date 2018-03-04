@@ -1,11 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
-    <Version>0.9.0</Version>
+    <TargetFrameworks>netstandard1.4;net47</TargetFrameworks>
+    <Version>0.9.1</Version>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net47' ">
     <PackageReference Include="IronRure.Batteries-Darwin" Version="2.6.0" />
-    <PackageReference Include="IronRure.Batteries-Windows" Version="2.6.0" />
     <PackageReference Include="IronRure.Batteries-Linux" Version="2.6.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="IronRure.Batteries-Windows" Version="2.6.1" />
   </ItemGroup>
 </Project>
