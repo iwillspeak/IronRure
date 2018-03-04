@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.4;net47</TargetFrameworks>
+    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net47</TargetFrameworks>
     <Version>0.9.1</Version>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' != 'net47' ">
