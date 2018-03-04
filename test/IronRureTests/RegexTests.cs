@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using System.Globalization;
 
 using IronRure;
 
@@ -39,6 +40,15 @@ namespace IronRureTests
             using (var reg = new Regex("", new Options(), Regex.DefaultFlags))
             {
                 Assert.True(reg.IsMatch(""));
+            }
+        }
+
+        [Fact]
+        public void Regex_CreateWithFlagsOnly_Succeeds()
+        {
+            using (var reg = new Regex(@"Δ", RureFlags.Unicode | RureFlags.Casei))
+            {
+                Assert.True(reg.IsMatch("δ"));
             }
         }
 
@@ -110,6 +120,36 @@ namespace IronRureTests
         }
 
         [Fact]
+        public void Regex_FindAllWithEmptuRegex()
+        {
+            var reg = new Regex("");
+
+            var matches = reg.FindAll("hello").ToArray();
+
+            Assert.Equal(6, matches.Length);
+        }
+
+        [Fact]
+        public void Regex_CaptureAll_RetursIteratorOfCaptures()
+        {
+            var reg = new Regex(@"(\d) [+=*/\-] (\d)");
+
+            var caps = reg.CaptureAll("2 * 8 - 9 = 7").ToArray();
+
+            Assert.Equal(2, caps.Length);
+
+            {
+                var cap = caps[0];
+                Assert.Equal("2 * 8", cap[0].ExtractedString);
+            }
+            {
+                var cap = caps[1];
+                Assert.Equal("9", cap[1].ExtractedString);
+                Assert.Equal("7", cap[2].ExtractedString);
+            }
+        }
+
+        [Fact]
         public void Regex_WhenNotAlCapturesAreCaptured_IndividualMatchIsCorrect()
         {
             var reg = new Regex(@"\b(\w)(\d)?(\w)\b");
@@ -134,6 +174,30 @@ namespace IronRureTests
             Assert.Equal(2, reg["bar"]);
             Assert.Equal(4, reg["baz"]);
             Assert.Equal(6, reg["t"]);
+        }
+
+        [Fact]
+        public void Regex_CaptureNamesIter_ReturnsCorrectNames()
+        {
+            var regex = new Regex(@"(?P<foo>[a](?P<bar>\d))(4)(?P<baz>(.{2}))(?:b)(?P<t>7)");
+
+            var names = regex.CaptureNames().ToArray();
+
+            Assert.Contains("foo", names);
+            Assert.Contains("bar", names);
+            Assert.Contains("baz", names);
+            Assert.Contains("t", names);
+            Assert.Equal(4, names.Length);
+        }
+        
+        [Fact]
+        public void Regex_IndexIntoCaptureWithGroupName_ReturnsCorrectMatch()
+        {
+            var reg = new Regex(@"(?P<h>hello) (?P<w>world)");
+
+            var caps = reg.Captures("hello world");
+            Assert.Equal("hello", caps["h"].ExtractedString);
+            Assert.Equal("world", caps["w"].ExtractedString);
         }
 
         [Fact]
@@ -169,6 +233,46 @@ namespace IronRureTests
             Assert.Equal("04", caps[dates["day"]].ExtractedString);
             Assert.Equal("10", caps[dates["month"]].ExtractedString);
             Assert.Equal("1961", caps[dates["year"]].ExtractedString);
+        }
+
+        [Fact]
+        public void Regex_ReplaceWithLiteralString_ReplacesFirstMatch()
+        {
+            var numbers = new Regex(@"\d+");
+
+            var haystack = "7 ate 9 because it wanted 3 square meals";
+
+            Assert.Equal("* ate 9 because it wanted 3 square meals", numbers.Replace(haystack, "*"));
+        }
+
+        [Fact]
+        public void Regex_ReplaceAllWithLiteralString_ReplacesAllMatches()
+        {
+            var numbers = new Regex(@"\d+");
+
+            var haystack = "1, 2, 3 and 4";
+            Assert.Equal("#, #, # and #", numbers.ReplaceAll(haystack, "#"));
+        }
+
+        [Fact]
+        public void Regex_ReplaceWithCount_ReplacesOnlyRequestedMatches()
+        {
+            var words = new Regex(@"\b\w+\b");
+
+            var haystack = "super six 4, this is super six four.";
+            Assert.Equal("$ $ $, this is super six four.", words.Replacen(haystack, "$", 3));
+        }
+
+        [Fact]
+        public void Regex_ReplaceWithComputedReplacement_InsertsCorrectReplacement()
+        {
+            var longWords = new Regex(@"\b\w{1,5}\b");
+
+            var haystack = "hello replacing world!";
+
+            Assert.Equal("##### replacing #####!",
+                         longWords.ReplaceAll(haystack,
+                                              m => new String('#', (int)(m.End - m.Start))));
         }
     }
 }

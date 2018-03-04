@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Linq;
 using System.Text;
 
 /// <summary>
@@ -16,7 +17,7 @@ namespace IronRure
     ///     Managed wrapper around the rust regex class.
     ///   </para>
     /// </summary>
-    public class Regex : UnmanagedResource
+    public partial class Regex : UnmanagedResource
     {
         /// <summary>
         ///   Create a new regex instance from the given pattern.
@@ -31,6 +32,13 @@ namespace IronRure
         /// </summary>
         public Regex(string pattern, Options opts)
             : this(pattern, opts.Raw, (uint)DefaultFlags)
+        {}
+
+        /// <summary>
+        ///   Create a new regex instance from the given pattern and flags.
+        /// </summary>
+        public Regex(string pattern, RureFlags flags)
+            : this(pattern, IntPtr.Zero, (uint)flags)
         {}
 
         /// <summary>
@@ -142,20 +150,12 @@ namespace IronRure
         /// <param name="haystack">The string to search for this pattern</param>
         public IEnumerable<Match> FindAll(byte[] haystack)
         {
-            var len = haystack.Length;
-            var match = Find(haystack);
-
-            while (match.Matched)
+            using (var iter =  new MatchIter(this, haystack))
             {
-                yield return match;
-
-                var nextStart = match.Start == match.End ?
-                    match.End + 1 : match.End;
-
-                if (nextStart > len)
-                    yield break;
-
-                match = Find(haystack, nextStart);
+                while (iter.MoveNext())
+                {
+                    yield return iter.Current;
+                }
             }
         }
 
@@ -175,6 +175,15 @@ namespace IronRure
         /// </summary>
         public int this[string capture] =>
             RureFfi.rure_capture_name_index(Raw, Encoding.UTF8.GetBytes(capture));
+
+        /// <summary>
+        ///   Get an enumeration of all the named captures in this pattern.
+        /// </summary>
+        public IEnumerable<string> CaptureNames()
+        {
+            return new CaptureNamesEnumerable(this);
+        }
+
 
         /// <summary>
         ///   Captures - Find the extent of the capturing groups in the pattern
@@ -220,6 +229,39 @@ namespace IronRure
         /// </summary>
         /// <param name="haystack">The string to search for this pattern</param>
         public Captures Captures(string haystack) => Captures(haystack, 0);
+
+        /// <summary>
+        ///   Capture All Matches
+        ///   <para>
+        ///     Returns an iterator containing the capture information
+        ///     for each match of the pattern.
+        ///   </para>
+        /// </summary>
+        /// <param name="haystack">The string to search for this pattern</param>
+        public IEnumerable<Captures> CaptureAll(byte[] haystack)
+        {
+            using (var iter =  new CapturesIter(this, haystack))
+            {
+                while (iter.MoveNext())
+                {
+                    yield return iter.Current;
+                }
+            }
+        }
+
+        /// <summary>
+        ///   Capture All Matches
+        ///   <para>
+        ///     Returns an iterator containing the capture information
+        ///     for each match of the pattern.
+        ///   </para>
+        /// </summary>
+        /// <param name="haystack">The string to search for this pattern</param>
+        public IEnumerable<Captures> CaptureAll(string haystack)
+        {
+            var haystackBytes = Encoding.UTF8.GetBytes(haystack);
+            return CaptureAll(haystackBytes);
+        }
 
         protected override void Free(IntPtr resource)
         {

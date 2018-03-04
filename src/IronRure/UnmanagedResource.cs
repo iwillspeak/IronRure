@@ -30,7 +30,7 @@ namespace IronRure
         /// <summary>
         ///   The raw unmanaged pointer this class manages the lifetime of.
         /// </summary>
-        public IntPtr Raw => _raw;
+        internal IntPtr Raw => _raw;
         private IntPtr _raw;
     }
 }

@@ -8,12 +8,22 @@ namespace IronRure
     public class RegexSet : UnmanagedResource
     {
         public RegexSet(params string[] patterns)
-            : base(CompileSet(patterns))
+            : this(Regex.DefaultFlags, patterns)
+        {}
+
+        public RegexSet(RureFlags flags, params string[] patterns)
+            : base(CompileSet(patterns, flags, IntPtr.Zero))
         {
             _arity = patterns.Length;
         }
 
-        private static IntPtr CompileSet(string[] patterns)
+        public RegexSet(RureFlags flags, Options options, params string[] patterns)
+            : base(CompileSet(patterns, flags, options.Raw))
+        {
+            _arity = patterns.Length;
+        }
+
+        private static IntPtr CompileSet(string[] patterns, RureFlags flags, IntPtr options)
         {
             var patBytes = patterns.Select(Encoding.UTF8.GetBytes).ToArray();
             var patLengths = patBytes
@@ -28,8 +38,8 @@ namespace IronRure
                 var compiled = RureFfi.rure_compile_set(patBytePinnedPointers,
                                                         patLengths,
                                                         new UIntPtr((uint)patLengths.Length),
-                                                        (uint)Regex.DefaultFlags,
-                                                        IntPtr.Zero,
+                                                        (uint)flags,
+                                                        options,
                                                         err.Raw);
 
                 foreach (var handle in patByteHandles)
@@ -45,24 +55,34 @@ namespace IronRure
         /// <summary>
         ///   Is Match - Checks if any of the patterns in the set match.
         /// </summary>
-        public bool IsMatch(string haystack)
+        public bool IsMatch(string haystack) =>
+            IsMatch(Encoding.UTF8.GetBytes(haystack));
+
+        /// <summary>
+        ///   Is match - Check if any of the patterns in the set match.
+        /// </summary>
+        public bool IsMatch(byte[] haystack)
         {
-            var haystackBytes = Encoding.UTF8.GetBytes(haystack);
-            return RureFfi.rure_set_is_match(Raw, haystackBytes,
-                                             new UIntPtr((uint)haystackBytes.Length),
+            return RureFfi.rure_set_is_match(Raw, haystack,
+                                             new UIntPtr((uint)haystack.Length),
                                              UIntPtr.Zero);
         }
 
         /// <summary>
         ///   Matches - Retrieve information about which patterns in the set match.
         /// </summary>
-        public SetMatch Matches(string haystack)
+        public SetMatch Matches(string haystack) =>
+            Matches(Encoding.UTF8.GetBytes(haystack));
+
+        /// <summary>
+        ///   Matches - Retrieve information abut which patterns in the set match.
+        /// </summary>
+        public SetMatch Matches(byte[] haystack)
         {
-            var haystackBytes = Encoding.UTF8.GetBytes(haystack);
             var results = new bool[_arity];
             var overall = RureFfi.rure_set_matches(Raw,
-                                                   haystackBytes,
-                                                   new UIntPtr((uint)haystackBytes.Length),
+                                                   haystack,
+                                                   new UIntPtr((uint)haystack.Length),
                                                    UIntPtr.Zero,
                                                    results);
             return new SetMatch(overall, results);

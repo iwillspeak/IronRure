@@ -10,6 +10,7 @@ namespace IronRure
         internal Captures(Regex re, byte[] haystack)
             : base(RureFfi.rure_captures_new(re.Raw))
         {
+            _reg = re;
             _haystack = haystack;
         }
 
@@ -37,6 +38,11 @@ namespace IronRure
         }
 
         /// <summary>
+        ///   Get the match for a given capture name.
+        /// </summary>
+        public Match this[string group] => this[_reg[group]];
+
+        /// <summary>
         ///   The number of groups in the capture set
         /// </summary>
         public int Length => (int)RureFfi.rure_captures_len(Raw);
@@ -44,5 +50,6 @@ namespace IronRure
         public bool Matched { get; internal set; }
 
         private byte[] _haystack;
+        private readonly Regex _reg;
     }
 }

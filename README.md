@@ -8,7 +8,14 @@ IronRure targets the .NET Standard runtime. It's available to install on NuGet:
 
     > Install-Package IronRure
 
-If you're targeting Windows or macOS then it's [batteries included](https://github.com/iwillspeak/IronRure-Batteries). If not then you'll need to supply your own compiled version of `rure`.
+If you're targeting Linux, Windows or macOS then it's [batteries included](https://github.com/iwillspeak/IronRure-Batteries). If not then you'll need to supply your own compiled version of `rure`.
+
+## Tutorials
+
+Walkthroughs and example code to get to know the basic features of IronRure.
+
+* [Re-create `grep` with IronRure](examples/grep/)
+* [Filtering User Input with `RegexSet`](examples/filtering/)
 
 ## Usage
 
@@ -64,3 +71,7 @@ In general IronRure out-performs .NET Regex, although milage may vary depending 
 ## Syntax and Semantics
 
 For more information about the pattern syntax see [the underlying Rust crate documentation](https://doc.rust-lang.org/regex/).
+
+## Windows Gotchas
+
+The windows build of [`IronRure-Batteries`](https://github.com/iwillspeak/IronRure-Batteries) requires the `vc140` redistributable to work. This means you need to have Visual Studio 2015 or the [Visual Studio 2015 C++ Runtime](https://www.microsoft.com/en-gb/download/details.aspx?id=48145) installed for it to load. If not you'll get an exception which claims that `rure.dll` can't be found.
