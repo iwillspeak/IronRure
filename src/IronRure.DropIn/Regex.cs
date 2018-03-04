@@ -66,6 +66,10 @@ namespace IronRure.DropIn
                 flags |= RureFlags.Multi;
             if (options.HasFlag(RegexOptions.Singleline))
                 flags |= RureFlags.Dotnl;
+            if (options.HasFlag(RegexOptions.RightToLeft))
+                throw new NotSupportedException("IronRure does not support rightmost-first searching");
+            if (options.HasFlag(RegexOptions.ECMAScript))
+                throw new NotSupportedException("IronRure does not support ECMAScript mode");
             return flags;
         }
 
@@ -82,6 +86,26 @@ namespace IronRure.DropIn
         {
             return _pattern.IsMatch(haystack, (uint)offset);
         }
+
+        /// <summary>
+        ///   Static version of the simple <see cref="Regex.IsMatch" />. 
+        /// </summary>
+        public static bool IsMatch(string haystack, string pattern) =>
+            IsMatch(haystack, pattern, RegexOptions.None);
+
+        /// <summary>
+        ///   Static version of <see cref="Regex.IsMatch" /> with options.
+        /// </summary>
+        public static bool IsMatch(string haystack, string pattern, RegexOptions options)
+        {
+            return new Regex(pattern, options).IsMatch(haystack);
+        }
+
+        /// <summary>
+        ///   Static version of <see cref="Regex.IsMatch" /> with match timeout.
+        /// </summary>
+        public static bool IsMatch(string haystack, string pattern, RegexOptions options, TimeSpan matchTimeout)
+            => IsMatch(haystack, pattern, options);
 
         /// <summary>
         ///   Escape any special characters in the pattern so that
