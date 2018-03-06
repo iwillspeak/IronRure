@@ -2,6 +2,10 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard1.4;net47</TargetFrameworks>
     <Version>0.9.1</Version>
+	<Author>Will Speak (@iwillspeak)</Author>
+	<Description>
+	  Bindings to the Rust `regex` crate from .NET.
+	</Description>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' != 'net47' ">
     <PackageReference Include="IronRure.Batteries-Darwin" Version="2.6.0" />
