@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard1.4;net47</TargetFrameworks>
-    <Version>0.9.1</Version>
+    <VersionPrefix>1.0.0</VersionPrefix>
 	<Author>Will Speak (@iwillspeak)</Author>
 	<Description>
 	  Bindings to the Rust `regex` crate from .NET.
