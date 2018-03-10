@@ -3,8 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFramework);net47</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net47</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
