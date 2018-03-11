@@ -14,7 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="IronRure.Batteries-Windows" Version="2.6.2" >
-	  <PrivateAssets>analyzers;build</PrivateAssets>
+	  <PrivateAssets>none</PrivateAssets>
 	</PackageReference>
   </ItemGroup>
 </Project>
