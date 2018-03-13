@@ -5,7 +5,7 @@ install:
   - dotnet restore
 build_script:
   - dotnet build
-  - dotnet pack -o artifacts_nuget
+  - ps: dotnet pack -o artifacts_nuget --version-suffix=${env:APPVEYOR_REPO_BRANCH}${env:APPVEYOR_BUILD_NUMBER} --configuration Release
 test_script:
   - ps: ForEach ($proj in (Get-ChildItem -Path test -Recurse -Filter '*.csproj')) { dotnet test --no-build $proj.FullName }
 artifacts:
