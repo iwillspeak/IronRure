@@ -1,11 +1,13 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace IronRure
 {
     /// <summary>
     ///   A set of captures for a given regex.
     /// </summary>
-    public class Captures : UnmanagedResource
+    public class Captures : UnmanagedResource, IEnumerable<Match>
     {
         internal Captures(Regex re, byte[] haystack)
             : base(RureFfi.rure_captures_new(re.Raw))
@@ -48,6 +50,17 @@ namespace IronRure
         public int Length => (int)RureFfi.rure_captures_len(Raw);
 
         public bool Matched { get; internal set; }
+
+        public IEnumerator<Match> GetEnumerator()
+        {
+            var len = Length;
+            for (int i = 0; i < len; i++)
+            {
+                yield return this[i];
+            }
+        }
+        
+        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
         private byte[] _haystack;
         private readonly Regex _reg;
