@@ -2,7 +2,7 @@
   <PropertyGroup>
 	<TargetFrameworks>netstandard1.4</TargetFrameworks>
     <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net47</TargetFrameworks>
-    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionPrefix>1.1.0</VersionPrefix>
 	<Author>Will Speak (@iwillspeak)</Author>
 	<Description>
 	  Bindings to the Rust `regex` crate from .NET.
