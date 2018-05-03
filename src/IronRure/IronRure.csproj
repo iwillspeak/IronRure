@@ -9,11 +9,11 @@
 	</Description>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' != 'net47' ">
-    <PackageReference Include="IronRure.Batteries-Darwin" Version="2.6.2" />
-    <PackageReference Include="IronRure.Batteries-Linux" Version="2.6.2" />
+    <PackageReference Include="IronRure.Batteries-Darwin" Version="100.0.0" />
+    <PackageReference Include="IronRure.Batteries-Linux" Version="100.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="IronRure.Batteries-Windows" Version="2.6.2" >
+    <PackageReference Include="IronRure.Batteries-Windows" Version="100.0.0" >
 	  <PrivateAssets>none</PrivateAssets>
 	</PackageReference>
   </ItemGroup>
