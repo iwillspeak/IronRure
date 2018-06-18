@@ -9,5 +9,5 @@ build_script:
 test_script:
   - ps: ForEach ($proj in (Get-ChildItem -Path test -Recurse -Filter '*.csproj')) { dotnet test --no-build $proj.FullName }
 artifacts:
-  - path: '**/artifacts_nuget/*.nupkg'
+  - path: '**/*.nupkg'
     name: NuGet Packages
