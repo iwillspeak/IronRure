@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-	<TargetFrameworks>netstandard1.4</TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net47</TargetFrameworks>
+    <TargetFrameworks>netstandard1.4;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net45</TargetFrameworks>
     <VersionPrefix>1.1.0</VersionPrefix>
-	<Author>Will Speak (@iwillspeak)</Author>
-	<Description>
-	  Bindings to the Rust `regex` crate from .NET.
-	</Description>
+    <Author>Will Speak (@iwillspeak)</Author>
+    <Description>
+      Bindings to the Rust `regex` crate from .NET.
+    </Description>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' != 'net47' ">
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' != '.NETFramework'">
     <PackageReference Include="IronRure.Batteries-Darwin" Version="100.0.1" />
     <PackageReference Include="IronRure.Batteries-Linux" Version="100.0.1" />
   </ItemGroup>
