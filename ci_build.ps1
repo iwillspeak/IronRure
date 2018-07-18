@@ -1,5 +1,5 @@
 dotnet restore
-dotnet --no-restore build
+dotnet build --no-restore
 
 if (${env:APPVEYOR_REPO_TAG})
 {
