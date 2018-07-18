@@ -2,12 +2,8 @@ version: '1.0.{build}'
 image: Visual Studio 2017
 install:
   - dotnet --version
-  - dotnet restore
 build_script:
-  - dotnet build
-  - ps: dotnet pack -o artifacts_nuget --version-suffix=${env:APPVEYOR_REPO_BRANCH}${env:APPVEYOR_BUILD_NUMBER} --configuration Release
-test_script:
-  - ps: ForEach ($proj in (Get-ChildItem -Path test -Recurse -Filter '*.csproj')) { dotnet test --no-build $proj.FullName }
+  - ps: .\ci_build.ps1
 artifacts:
   - path: '**/*.nupkg'
     name: NuGet Packages
