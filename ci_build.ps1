@@ -1,7 +1,7 @@
 dotnet restore
 dotnet build --no-restore
 
-if (${env:APPVEYOR_REPO_TAG})
+if (${env:APPVEYOR_REPO_TAG} -eq $true)
 {
 	dotnet pack --no-restore `
 	  -o artifacts_nuget `
