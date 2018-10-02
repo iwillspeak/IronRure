@@ -9,11 +9,11 @@
     </Description>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' != '.NETFramework'">
-    <PackageReference Include="IronRure.Batteries-Darwin" Version="100.0.1" />
-    <PackageReference Include="IronRure.Batteries-Linux" Version="100.0.1" />
+    <PackageReference Include="IronRure.Batteries-Darwin" Version="100.5.0" />
+    <PackageReference Include="IronRure.Batteries-Linux" Version="100.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="IronRure.Batteries-Windows" Version="100.0.1" >
+    <PackageReference Include="IronRure.Batteries-Windows" Version="100.5.0" >
 	  <PrivateAssets>none</PrivateAssets>
 	</PackageReference>
   </ItemGroup>
