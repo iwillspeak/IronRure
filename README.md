@@ -19,6 +19,10 @@ Walkthroughs and example code to get to know the basic features of IronRure.
 * [Re-create `grep` with IronRure](examples/grep/)
 * [Filtering User Input with `RegexSet`](examples/filtering/)
 
+## Contributing
+
+IronRure is open source. Pull requests are welcome. See the [Contributing Guidelines][contributing] and [Code of Conduct][coc] for more information.
+
 ## Usage
 
 The simplest operation is to check if a pattern matches anywhere in a given string:
@@ -77,3 +81,6 @@ For more information about the pattern syntax see [the underlying Rust crate doc
 ## Windows Gotchas
 
 The windows build of [`IronRure-Batteries`](https://github.com/iwillspeak/IronRure-Batteries) requires the `vc140` redistributable to work. This means you need to have Visual Studio 2015 or the [Visual Studio 2015 C++ Runtime](https://www.microsoft.com/en-gb/download/details.aspx?id=48145) installed for it to load. If not you'll get an exception which claims that `rure.dll` can't be found.
+
+[contributing]: CONTRIBUTING.md
+[coc]: CODE_OF_CONDUCT.md
