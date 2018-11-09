@@ -15,19 +15,15 @@ namespace IronRure
                 Environment.Is64BitProcess ? "rure_x64" : "rure_x86",
                 "rure.dll");
 
-            if (Path.Exists(location))
-            {
-                var hmod = LoadLibrary(location);
-                return hmod != IntPtr.Zero;
-            }
-            return false;
+            var hmod = LoadLibrary(location);
+            return hmod != IntPtr.Zero;
         }
 
         static RureFfi()
         {
             var currentLocation = new Uri(typeof(RureFfi).Assembly.CodeBase).LocalPath;
             TryLoadFrom(Path.GetDirectoryName(currentLocation)) ||
-                TryLoadFrom(Appdomain.CurrentDomain.BaseDirectory);
+                TryLoadFrom(AppDomain.CurrentDomain.BaseDirectory);
         }
 
         [DllImport("kernel32.dll")]
