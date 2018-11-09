@@ -8,12 +8,24 @@ namespace IronRure
     public static class RureFfi
     {
 #if NET45
+        private static bool TryLoadFrom(string basePath)
+        {
+            var location = Path.Combine(
+                basePath,
+                Environment.Is64BitProcess ? "rure_x64" : "rure_x86",
+                "rure.dll");
+
+            var hmod = LoadLibrary(location);
+            return hmod != IntPtr.Zero;
+        }
+
         static RureFfi()
         {
-            LoadLibrary(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                Environment.Is64BitProcess ? "rure_x64" : "rure_x86",
-                "rure.dll"
-            ));
+            var currentLocation = new Uri(typeof(RureFfi).Assembly.CodeBase).LocalPath;
+            if (!TryLoadFrom(Path.GetDirectoryName(currentLocation)))
+            {
+                TryLoadFrom(AppDomain.CurrentDomain.BaseDirectory);
+            }
         }
 
         [DllImport("kernel32.dll")]
