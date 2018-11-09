@@ -18,7 +18,7 @@ Test-LastExitCode $lastexitcode
 
 
 
-if (${env:APPVEYOR_REPO_TAG})
+if (${env:APPVEYOR_REPO_TAG} -eq $true)
 {
     dotnet pack --no-restore `
         -o artifacts_nuget `
