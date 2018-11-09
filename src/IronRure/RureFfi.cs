@@ -22,8 +22,10 @@ namespace IronRure
         static RureFfi()
         {
             var currentLocation = new Uri(typeof(RureFfi).Assembly.CodeBase).LocalPath;
-            TryLoadFrom(Path.GetDirectoryName(currentLocation)) ||
+            if (!TryLoadFrom(Path.GetDirectoryName(currentLocation)))
+            {
                 TryLoadFrom(AppDomain.CurrentDomain.BaseDirectory);
+            }
         }
 
         [DllImport("kernel32.dll")]
