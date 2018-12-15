@@ -1,14 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Linq;
 using System.Reflection;
-using System.Diagnostics;
-using System.Collections.Generic;
-
-using NetRegex = System.Text.RegularExpressions.Regex;
-
+using System.Text;
+using BenchmarkDotNet.Running;
 using IronRure;
+using NetRegex = System.Text.RegularExpressions.Regex;
 
 namespace Alice
 {
@@ -16,7 +15,12 @@ namespace Alice
     {
         static void Main(string[] args)
         {
-            var exePath = Assembly.GetEntryAssembly().Location;;
+            var summary = BenchmarkRunner.Run<AliceBenchTask>();
+        }
+
+        static void Main2(string[] args)
+        {
+            var exePath = Assembly.GetEntryAssembly().Location; ;
             var exeFolder = Path.GetDirectoryName(exePath);
             var path = Path.Combine(exeFolder, AliceFilename);
             var text = File.ReadAllText(path, Encoding.UTF8);
@@ -65,25 +69,28 @@ namespace Alice
             Console.WriteLine("{0} ({1})", name, pattern);
 
             var results = new List<BenchResult>();
-            
+
             // by doing the search this way we have to convert all 172k into
             // a .NET string for each step in the search. Surprisingly this
             // is _still_ faster than .NET in some cases.
-            results.Add(Bench($"rure::{name}", () => {
-                    foreach (var match in rure.FindAll(text))
-                        ;
-                }));
-            results.Add(Bench($"byts::{name}", () => {
-                    foreach (var match in rure.FindAll(bytes))
-                        ;
-                }));
-            results.Add(Bench($".net::{name}", () => {
-                    var match = net.Match(text);
-                    while (match.Success)
-                    {
-                        match = match.NextMatch();
-                    }
-                }));
+            results.Add(Bench($"rure::{name}", () =>
+            {
+                foreach (var match in rure.FindAll(text))
+                    ;
+            }));
+            results.Add(Bench($"byts::{name}", () =>
+            {
+                foreach (var match in rure.FindAll(bytes))
+                    ;
+            }));
+            results.Add(Bench($".net::{name}", () =>
+            {
+                var match = net.Match(text);
+                while (match.Success)
+                {
+                    match = match.NextMatch();
+                }
+            }));
 
             var winner = results.OrderBy(r => r.Median).First();
 
@@ -97,7 +104,7 @@ namespace Alice
                 {
                     var diff = (r.Median - winner.Median) / (double)winner.Median;
                     Console.WriteLine("{0}, {1:0.0}x slower", r, diff);
-                }             
+                }
             }
         }
 
