@@ -5,24 +5,23 @@ using System.Runtime.InteropServices;
 
 namespace IronRure
 {
-    internal class CaptureNamesEnumerator : UnmanagedResource, IEnumerator<string>
+    internal class CaptureNamesEnumerator : IDisposable, IEnumerator<string>
     {
+        private readonly CaptureNamesHandle _handle;
+        
+        public CaptureNamesEnumerator(Regex regex)
+        {
+            _handle = RureFfi.rure_iter_capture_names_new(regex.Raw);
+        }
+
         public string Current { get; protected set; }
 
         object IEnumerator.Current => (object)Current;
 
-        public CaptureNamesEnumerator(Regex regex)
-            : base(RureFfi.rure_iter_capture_names_new(regex.Raw))
-        {}
-
-        protected override void Free(IntPtr resource)
-        {
-            RureFfi.rure_iter_capture_names_free(resource);
-        }
 
         public bool MoveNext()
         {
-            while (RureFfi.rure_iter_capture_names_next(Raw, out IntPtr name))
+            while (RureFfi.rure_iter_capture_names_next(_handle, out IntPtr name))
             {
                 Current = Marshal.PtrToStringAnsi(name);
                 if (!string.IsNullOrEmpty(Current))
@@ -34,6 +33,11 @@ namespace IronRure
         public void Reset()
         {
             throw new NotSupportedException();
+        }
+
+        public void Dispose()
+        {
+            _handle.Dispose();
         }
     }
 }

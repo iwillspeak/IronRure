@@ -5,25 +5,39 @@ using System.Runtime.InteropServices;
 
 namespace IronRure
 {
-    public class RegexSet : UnmanagedResource
+    public class RegexSet : IDisposable
     {
+        /// <summary>
+        ///   The number of patterns in this set.
+        /// </summary>
+        private int _arity;
+
+        /// <summary>
+        ///  Raw regex set handle
+        /// </summary>
+        private RegexSetHandle _handle;
+
         public RegexSet(params string[] patterns)
             : this(Regex.DefaultFlags, patterns)
         {}
 
         public RegexSet(RureFlags flags, params string[] patterns)
-            : base(CompileSet(patterns, flags, IntPtr.Zero))
+            : this(CompileSet(patterns, flags, new OptionsHandle()), patterns.Length)
         {
-            _arity = patterns.Length;
         }
 
         public RegexSet(RureFlags flags, Options options, params string[] patterns)
-            : base(CompileSet(patterns, flags, options.Raw))
+            : this(CompileSet(patterns, flags, options.Raw), patterns.Length)
         {
-            _arity = patterns.Length;
         }
 
-        private static IntPtr CompileSet(string[] patterns, RureFlags flags, IntPtr options)
+        private RegexSet(RegexSetHandle handle, int arity)
+        {
+            _arity = arity;
+            _handle = handle;
+        }
+
+        private static RegexSetHandle CompileSet(string[] patterns, RureFlags flags, OptionsHandle options)
         {
             var patBytes = patterns.Select(Encoding.UTF8.GetBytes).ToArray();
             var patLengths = patBytes
@@ -33,22 +47,22 @@ namespace IronRure
             var patBytePinnedPointers = patByteHandles
                 .Select(h => h.AddrOfPinnedObject()).ToArray();
 
-            using (var err = new Error())
+            using (var err = RureFfi.rure_error_new())
             {
                 var compiled = RureFfi.rure_compile_set(patBytePinnedPointers,
                                                         patLengths,
                                                         new UIntPtr((uint)patLengths.Length),
                                                         (uint)flags,
                                                         options,
-                                                        err.Raw);
+                                                        err);
 
                 foreach (var handle in patByteHandles)
                     handle.Free();
                 
-                if (compiled != IntPtr.Zero)
-                    return compiled;
+                if (compiled.IsInvalid)
+                    throw new RegexCompilationException(err.Message);
 
-                throw new RegexCompilationException(err.Message);
+                return compiled;
             }
         }
 
@@ -63,7 +77,7 @@ namespace IronRure
         /// </summary>
         public bool IsMatch(byte[] haystack)
         {
-            return RureFfi.rure_set_is_match(Raw, haystack,
+            return RureFfi.rure_set_is_match(_handle, haystack,
                                              new UIntPtr((uint)haystack.Length),
                                              UIntPtr.Zero);
         }
@@ -80,7 +94,7 @@ namespace IronRure
         public SetMatch Matches(byte[] haystack)
         {
             var results = new bool[_arity];
-            var overall = RureFfi.rure_set_matches(Raw,
+            var overall = RureFfi.rure_set_matches(_handle,
                                                    haystack,
                                                    new UIntPtr((uint)haystack.Length),
                                                    UIntPtr.Zero,
@@ -88,14 +102,9 @@ namespace IronRure
             return new SetMatch(overall, results);
         }
 
-        protected override void Free(IntPtr resource)
+        public void Dispose()
         {
-            RureFfi.rure_set_free(resource);
+            _handle.Dispose();
         }
-
-        /// <summary>
-        ///   The number of patterns in this set.
-        /// </summary>
-        private int _arity;
     }
 }
