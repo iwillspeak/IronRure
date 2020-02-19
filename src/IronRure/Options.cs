@@ -2,16 +2,14 @@ using System;
 
 namespace IronRure
 {
-    public class Options : UnmanagedResource
+    public class Options : IDisposable
     {
         public Options()
-            : base(RureFfi.rure_options_new())
-        {}
-
-        protected override void Free(IntPtr resource)
         {
-            RureFfi.rure_options_free(resource);
+            Raw = RureFfi.rure_options_new();
         }
+
+        internal OptionsHandle Raw { get; }
 
         /// <summary>
         ///   Set Size Limit - Controls the size of a single regex program
@@ -27,6 +25,11 @@ namespace IronRure
         public uint DfaSize
         {
             set => RureFfi.rure_options_dfa_size_limit(Raw, new UIntPtr(value));
+        }
+
+        public void Dispose()
+        {
+            Raw.Dispose();
         }
     }
 }

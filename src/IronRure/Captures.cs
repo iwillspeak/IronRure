@@ -7,18 +7,17 @@ namespace IronRure
     /// <summary>
     ///   A set of captures for a given regex.
     /// </summary>
-    public class Captures : UnmanagedResource, IEnumerable<Match>
+    public class Captures : IDisposable, IEnumerable<Match>
     {
+        private readonly byte[] _haystack;
+        private readonly Regex _reg;
+
         internal Captures(Regex re, byte[] haystack)
-            : base(RureFfi.rure_captures_new(re.Raw))
+            : base()
         {
             _reg = re;
             _haystack = haystack;
-        }
-
-        protected override void Free(IntPtr resource)
-        {
-            RureFfi.rure_captures_free(resource);
+            Raw = RureFfi.rure_captures_new(re.Raw);
         }
 
         /// <summary>
@@ -51,6 +50,11 @@ namespace IronRure
 
         public bool Matched { get; internal set; }
 
+        /// <summary>
+        /// The raw, unmanaged, handle to the captures group
+        /// </summary>
+        public CapturesHandle Raw { get; }
+
         public IEnumerator<Match> GetEnumerator()
         {
             var len = Length;
@@ -61,8 +65,10 @@ namespace IronRure
         }
         
         IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
-
-        private byte[] _haystack;
-        private readonly Regex _reg;
+        
+        public void Dispose()
+        {
+            Raw.Dispose();
+        }
     }
 }

@@ -23,17 +23,6 @@ namespace IronRureTests
         }
 
         [Fact]
-        public void Options_GetRaw_ReturnsValidUntilDisposed()
-        {
-            var opts = new Options();
-
-            Assert.NotEqual(IntPtr.Zero, opts.Raw);
-
-            opts.Dispose();
-            Assert.Equal(IntPtr.Zero, opts.Raw);
-        }
-
-        [Fact]
         public void Options_SetSizeLimit_Succeeds()
         {
             using (var opts = new Options())
