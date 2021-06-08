@@ -106,7 +106,7 @@ namespace IronRureTests
 
             var matches = reg.FindAll("").ToArray();
 
-            Assert.Equal(0, matches.Length);
+            Assert.Empty(matches);
 
             matches = reg.FindAll("4 + 8 = 12").ToArray();
 
