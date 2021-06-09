@@ -9,7 +9,7 @@
            "type": "coreclr",
            "request": "launch",
            "preLaunchTask": "build",
-           "program": "${workspaceRoot}/examples/grep/bin/Debug/netcoreapp2.0/grep.dll",
+           "program": "${workspaceRoot}/examples/grep/bin/Debug/net5.0/grep.dll",
            "args": [ "foo" ],
            "cwd": "${workspaceRoot}",
            "stopAtEntry": false,
@@ -21,7 +21,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceRoot}/test/IronRureTests/bin/Debug/netcoreapp1.1/IronRureTests.dll",
+            "program": "${workspaceRoot}/test/IronRureTests/bin/Debug/net5.0/IronRureTests.dll",
             "args": [],
             "cwd": "${workspaceRoot}/test/IronRureTests",
             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
