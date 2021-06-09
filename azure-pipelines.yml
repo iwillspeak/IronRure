@@ -15,6 +15,11 @@ stages:
     - script: bash ./ci_build.sh
     - publish: 'PublishOutput/'
       artifact: NuGets
+    - task: PublishTestResults@2
+      condition: always()
+      inputs:
+        testResultsFormat: 'VSTest'
+        testResultsFiles: '**/TestResults/*.trx'
 
 - stage: Deploy
   jobs:
