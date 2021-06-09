@@ -3,7 +3,6 @@ branches:
   master:
     regex: ^main$
     tag: beta
-    increment: none
 ignore:
   sha: []
 merge-message-formats: {}
