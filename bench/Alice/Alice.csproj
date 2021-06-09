@@ -6,11 +6,17 @@
     <TargetFrameworks>net5.0</TargetFrameworks>
     <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net472</TargetFrameworks>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <IncludeRe2>true</IncludeRe2>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.0" />
+    <PackageReference Condition="$(IncludeRe2)" Include="IronRe2" Version="1.0.1" />
   </ItemGroup>
+
+  <PropertyGroup Condition="$(IncludeRe2)">
+    <DefineConstants>IncludeRe2</DefineConstants>
+  </PropertyGroup>
 
   <ItemGroup>
     <Content Include="Alice's_Adventures_in_Wonderland.txt">
