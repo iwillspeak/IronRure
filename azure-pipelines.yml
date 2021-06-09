@@ -1,0 +1,35 @@
+variables:
+- group: ApiKeys
+
+trigger:
+- master
+
+stages:
+
+- stage: Build
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - script: bash ./ci_build.sh
+    - publish: 'PublishOutput/'
+      artifact: NuGets
+
+- stage: Deploy
+  jobs:
+  - deployment: NuGetDeploy
+    displayName: Push NuGet Packages
+    pool:
+      vmImage: 'Ubuntu-latest'
+    environment: 'live-nuget'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            patterns: '**/*.nupkg'
+          - script: |
+              dotnet nuget push --api-key $API_KEY --source "https://api.nuget.org/v3/index.json" $(Pipeline.Workspace)/**/*.nupkg
+            env:
+              API_KEY: $(NuGetOrgApiKey)
