@@ -6,7 +6,6 @@ using BenchmarkDotNet.Attributes;
 
 namespace Alice
 {
-    [CoreJob, ClrJob]
     [MemoryDiagnoser]
     [RPlotExporter, RankColumn, AsciiDocExporter, MarkdownExporter]
     public class AliceBenchTask
