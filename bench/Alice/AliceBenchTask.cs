@@ -17,6 +17,9 @@ namespace Alice
         private Regex dotnetRegexNoCompile;
         private IronRure.Regex rustRegex;
         private IronRure.Regex rustRegexUnicode;
+#if IncludeRe2
+        private IronRe2.Regex re2Regex;
+#endif
 
         [GlobalSetup]
         public void GlobalSetup()
@@ -65,6 +68,10 @@ namespace Alice
                 Pattern,
                 RegexOptions.IgnoreCase);
 
+#if IncludeRe2
+            re2Regex = new IronRe2.Regex(Pattern, new IronRe2.Options { CaseSensitive = false });
+#endif
+
             rustRegex = new IronRure.Regex(Pattern, IronRure.RureFlags.Casei);
             rustRegexUnicode = new IronRure.Regex(Pattern, IronRure.RureFlags.Casei | IronRure.RureFlags.Unicode);
         }
@@ -74,6 +81,11 @@ namespace Alice
 
         [Benchmark]
         public void DotnetRegexNoCompile() => dotnetRegexNoCompile.Matches(text).EnsureEnumerated();
+
+#if IncludeRe2
+        [Benchmark]
+        public void Re2Regex() => re2Regex.FindAll(text).EnsureEnumerated();
+#endif
 
         [Benchmark]
         public void RustRegex() => rustRegex.FindAll(text).EnsureEnumerated();
