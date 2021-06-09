@@ -1,5 +1,21 @@
 #! /usr/bin/env bash
 
+if [ -n "$TF_BUILD" ]
+then
+    # normalise our branches
+    echo "Initialising CI branch state"
+    git branch --trac main origi/main
+    case "$BUILD_SOURCEBRANCH" in
+        refs/heads/*)
+            branch_name=${BUILD_SOURCEBRANCH:11}
+            git switch --force-create "$branch_name" HEAD
+            ;;
+        *)
+            git switch --force-create "ci" HEAD
+            ;;
+    esac
+fi
+
 set -euox pipefail
 
 dotnet --version --verbose
