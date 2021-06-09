@@ -4,10 +4,6 @@ branches:
     regex: ^main$
     tag: beta
     increment: none
-  feature:
-    mode: ContinuousDeployment
-    regex: ^(?!main).*$
-    increment: none
 ignore:
   sha: []
 merge-message-formats: {}
