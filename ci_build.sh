@@ -4,7 +4,7 @@ if [ -n "$TF_BUILD" ]
 then
     # normalise our branches
     echo "Initialising CI branch state"
-    git branch --trac main origi/main
+    git branch --track main origin/main
     case "$BUILD_SOURCEBRANCH" in
         refs/heads/*)
             branch_name=${BUILD_SOURCEBRANCH:11}
