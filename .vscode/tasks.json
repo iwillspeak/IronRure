@@ -13,7 +13,10 @@
                 "build"
             ],
             "problemMatcher": "$msCompile",
-            "group": "build"
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
             "label": "restore",
@@ -30,8 +33,12 @@
             "command": "dotnet",
             "args": [
                 "run",
+                "--configuration",
+                "Release",
                 "--project",
-                "bench/Alice/Alice.csproj"
+                "bench/Alice/Alice.csproj",
+                "--framework",
+                "net5.0"
             ],
             "problemMatcher": "$msCompile"
         },
@@ -44,7 +51,10 @@
                 "test/IronRureTests/IronRureTests.csproj"
             ],
             "problemMatcher": [],
-            "group": "test"
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
         }
     ]
 }
