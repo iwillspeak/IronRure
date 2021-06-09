@@ -2,7 +2,12 @@ variables:
 - group: ApiKeys
 
 trigger:
-- master
+  branches:
+    include:
+    - main
+  tags:
+    include:
+    - v*
 
 stages:
 
