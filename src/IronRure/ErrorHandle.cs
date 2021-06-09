@@ -9,15 +9,19 @@ namespace IronRure
     ///   error strings get disposed of correctly even when there's
     ///   Exceptions about.
     /// </sumary>
-    public class Error : UnmanagedResource
+    public sealed class ErrorHandle : SafeHandle
     {
-        public Error()
-            : base(RureFfi.rure_error_new())
-        {}
-
-        protected override void Free(IntPtr resource)
+        public ErrorHandle()
+            : base(IntPtr.Zero, true)
         {
-            RureFfi.rure_error_free(resource);
+        }
+
+        public override bool IsInvalid => handle == IntPtr.Zero;
+
+        protected override bool ReleaseHandle()
+        {
+            RureFfi.rure_error_free(handle);
+            return true;
         }
 
         /// <summary>
@@ -28,6 +32,7 @@ namespace IronRure
         ///   </para>
         /// </summary>
         public string Message =>
-            Marshal.PtrToStringAnsi(RureFfi.rure_error_message(Raw));
+            Marshal.PtrToStringAnsi(RureFfi.rure_error_message(this));
+
     }
 }

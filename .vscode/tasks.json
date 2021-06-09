@@ -1,38 +1,60 @@
 {
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
-    "version": "0.1.0",
+    "version": "2.0.0",
     "command": "dotnet",
-    "isShellCommand": true,
     "args": [],
     "tasks": [
         {
-            "taskName": "build",
-            "args": [ ],
-            "isBuildCommand": true,
-            "showOutput": "silent",
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "taskName": "restore",
-            "args": [ ],
-            "showOutput": "silent",
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "taskName": "bench",
+            "label": "build",
+            "type": "shell",
             "command": "dotnet",
-            "args": [ "run", "--project", "bench/Alice/Alice.csproj" ],
-            "showOutput": "always",
+            "args": [
+                "build"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "restore",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "restore"
+            ],
             "problemMatcher": "$msCompile"
         },
         {
-            "taskName": "test",
+            "label": "bench",
+            "type": "shell",
+            "command": "dotnet",
             "args": [
+                "run",
+                "--configuration",
+                "Release",
+                "--project",
+                "bench/Alice/Alice.csproj",
+                "--framework",
+                "net5.0"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "test",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "test",
                 "test/IronRureTests/IronRureTests.csproj"
             ],
-            "showOutput": "always",
-            "isTestCommand": true
+            "problemMatcher": [],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
         }
     ]
 }

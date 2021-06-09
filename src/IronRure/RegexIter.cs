@@ -2,21 +2,22 @@ using System;
 
 namespace IronRure
 {
-    public abstract class RegexIter : UnmanagedResource
+    public abstract class RegexIter : IDisposable
     {
-        protected Regex Pattern { get; }
-        protected byte[] Haystack { get; }
-
         public RegexIter(Regex pattern, byte[] haystack)
-            : base(RureFfi.rure_iter_new(pattern.Raw))
         {
+            Raw = RureFfi.rure_iter_new(pattern.Raw);
             Pattern = pattern;
             Haystack = haystack;
         }
 
-        protected override void Free(IntPtr resource)
+        protected RegexIterHandle Raw { get; }
+        protected Regex Pattern { get; }
+        protected byte[] Haystack { get; }
+
+        public void Dispose()
         {
-            RureFfi.rure_iter_free(resource);
+            Raw.Dispose();
         }
     }
 }

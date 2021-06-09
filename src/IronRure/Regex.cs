@@ -17,13 +17,13 @@ namespace IronRure
     ///     Managed wrapper around the rust regex class.
     ///   </para>
     /// </summary>
-    public partial class Regex : UnmanagedResource
+    public partial class Regex : IDisposable
     {
         /// <summary>
         ///   Create a new regex instance from the given pattern.
         /// </summary>
         public Regex(string pattern)
-            : this(pattern, IntPtr.Zero, (uint)DefaultFlags)
+            : this(pattern, new OptionsHandle(), (uint)DefaultFlags)
         {}
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace IronRure
         ///   Create a new regex instance from the given pattern and flags.
         /// </summary>
         public Regex(string pattern, RureFlags flags)
-            : this(pattern, IntPtr.Zero, (uint)flags)
+            : this(pattern, new OptionsHandle(), (uint)flags)
         {}
 
         /// <summary>
@@ -49,19 +49,22 @@ namespace IronRure
             : this(pattern, opts.Raw, (uint)flags)
         {}
 
-        private Regex(string pattern, IntPtr options, uint flags)
-            : base(Compile(pattern, options, flags))
-        {}
+        private Regex(string pattern, OptionsHandle options, uint flags)
+        {
+            Raw = Compile(pattern, options, flags);
+        }
+
+        internal RegexHandle Raw { get; }
 
         /// <summary>
         ///   Compiles the given regex and returns the unmanaged pointer to it.
         /// </summary>
-        private static IntPtr Compile(string pattern, IntPtr options, uint flags)
+        private static RegexHandle Compile(string pattern, OptionsHandle options, uint flags)
         {
             // Convert the pattern to a utf-8 encoded string.
             var patBytes = Encoding.UTF8.GetBytes(pattern);
 
-            using (var err = new Error())
+            using (var err = RureFfi.rure_error_new())
             {
                 // Compile the regex. We get back a raw handle to the underlying
                 // Rust object.
@@ -70,10 +73,10 @@ namespace IronRure
                     new UIntPtr((uint)patBytes.Length),
                     flags,
                     options,
-                    err.Raw);
+                    err);
                 
                 // If the regex failed to compile find out what the problem was.
-                if (raw == IntPtr.Zero)
+                if (raw.IsInvalid)
                     throw new RegexCompilationException(err.Message);
 
                 return raw;
@@ -263,9 +266,9 @@ namespace IronRure
             return CaptureAll(haystackBytes);
         }
 
-        protected override void Free(IntPtr resource)
+        public void Dispose()
         {
-            RureFfi.rure_free(resource);
+            Raw.Dispose();
         }
 
         /// <summary>

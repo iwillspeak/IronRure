@@ -8,12 +8,24 @@ namespace IronRure
     public static class RureFfi
     {
 #if NET45
+        private static bool TryLoadFrom(string basePath)
+        {
+            var location = Path.Combine(
+                basePath,
+                Environment.Is64BitProcess ? "rure_x64" : "rure_x86",
+                "rure.dll");
+
+            var hmod = LoadLibrary(location);
+            return hmod != IntPtr.Zero;
+        }
+
         static RureFfi()
         {
-            LoadLibrary(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                Environment.Is64BitProcess ? "rure_x64" : "rure_x86",
-                "rure.dll"
-            ));
+            var currentLocation = new Uri(typeof(RureFfi).Assembly.CodeBase).LocalPath;
+            if (!TryLoadFrom(Path.GetDirectoryName(currentLocation)))
+            {
+                TryLoadFrom(AppDomain.CurrentDomain.BaseDirectory);
+            }
         }
 
         [DllImport("kernel32.dll")]
@@ -40,9 +52,9 @@ namespace IronRure
         ///   simultaneously.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern IntPtr rure_compile(byte[] pattern, UIntPtr length,
-                    uint flags, IntPtr options,
-                    IntPtr error);
+        public static extern RegexHandle rure_compile(byte[] pattern, UIntPtr length,
+                    uint flags, OptionsHandle options,
+                    ErrorHandle error);
         
         /// <summary>
         ///   rure_free frees the given compiled regular expression.
@@ -71,7 +83,7 @@ namespace IronRure
         /// capturing groups in your regular expression.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern bool rure_is_match(IntPtr re, byte[] haystack, UIntPtr length,
+        public static extern bool rure_is_match(RegexHandle re, byte[] haystack, UIntPtr length,
                                                 UIntPtr start);
         
         /// <summary>
@@ -95,7 +107,7 @@ namespace IronRure
         ///   capturing groups in your regular expression.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern bool rure_find(IntPtr re, byte[] haystack, UIntPtr length,
+        public static extern bool rure_find(RegexHandle re, byte[] haystack, UIntPtr length,
                                             UIntPtr start, out RureMatch match);
 
         /// <summary>
@@ -124,8 +136,8 @@ namespace IronRure
         ///   use non-capturing groups (e.g., `(?:re)`) where possible.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern bool rure_find_captures(IntPtr re, byte[] hasytack, UIntPtr length,
-                                                     UIntPtr start, IntPtr captures);
+        public static extern bool rure_find_captures(RegexHandle re, byte[] hasytack, UIntPtr length,
+                                                     UIntPtr start, CapturesHandle captures);
 
         /// <summary>
         ///   rure_capture_name_index returns the capture index for the name given. If
@@ -137,7 +149,7 @@ namespace IronRure
         ///   corresponds to the entire match and is always unnamed.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern int rure_capture_name_index(IntPtr re, byte[] name);
+        public static extern int rure_capture_name_index(RegexHandle re, byte[] name);
 
         /// <summary>
         ///   rure_iter_capture_names_new creates a new capture_names
@@ -147,7 +159,7 @@ namespace IronRure
         ///   names of re.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern IntPtr rure_iter_capture_names_new(IntPtr re);
+        public static extern CaptureNamesHandle rure_iter_capture_names_new(RegexHandle re);
         
         /// <summary>
         ///   rure_iter_capture_names_free frees the iterator given.
@@ -166,7 +178,7 @@ namespace IronRure
         ///   provided pointer.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern bool rure_iter_capture_names_next(IntPtr it, out IntPtr name);
+        public static extern bool rure_iter_capture_names_next(CaptureNamesHandle it, out IntPtr name);
 
         /// <summary>
         ///   rure_iter_new creates a new iterator.
@@ -178,7 +190,7 @@ namespace IronRure
         ///   required.)
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern IntPtr rure_iter_new(IntPtr re);
+        public static extern RegexIterHandle rure_iter_new(RegexHandle re);
 
         /// <summary>
         ///   rure_iter_free frees the iterator given.
@@ -212,7 +224,7 @@ namespace IronRure
         ///   expression.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern bool rure_iter_next(IntPtr it,
+        public static extern bool rure_iter_next(RegexIterHandle it,
                                                  byte[] haystack,
                                                  UIntPtr length,
                                                  out RureMatch match);
@@ -247,10 +259,10 @@ namespace IronRure
         ///   groups (e.g., `(?:re)`) where possible.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern bool rure_iter_next_captures(IntPtr it,
+        public static extern bool rure_iter_next_captures(RegexIterHandle it,
                                                           byte[] haystack,
                                                           UIntPtr length,
-                                                          IntPtr captures);
+                                                          CapturesHandle captures);
 
         /// <summary>
         ///   rure_captures_new allocates storage for all capturing groups in re.
@@ -265,7 +277,7 @@ namespace IronRure
         ///   simultaneously.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern IntPtr rure_captures_new(IntPtr re);
+        public static extern CapturesHandle rure_captures_new(RegexHandle re);
 
         /// <summary>
         ///   rure_captures_free frees the given captures.
@@ -287,7 +299,7 @@ namespace IronRure
         ///   Note that index 0 corresponds to the full match.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern bool rure_captures_at(IntPtr captures,
+        public static extern bool rure_captures_at(CapturesHandle captures,
                                                    UIntPtr i,
                                                    out RureMatch match);
 
@@ -296,7 +308,7 @@ namespace IronRure
         ///   captures.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern UIntPtr rure_captures_len(IntPtr captures);
+        public static extern UIntPtr rure_captures_len(CapturesHandle captures);
 
         /// <summary>
         ///   rure_options_new allocates space for options.
@@ -309,7 +321,7 @@ namespace IronRure
         ///   same options pointer.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern IntPtr rure_options_new();
+        public static extern OptionsHandle rure_options_new();
         
         /// <summary>
         ///   rure_options_free frees the given options.
@@ -328,7 +340,7 @@ namespace IronRure
         ///   compilation error will be returned from rure_compile.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern void rure_options_size_limit(IntPtr options, UIntPtr limit);
+        public static extern void rure_options_size_limit(OptionsHandle options, UIntPtr limit);
 
         /// <summary>
         ///   rure_options_dfa_size_limit sets the approximate size of the cache used by
@@ -343,7 +355,7 @@ namespace IronRure
         ///   specified here.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern void rure_options_dfa_size_limit(IntPtr options, UIntPtr limit);
+        public static extern void rure_options_dfa_size_limit(OptionsHandle options, UIntPtr limit);
 
         /// <summary>
         ///   rure_compile_set compiles the given list of patterns into a single regular
@@ -366,12 +378,12 @@ namespace IronRure
         ///   The compiled expression set returned may be used from multiple threads.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern IntPtr rure_compile_set(IntPtr[] patterns,
+        public static extern RegexSetHandle rure_compile_set(IntPtr[] patterns,
                                                      UIntPtr[] patterns_lengths,
                                                      UIntPtr patterns_count,
                                                      uint flags,
-                                                     IntPtr options,
-                                                     IntPtr error);
+                                                     OptionsHandle options,
+                                                     ErrorHandle error);
 
         /// <summary>
         ///   rure_set_free frees the given compiled regular expression set.
@@ -397,7 +409,7 @@ namespace IronRure
         ///   \A ("begin text") anchor can never match.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern bool rure_set_is_match(IntPtr re,
+        public static extern bool rure_set_is_match(RegexSetHandle re,
                                                     byte[] haystack,
                                                     UIntPtr length,
                                                     UIntPtr start);
@@ -427,7 +439,7 @@ namespace IronRure
         ///   caring which, use rure_set_is_match.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern bool rure_set_matches(IntPtr re,
+        public static extern bool rure_set_matches(RegexSetHandle re,
                                                    byte[] haystack,
                                                    UIntPtr length,
                                                    UIntPtr start,
@@ -446,7 +458,7 @@ namespace IronRure
         /// value may be reused on subsequent calls to rure_compile.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern IntPtr rure_error_new();
+        public static extern ErrorHandle rure_error_new();
 
         /// <summary>
         /// rure_error_free frees the error given.
@@ -465,6 +477,6 @@ namespace IronRure
         ///   rure_compile, then this pointer may change or become invalid.
         /// </summary>
         [DllImport("rure", CallingConvention=CallingConvention.Cdecl)]
-        public static extern IntPtr rure_error_message(IntPtr err);
+        public static extern IntPtr rure_error_message(ErrorHandle err);
     }
 }
