@@ -8,7 +8,7 @@ namespace IronRure
     ///   Managed wrapper around the rure_error object. Ensures that
     ///   error strings get disposed of correctly even when there's
     ///   Exceptions about.
-    /// </sumary>
+    /// </summary>
     public sealed class ErrorHandle : SafeHandle
     {
         public ErrorHandle()
