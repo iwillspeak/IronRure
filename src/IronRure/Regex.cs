@@ -5,9 +5,6 @@ using System.Threading;
 using System.Linq;
 using System.Text;
 
-/// <summary>
-///   Iron Rure - .NET Bindings to the Rust Regex Crate
-/// </summary>
 namespace IronRure
 {
     /// <summary>
@@ -266,6 +263,7 @@ namespace IronRure
             return CaptureAll(haystackBytes);
         }
 
+        /// <inheritdoc />
         public void Dispose()
         {
             Raw.Dispose();

@@ -48,12 +48,15 @@ namespace IronRure
         /// </summary>
         public int Length => (int)RureFfi.rure_captures_len(Raw);
 
+        /// <summary>Overall match status for the pattern.</summary>
         public bool Matched { get; internal set; }
 
         /// <summary>
         /// The raw, unmanaged, handle to the captures group
         /// </summary>
         public CapturesHandle Raw { get; }
+
+        /// <inheritdoc />
 
         public IEnumerator<Match> GetEnumerator()
         {
@@ -64,8 +67,10 @@ namespace IronRure
             }
         }
         
+        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
         
+        /// <inheritdoc />
         public void Dispose()
         {
             Raw.Dispose();
