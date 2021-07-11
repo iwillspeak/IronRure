@@ -5,6 +5,10 @@ using System.Runtime.InteropServices;
 
 namespace IronRure
 {
+    /// <summary>
+    ///   Regex set. Used to match a collection of patterns against input text
+    ///   at the same time.
+    /// </summary>
     public class RegexSet : IDisposable
     {
         /// <summary>
@@ -17,15 +21,33 @@ namespace IronRure
         /// </summary>
         private RegexSetHandle _handle;
 
+        /// <summary>
+        ///   Create a regex set from a given collection of patterns with the
+        ///   default falgs and options.
+        /// </summary>
+        /// <param name="patterns">The patterns for this set.</param>
         public RegexSet(params string[] patterns)
             : this(Regex.DefaultFlags, patterns)
         {}
 
+        /// <summary>
+        ///   Create a regex set from a given collection of patterns with the
+        ///   given <paramref ref="falgs" /> and default options.
+        /// </summary>
+        /// <param name="flags">The flags to use for this set.</param>
+        /// <param name="patterns">The patterns for this set.</param>
         public RegexSet(RureFlags flags, params string[] patterns)
             : this(CompileSet(patterns, flags, new OptionsHandle()), patterns.Length)
         {
         }
 
+        /// <summary>
+        ///   Create a regex set from a given collection of patterns with the
+        ///   given <paramref ref="falgs" /> and <paramref ref="options" />.
+        /// </summary>
+        /// <param name="flags">The flags to use for this set.</param>
+        /// <param name="options">The options to use for this set.</param>
+        /// <param name="patterns">The patterns for this set.</param>
         public RegexSet(RureFlags flags, Options options, params string[] patterns)
             : this(CompileSet(patterns, flags, options.Raw), patterns.Length)
         {
@@ -102,6 +124,7 @@ namespace IronRure
             return new SetMatch(overall, results);
         }
 
+        /// <inheritdoc />
         public void Dispose()
         {
             _handle.Dispose();

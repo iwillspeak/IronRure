@@ -5,9 +5,10 @@ using System.Reflection;
 
 namespace IronRure
 {
+    /// <summary>P/Invoke FFI Bindings for the rust regex library</summary>
     public static class RureFfi
     {
-#if NET45
+#if NETFRAMEWORK
         private static bool TryLoadFrom(string basePath)
         {
             var location = Path.Combine(

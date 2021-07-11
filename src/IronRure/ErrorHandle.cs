@@ -11,13 +11,16 @@ namespace IronRure
     /// </summary>
     public sealed class ErrorHandle : SafeHandle
     {
+        /// <summary>Initialise a new error handle with the default value</summary>
         public ErrorHandle()
             : base(IntPtr.Zero, true)
         {
         }
 
+        /// <inheritdoc />
         public override bool IsInvalid => handle == IntPtr.Zero;
 
+        /// <inheritdoc />
         protected override bool ReleaseHandle()
         {
             RureFfi.rure_error_free(handle);
@@ -33,6 +36,5 @@ namespace IronRure
         /// </summary>
         public string Message =>
             Marshal.PtrToStringAnsi(RureFfi.rure_error_message(this));
-
     }
 }

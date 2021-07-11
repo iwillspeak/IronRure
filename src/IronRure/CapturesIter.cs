@@ -10,14 +10,20 @@ namespace IronRure
     /// </summary>
     public class CapturesIter : RegexIter, IEnumerator<Captures>
     {
+        /// <summary>Initialise a captures iterator.</summary>
+        /// <param name="pattern">The pattern to to search with.</param>
+        /// <param name="haystack">The haystack to search.</param>
         public CapturesIter(Regex pattern, byte[] haystack)
             : base(pattern, haystack)
         {}
 
+        /// <inheritdoc />
         public Captures Current { get; set; }
 
+        /// <inheritdoc />
         object IEnumerator.Current => (object)Current;
 
+        /// <inheritdoc />
         public bool MoveNext()
         {
             var caps = new Captures(Pattern, Haystack);
@@ -37,6 +43,7 @@ namespace IronRure
             return false;
         }
 
+        /// <inheritdoc />
         public void Reset()
         {
             throw new NotImplementedException();

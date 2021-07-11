@@ -2,8 +2,12 @@ using System;
 
 namespace IronRure
 {
+    /// <summary>Match information for a <see cref="RegexSet" />.</summary>
     public struct SetMatch
     {
+        /// <summary>Create a new set <see cref="SetMatch" /> instance.</summary>
+        /// <param name="matched">True if any of the expressions matched.</param>
+        /// <param name="matches">Match information for each pattern in the set.</param>
         public SetMatch(bool matched, bool[] matches)
         {
             Matched = matched;
