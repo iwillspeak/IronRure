@@ -2,18 +2,19 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard1.4;netstandard2.0</TargetFrameworks>
     <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net45</TargetFrameworks>
-    <VersionPrefix>2.0.0</VersionPrefix>
+    <VersionPrefix>2.0.1</VersionPrefix>
     <Author>Will Speak (@iwillspeak)</Author>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>
       Bindings to the Rust `regex` crate from .NET.
     </Description>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' != '.NETFramework'">
-    <PackageReference Include="IronRure.Batteries-Darwin" Version="154.0.0" />
-    <PackageReference Include="IronRure.Batteries-Linux" Version="154.0.0" />
+    <PackageReference Include="IronRure.Batteries-Darwin" Version="154.0.1" />
+    <PackageReference Include="IronRure.Batteries-Linux" Version="154.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="IronRure.Batteries-Windows" Version="154.0.0" >
+    <PackageReference Include="IronRure.Batteries-Windows" Version="154.0.1" >
 	  <PrivateAssets>none</PrivateAssets>
 	</PackageReference>
   </ItemGroup>
