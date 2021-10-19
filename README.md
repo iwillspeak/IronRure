@@ -2,7 +2,7 @@
 
 Rure is the [**Ru**st **R**egular **E**xpression crate](https://github.com/rust-lang/regex). This repo provides a set of bindings so that it can be used from .NET.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/662xbciv1k2hoddc?svg=true)](https://ci.appveyor.com/project/iwillspeak/ironrure)
+[![Build Status](https://dev.azure.com/iwillspeak/GitHub/_apis/build/status/iwillspeak.IronRure?branchName=refs%2Ftags%2Fv2.0.3)](https://dev.azure.com/iwillspeak/GitHub/_build/latest?definitionId=6&branchName=refs%2Ftags%2Fv2.0.3)
 
 ## Getting Started
 
