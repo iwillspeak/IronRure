@@ -1,7 +1,6 @@
 # Alice's Adventures in Wonderland
 
 This folder contains a simple test executable which benchmark the performance of .NET regex against IronRure.
-
 ``` ini
 
 BenchmarkDotNet=v0.13.0, OS=fedora 34
