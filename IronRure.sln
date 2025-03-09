@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7309B611-FA86-4A9C-B9BE-23DC8200B440}"
 EndProject
@@ -8,7 +8,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronRure", "src\IronRure\Ir
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{75DE4621-6B31-4E13-94BC-E34D5D65DE27}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronRureTests", "test\IronRureTests\IronRureTests.csproj", "{331D4B1D-99D5-4136-A6F4-3C307918466A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronRure.Tests", "test\IronRureTests\IronRure.Tests.csproj", "{331D4B1D-99D5-4136-A6F4-3C307918466A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bench", "bench", "{27DB6A99-06B0-4434-9CEE-F674EEDD57D5}"
 EndProject
@@ -19,6 +19,18 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "grep", "examples\grep\grep.csproj", "{CA2E8F13-FCBC-4577-9C72-17B85A23C0C8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "filtering", "examples\filtering\filtering.csproj", "{2E862603-ACE4-43D6-B133-66A04E78782E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		build.sh = build.sh
+		.github\workflows\ci.yml = .github\workflows\ci.yml
+		ci_build.sh = ci_build.sh
+		src\Directory.Build.props = src\Directory.Build.props
+		GitVersion.yml = GitVersion.yml
+		nuget.config = nuget.config
+		.github\workflows\publish.yml = .github\workflows\publish.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

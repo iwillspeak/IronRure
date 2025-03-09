@@ -1,42 +1,39 @@
 using Xunit;
-using IronRure;
-using System.Linq;
 
-namespace IronRure.Tests
+namespace IronRure.Tests;
+
+public class CapturesTests
 {
-    public class CapturesTests
+    [Fact]
+    public void CapturesIsEnumerable()
     {
-        [Fact]
-        void CapturesIsEnumerable()
-        {
-            var pattern = new Regex(@"(hello) (\w+)? (world)");
-            var caps = pattern.Captures("hello world");
-            Assert.Equal(4, caps.Count());
-        }
+        Regex pattern = new(@"(hello) (\w+)? (world)");
+        Captures caps = pattern.Captures("hello world");
+        Assert.Equal(4, caps.Length);
+    }
 
-        [Fact]
-        void CaptureEnumerableReturnsCorrectCaptures()
-        {
-            var pattern = new Regex(@"(foo)(bar)?");
-            var caps = pattern.Captures("foo");
+    [Fact]
+    public void CaptureEnumerableReturnsCorrectCaptures()
+    {
+        Regex pattern = new(@"(foo)(bar)?");
+        Captures caps = pattern.Captures("foo");
 
-            var capsEnum = caps.GetEnumerator();
+        using var capsEnum = caps.GetEnumerator();
 
-            Assert.True(capsEnum.MoveNext());
-            var current = capsEnum.Current;
-            Assert.True(current.Matched);
-            Assert.Equal("foo", current.ExtractedString);
+        Assert.True(capsEnum.MoveNext());
+        Match current = capsEnum.Current;
+        Assert.True(current.Matched);
+        Assert.Equal("foo", current.ExtractedString);
 
-            Assert.True(capsEnum.MoveNext());
-            current = capsEnum.Current;
-            Assert.True(current.Matched);
-            Assert.Equal("foo", current.ExtractedString);
+        Assert.True(capsEnum.MoveNext());
+        current = capsEnum.Current;
+        Assert.True(current.Matched);
+        Assert.Equal("foo", current.ExtractedString);
 
-            Assert.True(capsEnum.MoveNext());
-            current = capsEnum.Current;
-            Assert.False(current.Matched);
+        Assert.True(capsEnum.MoveNext());
+        current = capsEnum.Current;
+        Assert.False(current.Matched);
 
-            Assert.False(capsEnum.MoveNext());
-        }
+        Assert.False(capsEnum.MoveNext());
     }
 }

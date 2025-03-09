@@ -1,31 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
-    <TargetFrameworks>net5.0</TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net472</TargetFrameworks>
+    <TargetFrameworks>net9.0</TargetFrameworks>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <IncludeRe2>true</IncludeRe2>
+    <IncludeRe2>false</IncludeRe2>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.0" />
-    <PackageReference Condition="$(IncludeRe2)" Include="IronRe2" Version="1.0.1" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
+    <PackageReference Condition="$(IncludeRe2)" Include="IronRe2" Version="2.0.3" />
   </ItemGroup>
-
   <PropertyGroup Condition="$(IncludeRe2)">
     <DefineConstants>IncludeRe2</DefineConstants>
   </PropertyGroup>
-
   <ItemGroup>
     <Content Include="Alice's_Adventures_in_Wonderland.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\src\IronRure\IronRure.csproj" />
   </ItemGroup>
-
 </Project>

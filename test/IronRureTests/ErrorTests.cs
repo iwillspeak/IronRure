@@ -1,25 +1,23 @@
 using System;
 using Xunit;
 
-using IronRure;
+namespace IronRure.Tests;
 
-namespace IronRureTests
+public class ErrorTests
 {
-    public class ErrorTests
+    [Fact]
+    public void Error_Create_Succeeds()
     {
-        [Fact]
-        public void Eror_Create_Succeeds()
-        {
-            var err = RureFfi.rure_error_new();
-        }
+        ErrorHandle err = RureFfi.rure_error_new();
+        Assert.NotNull(err);
+    }
 
-        [Fact]
-        public void Error_AsIDisposable_ImplementsInterface()
-        {
-            var err = RureFfi.rure_error_new();
-            var dispo = err as IDisposable;
+    [Fact]
+    public void Error_AsIDisposable_ImplementsInterface()
+    {
+        ErrorHandle err = RureFfi.rure_error_new();
+        IDisposable dispo = err as IDisposable;
 
-            Assert.NotNull(dispo);
-        }
+        Assert.NotNull(dispo);
     }
 }
