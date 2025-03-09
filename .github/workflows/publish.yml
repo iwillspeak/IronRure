@@ -1,0 +1,98 @@
+name: publish
+
+# Trigger on pushes and pull requests to the main branch.
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Set permissions for the workflow.
+permissions:
+  contents: write
+  pull-requests: write
+  checks: write
+  packages: write
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_NOLOGO: 1
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Add GitHub Packages NuGet Source
+      run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/crispthinking/index.json"
+
+    - name: Restore dependencies
+      run: dotnet restore IronRe2.sln
+    
+    - name: Build
+      run: dotnet build IronRe2.sln --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test IronRe2.sln --configuration Release --no-build --logger "trx" --logger "console;verbosity=normal"
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      with:
+          name: test-results-${{ matrix.os }}
+          path: "**/*.trx"
+
+    - name: Pack
+      run: |
+            if [ "${{ github.ref_name }}" == "main" ]; then
+              dotnet pack IronRe2.sln --configuration Release --no-build --output Artifacts /p:PackageVersion=2.1.2-beta
+            else
+              dotnet pack IronRe2.sln --configuration Release --no-build --output Artifacts /p:PackageVersion=2.1.2-beta-${{ github.sha }}
+            fi
+      shell: bash
+
+    - name: Upload NuGet packages
+      uses: actions/upload-artifact@v4
+      with:
+          name: nuget-packages
+          path: Artifacts/*.nupkg
+
+  deploy:
+    # Publish only when creating a GitHub Release
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      # Download the NuGet package created in the previous job
+      - uses: actions/download-artifact@v4
+        with:
+          name: nuget-packages
+          path: bin/artifacts/
+
+      # Install the .NET SDK indicated in the global.json file
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+
+      # Publish all NuGet packages to GitHub Packages
+      - name: Publish GitHub package
+        run: |
+          dotnet nuget push bin/artifacts/**/*.nupkg --api-key "${{ secrets.GITHUB_TOKEN }}" --source "https://nuget.pkg.github.com/crispthinking/index.json" --skip-duplicate
+      
+      # Publish all NuGet packages to NuGet.org
+      # - name: Publish NuGet package
+      #   run: |
+      #     dotnet nuget push bin/artifacts/**/*.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source "https://api.nuget.org/v3/index.json" --skip-duplicate

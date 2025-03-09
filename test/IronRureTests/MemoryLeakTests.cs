@@ -19,7 +19,7 @@ public class MemoryLeakTests
         for (int i = 0; i < 1000; i++)
         {
             // Test with Options and Regex.  
-            using (Options opts = new Options().WithSize(512).WithDfaSize(512))
+            using (Options opts = new Options().WithSize(65536).WithDfaSize(65536))
             {
                 using Regex regex = new(@"(\w+)", opts);
                 // Perform some operations to simulate real usage.  

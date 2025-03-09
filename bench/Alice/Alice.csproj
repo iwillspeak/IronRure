@@ -4,11 +4,11 @@
     <IsPackable>false</IsPackable>
     <TargetFrameworks>net9.0</TargetFrameworks>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <IncludeRe2>true</IncludeRe2>
+    <IncludeRe2>false</IncludeRe2>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.0" />
-    <PackageReference Condition="$(IncludeRe2)" Include="IronRe2" Version="1.0.1" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
+    <PackageReference Condition="$(IncludeRe2)" Include="IronRe2" Version="2.0.3" />
   </ItemGroup>
   <PropertyGroup Condition="$(IncludeRe2)">
     <DefineConstants>IncludeRe2</DefineConstants>

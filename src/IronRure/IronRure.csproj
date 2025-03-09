@@ -11,11 +11,11 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<ItemGroup Condition="'$(TargetFrameworkIdentifier)' != '.NETFramework'">
-		<PackageReference Include="IronRure.Batteries-Darwin" Version="154.0.1" />
-		<PackageReference Include="IronRure.Batteries-Linux" Version="154.0.1" />
+		<PackageReference Include="IronRure.Batteries-Darwin" Version="154.1.0" />
+		<PackageReference Include="IronRure.Batteries-Linux" Version="154.1.0" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="IronRure.Batteries-Windows" Version="154.0.1">
+		<PackageReference Include="IronRure.Batteries-Windows" Version="154.1.0">
 			<PrivateAssets>none</PrivateAssets>
 		</PackageReference>
 	</ItemGroup>

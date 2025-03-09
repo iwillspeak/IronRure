@@ -1,8 +1,8 @@
 mode: ContinuousDelivery
 branches:
-  master:
+  main:
     regex: ^main$
-    tag: beta
+    label: beta
 ignore:
   sha: []
 merge-message-formats: {}

@@ -53,7 +53,7 @@ public static partial class RureFfi
     ///   simultaneously.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial RegexHandle rure_compile([In] byte[] pattern, UIntPtr length,
                 uint flags, OptionsHandle options,
                 ErrorHandle error);
@@ -64,7 +64,7 @@ public static partial class RureFfi
     ///   This must be called at most once for any rure.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial void rure_free(IntPtr reg);
 
     /// <summary>
@@ -86,7 +86,7 @@ public static partial class RureFfi
     /// capturing groups in your regular expression.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool rure_is_match(RegexHandle re, [In] byte[] haystack, UIntPtr length,
                                     UIntPtr start);
@@ -112,7 +112,7 @@ public static partial class RureFfi
     ///   capturing groups in your regular expression.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool rure_find(RegexHandle re, [In] byte[] haystack, UIntPtr length,
                                     UIntPtr start, out RureMatch match);
@@ -143,7 +143,7 @@ public static partial class RureFfi
     ///   use non-capturing groups (e.g., `(?:re)`) where possible.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool rure_find_captures(RegexHandle re, [In] byte[] hasytack, UIntPtr length,
                                              UIntPtr start, CapturesHandle captures);
@@ -158,7 +158,7 @@ public static partial class RureFfi
     ///   corresponds to the entire match and is always unnamed.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial int rure_capture_name_index(RegexHandle re, [In] byte[] name);
 
     /// <summary>
@@ -169,7 +169,7 @@ public static partial class RureFfi
     ///   names of re.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial CaptureNamesHandle rure_iter_capture_names_new(RegexHandle re);
     
     /// <summary>
@@ -178,7 +178,7 @@ public static partial class RureFfi
     ///   It must be called at most once.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial void rure_iter_capture_names_free(IntPtr it);
 
     /// <summary>
@@ -190,7 +190,7 @@ public static partial class RureFfi
     ///   provided pointer.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool rure_iter_capture_names_next(CaptureNamesHandle it, out IntPtr name);
 
@@ -204,7 +204,7 @@ public static partial class RureFfi
     ///   required.)
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial RegexIterHandle rure_iter_new(RegexHandle re);
 
     /// <summary>
@@ -213,7 +213,7 @@ public static partial class RureFfi
     ///   It must be called at most once.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial void rure_iter_free(IntPtr it);
 
     /// <summary>
@@ -240,7 +240,7 @@ public static partial class RureFfi
     ///   expression.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool rure_iter_next(RegexIterHandle it,
                                          [In] byte[] haystack,
@@ -277,7 +277,7 @@ public static partial class RureFfi
     ///   groups (e.g., `(?:re)`) where possible.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool rure_iter_next_captures(RegexIterHandle it,
                                                   [In] byte[] haystack,
@@ -297,7 +297,7 @@ public static partial class RureFfi
     ///   simultaneously.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial CapturesHandle rure_captures_new(RegexHandle re);
 
     /// <summary>
@@ -306,7 +306,7 @@ public static partial class RureFfi
     ///   This must be called at most once.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial void rure_captures_free(IntPtr captures);
 
     /// <summary>
@@ -321,7 +321,7 @@ public static partial class RureFfi
     ///   Note that index 0 corresponds to the full match.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool rure_captures_at(CapturesHandle captures,
                                                UIntPtr i,
@@ -332,7 +332,7 @@ public static partial class RureFfi
     ///   captures.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial UIntPtr rure_captures_len(CapturesHandle captures);
 
     /// <summary>
@@ -346,7 +346,7 @@ public static partial class RureFfi
     ///   same options pointer.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial OptionsHandle rure_options_new();
     
     /// <summary>
@@ -355,7 +355,7 @@ public static partial class RureFfi
     ///   This must be called at most once.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial void rure_options_free(IntPtr options);
 
     /// <summary>
@@ -367,7 +367,7 @@ public static partial class RureFfi
     ///   compilation error will be returned from rure_compile.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial void rure_options_size_limit(OptionsHandle options, UIntPtr limit);
 
     /// <summary>
@@ -383,7 +383,7 @@ public static partial class RureFfi
     ///   specified here.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial void rure_options_dfa_size_limit(OptionsHandle options, UIntPtr limit);
 
     /// <summary>
@@ -407,7 +407,7 @@ public static partial class RureFfi
     ///   The compiled expression set returned may be used from multiple threads.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial RegexSetHandle rure_compile_set([In] IntPtr[] patterns,
                                                  [In] UIntPtr[] patterns_lengths,
                                                  UIntPtr patterns_count,
@@ -421,7 +421,7 @@ public static partial class RureFfi
     ///   This must be called at most once for any rure_set.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial void rure_set_free(IntPtr re);
 
     /// <summary>
@@ -440,7 +440,7 @@ public static partial class RureFfi
     ///   \A ("begin text") anchor can never match.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool rure_set_is_match(RegexSetHandle re,
                                             [In] byte[] haystack,
@@ -472,7 +472,7 @@ public static partial class RureFfi
     ///   caring which, use rure_set_is_match.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool rure_set_matches(RegexSetHandle re,
                                            [In] byte[] haystack,
@@ -493,7 +493,7 @@ public static partial class RureFfi
     /// value may be reused on subsequent calls to rure_compile.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial ErrorHandle rure_error_new();
 
     /// <summary>
@@ -502,7 +502,7 @@ public static partial class RureFfi
     /// This must be called at most once.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial void rure_error_free(IntPtr error);
 
     /// <summary>
@@ -514,6 +514,6 @@ public static partial class RureFfi
     ///   rure_compile, then this pointer may change or become invalid.
     /// </summary>
     [LibraryImport("rure")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial IntPtr rure_error_message(ErrorHandle err);
 }
