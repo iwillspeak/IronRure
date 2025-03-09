@@ -146,7 +146,7 @@ public class RegexSet : IDisposable
             return;
         }
 
-        _handle.Dispose();
+        _handle?.Dispose();
         _handle = null;
     }
 }

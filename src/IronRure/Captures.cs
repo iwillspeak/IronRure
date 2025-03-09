@@ -98,7 +98,7 @@ public class Captures : IDisposable, IEnumerable<Match>
         if (disposing)
         {
             // Dispose managed resources
-            Raw.Dispose();
+            Raw?.Dispose();
         }
 
         // Dispose unmanaged resources

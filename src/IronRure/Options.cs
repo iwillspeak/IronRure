@@ -68,7 +68,7 @@ public class Options : IDisposable
         if (disposing)
         {
             // Dispose managed resources
-            Raw.Dispose();
+            Raw?.Dispose();
         }
 
         // Dispose unmanaged resources

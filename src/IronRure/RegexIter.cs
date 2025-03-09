@@ -3,7 +3,7 @@ using System;
 namespace IronRure;
 
 /// <summary>Regex match iterator.</summary>
-/// <remarks>Initalise a the regex iterator for the given haystack.</remarks>
+/// <remarks>Initialise a the regex iterator for the given haystack.</remarks>
 public abstract class RegexIter(Regex pattern, byte[] haystack) : IDisposable
 {
 
@@ -19,6 +19,6 @@ public abstract class RegexIter(Regex pattern, byte[] haystack) : IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
-        Raw.Dispose();
+        Raw?.Dispose();
     }
 }

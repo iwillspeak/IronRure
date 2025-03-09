@@ -32,6 +32,6 @@ internal class CaptureNamesEnumerator(Regex regex) : IDisposable, IEnumerator<st
 
     public void Dispose()
     {
-        _handle.Dispose();
+        _handle?.Dispose();
     }
 }

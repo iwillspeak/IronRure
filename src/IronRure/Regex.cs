@@ -262,13 +262,14 @@ public partial class Regex : IDisposable
 
         if (disposing)
         {
-            // Dispose managed resources
+            // Dispose managed resources if any
         }
 
-        // Dispose unmanaged resources
-        Raw.Dispose();
+        // Dispose unmanaged resources safely.
+        Raw?.Dispose();
         _disposed = true;
     }
+
 
     /// <inheritdoc />
     public void Dispose()
