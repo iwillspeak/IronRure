@@ -1,53 +1,47 @@
 using System;
 using Xunit;
 
-using IronRure;
+namespace IronRure.Tests;
 
-namespace IronRureTests
+public class OptionsTests
 {
-    public class OptionsTets
+    [Fact]
+    public void Options_Create_Succeeds()
     {
-        [Fact]
-        public void Options_Create_Succeeds()
-        {
-            var opts = new Options();
-        }
+        Options opts = new();
+        Assert.NotNull(opts);
+    }
 
-        [Fact]
-        public void Options_AsIDisposable_ImplementsInterface()
-        {
-            var opts = new Options();
-            var dispo = opts as IDisposable;
+    [Fact]
+    public void Options_AsIDisposable_ImplementsInterface()
+    {
+        Options opts = new();
+        opts.Dispose();
 
-            Assert.NotNull(dispo);
-        }
+        Assert.NotNull(opts);
+    }
 
-        [Fact]
-        public void Options_SetSizeLimit_Succeeds()
-        {
-            using (var opts = new Options())
-            {
-                opts.Size = 1024;
-            }
-        }
+    [Fact]
+    public void Options_SetSizeLimit_Succeeds()
+    {
+        using Options opts = new();
+        opts.Size = 1024;
+    }
 
-        [Fact]
-        public void Options_SetDfaLimit_Succeeds()
-        {
-            using (var opts = new Options())
-            {
-                opts.DfaSize = 1024;
-            }
-        }
+    [Fact]
+    public void Options_SetDfaLimit_Succeeds()
+    {
+        using Options opts = new();
+        opts.DfaSize = 1024;
+    }
 
-        [Fact]
-        public void Options_WithBuildableInterface_Succeeds()
-        {
-            new Options()
-                .WithSize(512)
-                .WithDfaSize(1024)
-                .WithSize(768)
-                .Dispose();
-        }
+    [Fact]
+    public void Options_WithBuildableInterface_Succeeds()
+    {
+        new Options()
+            .WithSize(512)
+            .WithDfaSize(1024)
+            .WithSize(768)
+            .Dispose();
     }
 }
