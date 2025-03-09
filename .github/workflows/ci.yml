@@ -64,9 +64,11 @@ jobs:
           path: "**/*.trx"
 
       - name: Pack
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: dotnet pack IronRure.sln --configuration Release --no-build --output Artifacts
 
       - name: Upload NuGet packages
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         uses: actions/upload-artifact@v4
         with:
           name: nuget-packages
