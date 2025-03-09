@@ -1,67 +1,70 @@
-# name: CI
+name: Build IronRure
 
-# # Trigger on pushes and pull requests to the main branch.
-# on:
-#   push:
-#     branches:
-#       - main
-#   pull_request:
-#     branches:
-#       - main
-#   workflow_dispatch:
+# Trigger on pushes and pull requests to the main branch.
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
-# # Set permissions for the workflow. TEST
-# permissions:
-#   contents: write
-#   pull-requests: write
-#   checks: write
-#   packages: read
+# Set permissions for the workflow. TEST
+permissions:
+  contents: write
+  pull-requests: write
+  checks: write
+  packages: read
 
-# env:
-#   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-#   DOTNET_CLI_TELEMETRY_OPTOUT: 1
-#   DOTNET_NOLOGO: 1
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_NOLOGO: 1
 
-# jobs:
-#   build:
-#     runs-on: ${{ matrix.os }}
-#     strategy:
-#       matrix:
-#         os: [ubuntu-latest]
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
 
-#     steps:
-#       - uses: actions/checkout@v4
-#         with:
-#           fetch-depth: 0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-#       - name: Setup .NET
-#         uses: actions/setup-dotnet@v4
-#         with:
-#           dotnet-version: '9.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
     
-#       - name: Add GitHub Packages NuGet Source
-#         run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/crispthinking/index.json"
+      - name: Add GitHub Packages NuGet Source
+        run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/crispthinking/index.json"
+
+      - name: Add GitHub Packages NuGet Source
+        run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/oscarjaergren/index.json"
     
-#       - name: Restore dependencies
-#         run: dotnet restore IronRe2.sln
+      - name: Restore dependencies
+        run: dotnet restore IronRure.sln
     
-#       - name: Build
-#         run: dotnet build IronRe2.sln --configuration Release --no-restore
+      - name: Build
+        run: dotnet build IronRure.sln --configuration Release --no-restore
 
-#       - name: Test
-#         run: dotnet test IronRe2.sln --configuration Release --no-build --logger "trx" --logger "console;verbosity=normal"
+      - name: Test
+        run: dotnet test IronRure.sln --configuration Release --no-build --logger "trx" --logger "console;verbosity=normal"
 
-#       - name: Upload test results
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: test-results-${{ matrix.os }}
-#           path: "**/*.trx"
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.os }}
+          path: "**/*.trx"
 
-#       - name: Pack
-#         run: dotnet pack IronRe2.sln --configuration Release --no-build --output Artifacts
+      - name: Pack
+        run: dotnet pack IronRure.sln --configuration Release --no-build --output Artifacts
 
-#       - name: Upload NuGet packages
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: nuget-packages
-#           path: Artifacts/*.nupkg
+      - name: Upload NuGet packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages
+          path: Artifacts/*.nupkg
