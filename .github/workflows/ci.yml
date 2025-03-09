@@ -9,13 +9,14 @@ on:
     branches:
       - main
   workflow_dispatch:
+  workflow_call:  # Allows the workflow to be called by other workflows
 
 # Set permissions for the workflow. TEST
 permissions:
   contents: write
   pull-requests: write
   checks: write
-  packages: read
+  packages: write
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -25,13 +26,15 @@ env:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
+    strategy:  
+      fail-fast: false      # This allows the matrix jobs to run independently.
+      matrix:  
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v4
         with:
+          submodules: true
           fetch-depth: 0
 
       - name: Setup .NET
