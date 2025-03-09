@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFrameworks>net9.0</TargetFrameworks>
 		<LangVersion>preview</LangVersion>
-		<VersionPrefix>2.0.5</VersionPrefix>
+		<VersionPrefix>2.0.6</VersionPrefix>
 		<Author>Will Speak (@iwillspeak)</Author>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Description>
@@ -10,13 +10,9 @@
 		</Description>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
-	<ItemGroup Condition="'$(TargetFrameworkIdentifier)' != '.NETFramework'">
+	<ItemGroup>
 		<PackageReference Include="IronRure.Batteries-Darwin" Version="154.1.0" />
 		<PackageReference Include="IronRure.Batteries-Linux" Version="154.1.0" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="IronRure.Batteries-Windows" Version="154.1.0">
-			<PrivateAssets>none</PrivateAssets>
-		</PackageReference>
+		<PackageReference Include="IronRure.Batteries-Windows" Version="154.1.0" />
 	</ItemGroup>
 </Project>
