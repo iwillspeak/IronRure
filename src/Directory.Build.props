@@ -1,15 +1,15 @@
 <Project>
-    <PropertyGroup>
-        <UpdateVersionProperties>true</UpdateVersionProperties>
-        <UpdateAssemblyInfo>false</UpdateAssemblyInfo>
-        <GitVersion_NoFetchEnabled>true</GitVersion_NoFetchEnabled>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    </PropertyGroup>
-    <ItemGroup>
-        <PackageReference Include="GitVersion.Msbuild" Version="6.1.0">
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
-    </ItemGroup>
+	<PropertyGroup>
+		<UpdateVersionProperties>true</UpdateVersionProperties>
+		<UpdateAssemblyInfo>false</UpdateAssemblyInfo>
+		<GitVersion_NoFetchEnabled>true</GitVersion_NoFetchEnabled>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="GitVersion.Msbuild" Version="6.1.0">
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+	</ItemGroup>
 </Project>

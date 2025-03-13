@@ -17,7 +17,7 @@ public class RegexTests
     public void Regex_AsIDisposable_ImplementsInterface()
     {
         Regex reg = new(".*");
-        IDisposable dispo = reg as IDisposable;
+        var dispo = reg as IDisposable;
         Assert.NotNull(dispo);
     }
 
@@ -78,13 +78,13 @@ public class RegexTests
         Regex reg = new(@"\d{2,4}");
 
         {
-            Match match = reg.Find("300");
+            var match = reg.Find("300");
             Assert.True(match.Matched);
             Assert.Equal(0U, match.Start);
             Assert.Equal(3U, match.End);
         }
         {
-            Match match = reg.Find("this 1 has 3 numbers in 32 chars");
+            var match = reg.Find("this 1 has 3 numbers in 32 chars");
             Assert.True(match.Matched);
             Assert.Equal(24U, match.Start);
             Assert.Equal(26U, match.End);
@@ -131,11 +131,11 @@ public class RegexTests
         Assert.Equal(2, caps.Length);
 
         {
-            Captures cap = caps[0];
+            var cap = caps[0];
             Assert.Equal("2 * 8", cap[0].ExtractedString);
         }
         {
-            Captures cap = caps[1];
+            var cap = caps[1];
             Assert.Equal("9", cap[1].ExtractedString);
             Assert.Equal("7", cap[2].ExtractedString);
         }
@@ -146,7 +146,7 @@ public class RegexTests
     {
         Regex reg = new(@"\b(\w)(\d)?(\w)\b");
 
-        using Captures captures = reg.Captures("this is a test");
+        using var captures = reg.Captures("this is a test");
         Assert.True(captures.Matched);
 
         Assert.True(captures[0].Matched);
@@ -179,13 +179,13 @@ public class RegexTests
         Assert.Contains("t", names);
         Assert.Equal(4, names.Length);
     }
-    
+
     [Fact]
     public void Regex_IndexIntoCaptureWithGroupName_ReturnsCorrectMatch()
     {
         Regex reg = new(@"(?P<h>hello) (?P<w>world)");
 
-        Captures caps = reg.Captures("hello world");
+        var caps = reg.Captures("hello world");
         Assert.Equal("hello", caps["h"].ExtractedString);
         Assert.Equal("world", caps["w"].ExtractedString);
     }
@@ -195,10 +195,10 @@ public class RegexTests
     {
         Regex dates = new(@"(\d{2})/(\d{2})/(\d{4})");
 
-        using Captures captures = dates.Captures("hello on 14/05/2017!");
+        using var captures = dates.Captures("hello on 14/05/2017!");
         Assert.True(captures.Matched);
 
-        Match match = captures[0];
+        var match = captures[0];
         Assert.True(captures.Matched);
         Assert.Equal(4, captures.Length);
 
@@ -216,7 +216,7 @@ public class RegexTests
         Regex dates = new(@"(?P<day>\d{2})/(?P<month>\d{2})/(?P<year>\d{4})");
 
         const string haystack = "The first satellite was launched on 04/10/1961";
-        Captures caps = dates.Captures(haystack);
+        var caps = dates.Captures(haystack);
         Assert.True(caps.Matched);
         Assert.Equal("04", caps[dates["day"]].ExtractedString);
         Assert.Equal("10", caps[dates["month"]].ExtractedString);
@@ -259,7 +259,7 @@ public class RegexTests
         const string haystack = "hello replacing world!";
 
         Assert.Equal("##### replacing #####!",
-                     longWords.ReplaceAll(haystack,
-                                          m => new string('#', (int)(m.End - m.Start))));
+            longWords.ReplaceAll(haystack,
+                m => new string('#', (int)(m.End - m.Start))));
     }
 }

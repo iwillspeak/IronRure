@@ -24,7 +24,7 @@ public class MatchTests
     [Fact]
     public void Match_ExtractedText_IsCorrectSubstring()
     {
-        byte[] haystack = Encoding.UTF8.GetBytes("hello wørld");
+        var haystack = Encoding.UTF8.GetBytes("hello wørld");
         Match match = new(haystack, true, 0, 5);
         Assert.Equal("hello", match.ExtractedString);
 

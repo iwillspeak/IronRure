@@ -10,6 +10,8 @@ internal class CaptureNamesEnumerable(Regex regex) : IEnumerable<string>
         return new CaptureNamesEnumerator(regex);
     }
 
-    IEnumerator IEnumerable.GetEnumerator() =>
-        (IEnumerator)GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 }

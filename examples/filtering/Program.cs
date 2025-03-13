@@ -15,22 +15,23 @@ internal class Program
 
         while (Console.ReadLine() is { } line)
         {
-            SetMatch match = set.Matches(line);
+            var match = set.Matches(line);
             if (match.Matched)
             {
-                for (int i = 0; i < match.Matches.Length; i++)
+                for (var i = 0; i < match.Matches.Length; i++)
                 {
                     if (!match.Matches[i])
                     {
                         continue;
                     }
 
-                    foreach (Match found in expressions[i].FindAll(line))
+                    foreach (var found in expressions[i].FindAll(line))
                     {
                         line = line.Replace(found.ExtractedString, new string('*', found.ExtractedString.Length));
                     }
                 }
             }
+
             Console.WriteLine(line);
         }
     }

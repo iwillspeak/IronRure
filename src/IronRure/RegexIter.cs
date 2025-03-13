@@ -6,7 +6,6 @@ namespace IronRure;
 /// <remarks>Initialise a the regex iterator for the given haystack.</remarks>
 public abstract class RegexIter(Regex pattern, byte[] haystack) : IDisposable
 {
-
     /// <summary>The raw handle to the iterator.</summary>
     protected RegexIterHandle Raw { get; } = RureFfi.rure_iter_new(pattern.Raw);
 

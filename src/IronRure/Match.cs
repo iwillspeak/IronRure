@@ -3,9 +3,9 @@ using System.Text;
 namespace IronRure;
 
 /// <summary>
-///   High-level Match Info
+///     High-level Match Info
 /// </summary>
-/// <remarks>Initialise a new <see cref="Match"/> instnace from the constituent parts.</remarks>
+/// <remarks>Initialise a new <see cref="Match" /> instnace from the constituent parts.</remarks>
 public class Match(byte[] haystack, bool matched, uint start, uint end)
 {
     /// <summary>Did the pattern match?</summary>

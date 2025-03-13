@@ -23,7 +23,7 @@ public class RegexSetTests
     public void RegexSet_AsIDisposable_ImplementsInterface()
     {
         RegexSet set = new("");
-        IDisposable dispo = set as IDisposable;
+        var dispo = set as IDisposable;
 
         Assert.NotNull(dispo);
     }
@@ -44,7 +44,7 @@ public class RegexSetTests
         Assert.True(regs.IsMatch("hello"));
         Assert.True(regs.IsMatch("1234"));
         Assert.True(regs.IsMatch("l33t"));
-        SetMatch match = regs.Matches("hello");
+        var match = regs.Matches("hello");
         Assert.Equal([true, false], match.Matches);
         match = regs.Matches("123");
         Assert.Equal([false, true], match.Matches);
@@ -54,7 +54,7 @@ public class RegexSetTests
     public void RegexSet_Matches_ExposesMatchingPatterns()
     {
         using RegexSet regs = new("hel+o", "regex", "world");
-        SetMatch match = regs.Matches("hello world");
+        var match = regs.Matches("hello world");
         Assert.True(match.Matched);
         Assert.True(match.Matches[0]);
         Assert.False(match.Matches[1]);
@@ -68,7 +68,7 @@ public class RegexSetTests
         using RegexSet regs = new(RureFlags.Casei, "a", "e", "i", "o", "u");
         Assert.True(regs.IsMatch("a"));
         Assert.True(regs.IsMatch("E"));
-        SetMatch match = regs.Matches("Union");
+        var match = regs.Matches("Union");
         Assert.True(match.Matched);
         Assert.Equal([false, false, true, true, true], match.Matches);
     }
@@ -76,11 +76,11 @@ public class RegexSetTests
     [Fact]
     public void RegexSet_Match_WithOptions()
     {
-        Options opts = new Options()
+        var opts = new Options()
             .WithDfaSize(100);
         using RegexSet regs = new(Regex.DefaultFlags, opts, "foo+", "ba?r");
         Assert.True(regs.IsMatch("foooooooooooo"));
-        SetMatch match = regs.Matches("br");
+        var match = regs.Matches("br");
         Assert.True(match.Matched);
         Assert.Equal([false, true], match.Matches);
     }

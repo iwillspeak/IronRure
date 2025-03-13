@@ -8,7 +8,7 @@ public class CapturesTests
     public void CapturesIsEnumerable()
     {
         Regex pattern = new(@"(hello) (\w+)? (world)");
-        Captures caps = pattern.Captures("hello world");
+        var caps = pattern.Captures("hello world");
         Assert.Equal(4, caps.Length);
     }
 
@@ -16,12 +16,12 @@ public class CapturesTests
     public void CaptureEnumerableReturnsCorrectCaptures()
     {
         Regex pattern = new(@"(foo)(bar)?");
-        Captures caps = pattern.Captures("foo");
+        var caps = pattern.Captures("foo");
 
         using var capsEnum = caps.GetEnumerator();
 
         Assert.True(capsEnum.MoveNext());
-        Match current = capsEnum.Current;
+        var current = capsEnum.Current;
         Assert.True(current.Matched);
         Assert.Equal("foo", current.ExtractedString);
 

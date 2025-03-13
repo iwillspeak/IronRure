@@ -5,7 +5,7 @@ namespace IronRure;
 /// <summary>Regex compilation options.</summary>
 public class Options : IDisposable
 {
-    private bool _disposed = false;
+    private bool _disposed;
 
     /// <summary>Create a new options instance with the default values.</summary>
     public Options()
@@ -16,7 +16,7 @@ public class Options : IDisposable
     internal OptionsHandle Raw { get; }
 
     /// <summary>
-    ///   Set Size Limit - Controls the size of a single regex program
+    ///     Set Size Limit - Controls the size of a single regex program
     /// </summary>
     public uint Size
     {
@@ -28,7 +28,7 @@ public class Options : IDisposable
     }
 
     /// <summary>
-    ///   Set DFA Size Limit - Controls the DFA cache size during search
+    ///     Set DFA Size Limit - Controls the DFA cache size during search
     /// </summary>
     public uint DfaSize
     {
@@ -39,14 +39,6 @@ public class Options : IDisposable
         }
     }
 
-    /// <summary>
-    ///   Finalizer to ensure resources are released.
-    /// </summary>
-    ~Options()
-    {
-        Dispose(false);
-    }
-
     /// <inheritdoc />
     public void Dispose()
     {
@@ -55,9 +47,20 @@ public class Options : IDisposable
     }
 
     /// <summary>
-    ///   Releases the unmanaged resources used by the Options and optionally releases the managed resources.
+    ///     Finalizer to ensure resources are released.
     /// </summary>
-    /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+    ~Options()
+    {
+        Dispose(false);
+    }
+
+    /// <summary>
+    ///     Releases the unmanaged resources used by the Options and optionally releases the managed resources.
+    /// </summary>
+    /// <param name="disposing">
+    ///     true to release both managed and unmanaged resources; false to release only unmanaged
+    ///     resources.
+    /// </param>
     protected virtual void Dispose(bool disposing)
     {
         if (_disposed)

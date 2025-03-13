@@ -3,11 +3,16 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using BenchmarkDotNet.Attributes;
+using IronRure;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Alice;
 
 [MemoryDiagnoser]
-[RPlotExporter, RankColumn, AsciiDocExporter, MarkdownExporter]
+[RPlotExporter]
+[RankColumn]
+[AsciiDocExporter]
+[MarkdownExporter]
 public class AliceBenchTask
 {
     private static readonly string AliceFilename = "Alice's_Adventures_in_Wonderland.txt";
@@ -55,7 +60,7 @@ public class AliceBenchTask
         "Alice.{0,25}Hatter|Hatter.{0,25}Alice",
         "([A-Za-z]lice|[A-Za-z]heshire)[^a-zA-Z]"
         //".*"
-        )]
+    )]
     public string Pattern;
 
     //[IterationSetup]
@@ -72,15 +77,21 @@ public class AliceBenchTask
         re2Regex = new IronRe2.Regex(Pattern, new IronRe2.Options { CaseSensitive = false });
 #endif
 
-        rustRegex = new IronRure.Regex(Pattern, IronRure.RureFlags.Casei);
-        rustRegexUnicode = new IronRure.Regex(Pattern, IronRure.RureFlags.Casei | IronRure.RureFlags.Unicode);
+        rustRegex = new IronRure.Regex(Pattern, RureFlags.Casei);
+        rustRegexUnicode = new IronRure.Regex(Pattern, RureFlags.Casei | RureFlags.Unicode);
     }
 
     [Benchmark(Baseline = true)]
-    public void DotnetRegex() => dotnetRegex.Matches(text).EnsureEnumerated();
+    public void DotnetRegex()
+    {
+        dotnetRegex.Matches(text).EnsureEnumerated();
+    }
 
     [Benchmark]
-    public void DotnetRegexNoCompile() => dotnetRegexNoCompile.Matches(text).EnsureEnumerated();
+    public void DotnetRegexNoCompile()
+    {
+        dotnetRegexNoCompile.Matches(text).EnsureEnumerated();
+    }
 
 #if IncludeRe2
     [Benchmark]
@@ -88,18 +99,29 @@ public class AliceBenchTask
 #endif
 
     [Benchmark]
-    public void RustRegex() => rustRegex.FindAll(text).EnsureEnumerated();
+    public void RustRegex()
+    {
+        rustRegex.FindAll(text).EnsureEnumerated();
+    }
 
     [Benchmark]
-    public void RustRegexUnicode() => rustRegexUnicode.FindAll(text).EnsureEnumerated();
+    public void RustRegexUnicode()
+    {
+        rustRegexUnicode.FindAll(text).EnsureEnumerated();
+    }
 }
 
 public static class Extensions
 {
     public static void EnsureEnumerated(this IEnumerable e)
     {
-        if (e == null) return;
+        if (e == null)
+        {
+            return;
+        }
 
-        foreach (object _ in e) { }
+        foreach (var _ in e)
+        {
+        }
     }
 }

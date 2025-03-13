@@ -1,38 +1,39 @@
 using System;
 using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace IronRure;
 
 /// <summary>
-///   Regex set. Used to match a collection of patterns against input text
-///   at the same time.
+///     Regex set. Used to match a collection of patterns against input text
+///     at the same time.
 /// </summary>
 public class RegexSet : IDisposable
 {
     /// <summary>
-    ///   The number of patterns in this set.
+    ///     The number of patterns in this set.
     /// </summary>
     private readonly int _arity;
 
     /// <summary>
-    ///  Raw regex set handle
+    ///     Raw regex set handle
     /// </summary>
     private RegexSetHandle? _handle;
 
     /// <summary>
-    ///   Create a regex set from a given collection of patterns with the
-    ///   default flags and options.
+    ///     Create a regex set from a given collection of patterns with the
+    ///     default flags and options.
     /// </summary>
     /// <param name="patterns">The patterns for this set.</param>
     public RegexSet(params string[] patterns)
         : this(Regex.DefaultFlags, patterns)
-    { }
+    {
+    }
 
     /// <summary>
-    ///   Create a regex set from a given collection of patterns with the
-    ///   given <paramref name="flags" /> and default options.
+    ///     Create a regex set from a given collection of patterns with the
+    ///     given <paramref name="flags" /> and default options.
     /// </summary>
     /// <param name="flags">The flags to use for this set.</param>
     /// <param name="patterns">The patterns for this set.</param>
@@ -42,8 +43,8 @@ public class RegexSet : IDisposable
     }
 
     /// <summary>
-    ///   Create a regex set from a given collection of patterns with the
-    ///   given <paramref name="flags" /> and <paramref name="options" />.
+    ///     Create a regex set from a given collection of patterns with the
+    ///     given <paramref name="flags" /> and <paramref name="options" />.
     /// </summary>
     /// <param name="flags">The flags to use for this set.</param>
     /// <param name="options">The options to use for this set.</param>
@@ -57,6 +58,15 @@ public class RegexSet : IDisposable
     {
         _arity = arity;
         _handle = handle;
+    }
+
+    /// <summary>
+    ///     Disposes the resources used by the RegexSet.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
     private static RegexSetHandle CompileSet(string[] patterns, RureFlags flags, OptionsHandle options)
@@ -86,7 +96,9 @@ public class RegexSet : IDisposable
                 err);
 
             if (compiled.IsInvalid)
+            {
                 throw new RegexCompilationException(err.Message);
+            }
 
             return compiled;
         }
@@ -96,21 +108,25 @@ public class RegexSet : IDisposable
             foreach (var handle in patByteHandles)
             {
                 if (handle.IsAllocated)
+                {
                     handle.Free();
+                }
             }
         }
     }
 
     /// <summary>
-    ///   Is Match - Checks if any of the patterns in the set match.
+    ///     Is Match - Checks if any of the patterns in the set match.
     /// </summary>
     /// <param name="haystack">The string to match against.</param>
     /// <returns>True if any pattern matches, false otherwise.</returns>
-    public bool IsMatch(string haystack) =>
-        IsMatch(Encoding.UTF8.GetBytes(haystack));
+    public bool IsMatch(string haystack)
+    {
+        return IsMatch(Encoding.UTF8.GetBytes(haystack));
+    }
 
     /// <summary>
-    ///   Is match - Check if any of the patterns in the set match.
+    ///     Is match - Check if any of the patterns in the set match.
     /// </summary>
     /// <param name="haystack">The byte array to match against.</param>
     /// <returns>True if any pattern matches, false otherwise.</returns>
@@ -124,15 +140,17 @@ public class RegexSet : IDisposable
     }
 
     /// <summary>
-    ///   Matches - Retrieve information about which patterns in the set match.
+    ///     Matches - Retrieve information about which patterns in the set match.
     /// </summary>
     /// <param name="haystack">The string to match against.</param>
     /// <returns>A SetMatch object containing match information.</returns>
-    public SetMatch Matches(string haystack) =>
-        Matches(Encoding.UTF8.GetBytes(haystack));
+    public SetMatch Matches(string haystack)
+    {
+        return Matches(Encoding.UTF8.GetBytes(haystack));
+    }
 
     /// <summary>
-    ///   Matches - Retrieve information about which patterns in the set match.
+    ///     Matches - Retrieve information about which patterns in the set match.
     /// </summary>
     /// <param name="haystack">The byte array to match against.</param>
     /// <returns>A SetMatch object containing match information.</returns>
@@ -150,16 +168,7 @@ public class RegexSet : IDisposable
     }
 
     /// <summary>
-    /// Disposes the resources used by the RegexSet.
-    /// </summary>
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    /// <summary>
-    /// Disposes the resources used by the RegexSet.
+    ///     Disposes the resources used by the RegexSet.
     /// </summary>
     /// <param name="disposing">Indicates if managed resources should be disposed.</param>
     protected virtual void Dispose(bool disposing)
