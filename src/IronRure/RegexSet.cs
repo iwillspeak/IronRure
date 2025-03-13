@@ -19,7 +19,7 @@ public class RegexSet : IDisposable
     /// <summary>
     ///     Raw regex set handle
     /// </summary>
-    private RegexSetHandle? _handle;
+    private RegexSetHandle _handle;
 
     /// <summary>
     ///     Create a regex set from a given collection of patterns with the

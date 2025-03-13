@@ -53,7 +53,7 @@ public class Captures : IDisposable, IEnumerable<Match>
     /// <summary>
     ///     The raw, unmanaged, handle to the captures group
     /// </summary>
-    public CapturesHandle? Raw { get; }
+    public CapturesHandle Raw { get; }
 
     /// <inheritdoc />
     public void Dispose()

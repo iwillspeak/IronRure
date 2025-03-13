@@ -64,7 +64,7 @@ public partial class Regex : IDisposable
     /// <summary>
     ///     Gets the raw RegexHandle.
     /// </summary>
-    internal RegexHandle? Raw { get; private set; }
+    internal RegexHandle Raw { get; private set; }
 
     /// <summary>
     ///     Get Capture Index from Name
@@ -110,7 +110,7 @@ public partial class Regex : IDisposable
         // If the regex failed to compile find out what the problem was.
         if (raw.IsInvalid)
         {
-            throw new RegexCompilationException(err.Message);
+            throw new RegexCompilationException(err.Message ?? "Error retrieving the error");
         }
 
         return raw;
@@ -141,7 +141,7 @@ public partial class Regex : IDisposable
         var haystackBytes = Encoding.UTF8.GetBytes(haystack);
 
         return RureFfi.rure_is_match(
-            Raw, haystackBytes,
+            Raw ?? throw new InvalidOperationException(), haystackBytes,
             new UIntPtr((uint)haystackBytes.Length),
             new UIntPtr(offset));
     }
@@ -158,7 +158,7 @@ public partial class Regex : IDisposable
         ThrowIfDisposed();
 
         var matched = RureFfi.rure_find(
-            Raw, haystack,
+            Raw ?? throw new InvalidOperationException(), haystack,
             new UIntPtr((uint)haystack.Length),
             new UIntPtr(offset),
             out var matchInfo);
@@ -245,13 +245,11 @@ public partial class Regex : IDisposable
     {
         ThrowIfDisposed();
         Captures caps = new(this, haystack);
-        var matched = RureFfi.rure_find_captures(Raw,
+        caps.Matched = RureFfi.rure_find_captures(Raw,
             haystack,
             new UIntPtr((uint)haystack.Length),
             new UIntPtr(offset),
             caps.Raw);
-
-        caps.Matched = matched;
         return caps;
     }
 
@@ -304,7 +302,7 @@ public partial class Regex : IDisposable
     /// <param name="haystack">The byte array to search for this pattern</param>
     /// <returns>A list of Captures objects.</returns>
     /// <exception cref="ObjectDisposedException">Thrown if the Regex has been disposed.</exception>
-    public IEnumerable<Captures?> CaptureAll(byte[] haystack)
+    public IEnumerable<Captures> CaptureAll(byte[] haystack)
     {
         ThrowIfDisposed();
         using CapturesIter iter = new(this, haystack);
@@ -324,7 +322,7 @@ public partial class Regex : IDisposable
     /// <param name="haystack">The string to search for this pattern</param>
     /// <returns>A list of Captures objects.</returns>
     /// <exception cref="ObjectDisposedException">Thrown if the Regex has been disposed.</exception>
-    public IEnumerable<Captures?> CaptureAll(string haystack)
+    public IEnumerable<Captures> CaptureAll(string haystack)
     {
         ThrowIfDisposed();
         var haystackBytes = Encoding.UTF8.GetBytes(haystack);

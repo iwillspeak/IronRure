@@ -76,31 +76,27 @@ public class RegexTests
     public void Regex_Find_ReturnsValidMatchInfo()
     {
         Regex reg = new(@"\d{2,4}");
+        var match = reg.Find("300");
+        Assert.True(match.Matched);
+        Assert.Equal(0U, match.Start);
+        Assert.Equal(3U, match.End);
 
-        {
-            var match = reg.Find("300");
-            Assert.True(match.Matched);
-            Assert.Equal(0U, match.Start);
-            Assert.Equal(3U, match.End);
-        }
-        {
-            var match = reg.Find("this 1 has 3 numbers in 32 chars");
-            Assert.True(match.Matched);
-            Assert.Equal(24U, match.Start);
-            Assert.Equal(26U, match.End);
-        }
+        var match2 = reg.Find("this 1 has 3 numbers in 32 chars");
+        Assert.True(match2.Matched);
+        Assert.Equal(24U, match2.Start);
+        Assert.Equal(26U, match2.End);
     }
 
     [Fact]
     public void Regex_FindAll_ReturnsIteratorOfMatches()
     {
-        Regex reg = new(@"\d+");
+        var reg = new Regex(@"\d+");
 
         var matches = reg.FindAll("").ToArray();
 
         Assert.Empty(matches);
 
-        matches = [.. reg.FindAll("4 + 8 = 12")];
+        matches = reg.FindAll("4 + 8 = 12").ToArray();
 
         Assert.Equal(3, matches.Length);
         Assert.Equal(0U, matches[0].Start);
@@ -112,7 +108,7 @@ public class RegexTests
     }
 
     [Fact]
-    public void Regex_FindAllWithEmptuRegex()
+    public void Regex_FindAllWithEmptyRegex()
     {
         Regex reg = new("");
 
@@ -122,7 +118,7 @@ public class RegexTests
     }
 
     [Fact]
-    public void Regex_CaptureAll_RetursIteratorOfCaptures()
+    public void Regex_CaptureAll_ReturnsIteratorOfCaptures()
     {
         Regex reg = new(@"(\d) [+=*/\-] (\d)");
 

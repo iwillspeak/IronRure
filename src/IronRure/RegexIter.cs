@@ -47,7 +47,6 @@ public abstract class RegexIter : IDisposable
         }
 
         Raw?.Dispose();
-        Pattern?.Dispose();
         _disposed = true;
         GC.SuppressFinalize(this);
     }
