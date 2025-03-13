@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace IronRure;
 
@@ -8,22 +7,35 @@ namespace IronRure;
 ///     An enumerator of regex matches. Uses the underlying Rure
 ///     regex iterator.
 /// </summary>
-/// <remarks>Initialise a match iterator.</remarks>
-/// <param name="pattern">The pattern to to search with.</param>
+/// <param name="pattern">The pattern to search with.</param>
 /// <param name="haystack">The haystack to search.</param>
-public class MatchIter(Regex pattern, byte[] haystack) : RegexIter(pattern, haystack), IEnumerator<Match>
+public class MatchIter(Regex pattern, byte[] haystack) : RegexIter(pattern, haystack), IEnumerator
 {
     private RureMatch _matchInfo;
 
-    /// <inheritdoc />
-    public Match Current { get; set; }
+    /// <summary>
+    /// The current match.
+    /// </summary>
+    public Match? Current { get; private set; }
 
-    /// <inheritdoc />
-    object IEnumerator.Current => Current;
+    /// <summary>
+    /// Gets the current element in the collection.
+    /// </summary>
+    object? IEnumerator.Current => Current;
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Advances the enumerator to the next element of the collection.
+    /// </summary>
+    /// <returns>true if the enumerator was successfully advanced to the next element; 
+    /// false if the enumerator has passed the end of the collection.</returns>
     public bool MoveNext()
     {
+        if (Raw == null || Haystack == null)
+        {
+            Current = null;
+            return false;
+        }
+
         var matched = RureFfi.rure_iter_next(Raw,
             Haystack,
             new UIntPtr((uint)Haystack.Length),
@@ -38,7 +50,6 @@ public class MatchIter(Regex pattern, byte[] haystack) : RegexIter(pattern, hays
                     (uint)_matchInfo.start,
                     (uint)_matchInfo.end);
             }
-
             return true;
         }
 
@@ -46,7 +57,9 @@ public class MatchIter(Regex pattern, byte[] haystack) : RegexIter(pattern, hays
         return false;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Sets the enumerator to its initial position.
+    /// </summary>
     public void Reset()
     {
         throw new NotImplementedException();
