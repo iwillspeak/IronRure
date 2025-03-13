@@ -5,11 +5,18 @@ using System.Runtime.InteropServices;
 
 namespace IronRure;
 
-internal class CaptureNamesEnumerator(Regex regex) : IEnumerator<string>
+internal class CaptureNamesEnumerator : IEnumerator<string>
 {
-    private readonly CaptureNamesHandle? _handle = regex?.Raw != null ?
-        RureFfi.rure_iter_capture_names_new(regex.Raw) : null;
+    private readonly CaptureNamesHandle? _handle;
     private bool _disposed;
+    private readonly Regex _regex;
+
+    public CaptureNamesEnumerator(Regex regex)
+    {
+        _regex = regex;
+        _handle = regex?.Raw != null ?
+            RureFfi.rure_iter_capture_names_new(regex.Raw) : null;
+    }
 
     public void Dispose()
     {
@@ -27,7 +34,7 @@ internal class CaptureNamesEnumerator(Regex regex) : IEnumerator<string>
         if (disposing && _handle != null)
         {
             _handle.Dispose();
-            regex.Dispose();
+            _regex.Dispose();
         }
         _disposed = true;
     }

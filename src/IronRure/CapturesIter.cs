@@ -9,19 +9,37 @@ namespace IronRure;
 ///     regex iterator.
 /// </summary>
 /// <remarks>Initialise a captures iterator.</remarks>
-/// <param name="pattern">The pattern to to search with.</param>
-/// <param name="haystack">The haystack to search.</param>
-public class CapturesIter(Regex pattern, byte[] haystack) : RegexIter(pattern, haystack), IEnumerator<Captures>
+public class CapturesIter : RegexIter, IEnumerator<Captures>
 {
-    /// <inheritdoc />
-    public Captures Current { get; set; }
+    /// <summary>
+    ///     An enumerator of regex captures. Uses the underlying Rure
+    ///     regex iterator.
+    /// </summary>
+    /// <remarks>Initialise a captures iterator.</remarks>
+    /// <param name="pattern">The pattern to search with.</param>
+    /// <param name="haystack">The haystack to search.</param>
+    public CapturesIter(Regex pattern, byte[] haystack) : base(pattern, haystack)
+    {
+    }
+
+
+    /// <summary>
+    ///     Gets or sets the current capture.
+    /// </summary>
+    public Captures? Current { get; set; }
 
     /// <inheritdoc />
-    object IEnumerator.Current => Current;
+    object? IEnumerator.Current => Current;
 
     /// <inheritdoc />
     public bool MoveNext()
     {
+        if (Pattern == null || Haystack == null || Raw == null)
+        {
+            Current = null;
+            return false;
+        }
+
         Captures caps = new(Pattern, Haystack);
         var matched = RureFfi.rure_iter_next_captures(Raw,
             Haystack,

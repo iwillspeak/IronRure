@@ -97,7 +97,7 @@ public class RegexSet : IDisposable
 
             if (compiled.IsInvalid)
             {
-                throw new RegexCompilationException(err.Message);
+                throw new RegexCompilationException(err.Message ?? "Error happened when retrieving the error");
             }
 
             return compiled;

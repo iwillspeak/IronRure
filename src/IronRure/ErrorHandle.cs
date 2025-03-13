@@ -26,8 +26,14 @@ public sealed class ErrorHandle : SafeHandle
     ///         objecct and return it.
     ///     </para>
     /// </summary>
-    public string Message =>
-        Marshal.PtrToStringAnsi(RureFfi.rure_error_message(this));
+    public string? Message
+    {
+        get
+        {
+            var messagePtr = RureFfi.rure_error_message(this);
+            return messagePtr == IntPtr.Zero ? null : Marshal.PtrToStringAnsi(messagePtr);
+        }
+    }
 
     /// <inheritdoc />
     protected override bool ReleaseHandle()

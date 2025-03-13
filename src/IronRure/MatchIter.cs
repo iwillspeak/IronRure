@@ -7,11 +7,19 @@ namespace IronRure;
 ///     An enumerator of regex matches. Uses the underlying Rure
 ///     regex iterator.
 /// </summary>
-/// <param name="pattern">The pattern to search with.</param>
-/// <param name="haystack">The haystack to search.</param>
-public class MatchIter(Regex pattern, byte[] haystack) : RegexIter(pattern, haystack), IEnumerator
+public class MatchIter : RegexIter, IEnumerator
 {
     private RureMatch _matchInfo;
+
+    /// <summary>
+    ///     An enumerator of regex matches. Uses the underlying Rure
+    ///     regex iterator.
+    /// </summary>
+    /// <param name="pattern">The pattern to search with.</param>
+    /// <param name="haystack">The haystack to search.</param>
+    public MatchIter(Regex pattern, byte[] haystack) : base(pattern, haystack)
+    {
+    }
 
     /// <summary>
     /// The current match.

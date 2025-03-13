@@ -71,22 +71,18 @@ public partial class Regex : IDisposable
     /// </summary>
     /// <param name="capture">The name of the capture group.</param>
     /// <returns>The index of the named capture group.</returns>
-    public int this[string capture] =>
-        RureFfi.rure_capture_name_index(Raw, Encoding.UTF8.GetBytes(capture));
+    public int this[string capture]
+    {
+        get
+        {
+            return Raw != null ? RureFfi.rure_capture_name_index(Raw, Encoding.UTF8.GetBytes(capture)) : 0;
+        }
+    }
 
     /// <summary>
     ///     The default flags for the regex
     /// </summary>
     public static RureFlags DefaultFlags => RureFlags.Unicode;
-
-    /// <summary>
-    ///     Dispose resources associated with the Regex.
-    /// </summary>
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
 
     /// <summary>
     ///     Compiles the given regex and returns the unmanaged pointer to it.
@@ -160,6 +156,7 @@ public partial class Regex : IDisposable
     public Match Find(byte[] haystack, uint offset)
     {
         ThrowIfDisposed();
+
         var matched = RureFfi.rure_find(
             Raw, haystack,
             new UIntPtr((uint)haystack.Length),
@@ -307,7 +304,7 @@ public partial class Regex : IDisposable
     /// <param name="haystack">The byte array to search for this pattern</param>
     /// <returns>A list of Captures objects.</returns>
     /// <exception cref="ObjectDisposedException">Thrown if the Regex has been disposed.</exception>
-    public IEnumerable<Captures> CaptureAll(byte[] haystack)
+    public IEnumerable<Captures?> CaptureAll(byte[] haystack)
     {
         ThrowIfDisposed();
         using CapturesIter iter = new(this, haystack);
@@ -327,7 +324,7 @@ public partial class Regex : IDisposable
     /// <param name="haystack">The string to search for this pattern</param>
     /// <returns>A list of Captures objects.</returns>
     /// <exception cref="ObjectDisposedException">Thrown if the Regex has been disposed.</exception>
-    public IEnumerable<Captures> CaptureAll(string haystack)
+    public IEnumerable<Captures?> CaptureAll(string haystack)
     {
         ThrowIfDisposed();
         var haystackBytes = Encoding.UTF8.GetBytes(haystack);
@@ -346,19 +343,11 @@ public partial class Regex : IDisposable
     /// <summary>
     ///     Releases the unmanaged resources used by the Regex and optionally releases the managed resources.
     /// </summary>
-    /// <param name="disposing">
-    ///     true to release both managed and unmanaged resources; false to release only unmanaged resources.
-    /// </param>
-    protected virtual void Dispose(bool disposing)
+    public void Dispose()
     {
         if (_disposed)
         {
             return;
-        }
-
-        if (disposing)
-        {
-            // Dispose managed resources if any
         }
 
         // Dispose unmanaged resources safely.
@@ -368,5 +357,6 @@ public partial class Regex : IDisposable
             Raw = null;
         }
         _disposed = true;
+        GC.SuppressFinalize(this);
     }
 }

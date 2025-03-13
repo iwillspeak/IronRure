@@ -2,22 +2,53 @@ using System;
 
 namespace IronRure;
 
-/// <summary>Regex match iterator.</summary>
-/// <remarks>Initialise a the regex iterator for the given haystack.</remarks>
-public abstract class RegexIter(Regex pattern, byte[] haystack) : IDisposable
+/// <summary>
+/// Regex match iterator.
+/// </summary>
+public abstract class RegexIter : IDisposable
 {
-    /// <summary>The raw handle to the iterator.</summary>
-    protected RegexIterHandle Raw { get; } = RureFfi.rure_iter_new(pattern.Raw);
+    private bool _disposed;
 
-    /// <summary>The pattern that this iterator is using.</summary>
-    protected Regex Pattern { get; } = pattern;
+    /// <summary>
+    /// Regex match iterator.
+    /// </summary>
+    /// <param name="pattern">The pattern for the iterator.</param>
+    /// <param name="haystack">The haystack being searched.</param>
+    protected RegexIter(Regex pattern, byte[] haystack)
+    {
+        Raw = pattern?.Raw != null ? RureFfi.rure_iter_new(pattern.Raw) : null;
+        Pattern = pattern;
+        Haystack = haystack;
+    }
 
-    /// <summary>The haystack being serched.</summary>
-    protected byte[] Haystack { get; } = haystack;
+    /// <summary>
+    /// The raw handle to the iterator.
+    /// </summary>
+    protected RegexIterHandle? Raw { get; }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// The pattern that this iterator is using.
+    /// </summary>
+    protected Regex? Pattern { get; }
+
+    /// <summary>
+    /// The haystack being searched.
+    /// </summary>
+    protected byte[]? Haystack { get; }
+
+    /// <summary>
+    /// Disposes the iterator handle.
+    /// </summary>
     public void Dispose()
     {
+        if (_disposed)
+        {
+            return;
+        }
+
         Raw?.Dispose();
+        Pattern?.Dispose();
+        _disposed = true;
+        GC.SuppressFinalize(this);
     }
 }
