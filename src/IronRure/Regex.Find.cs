@@ -18,7 +18,7 @@ public partial class Regex
     }
 
     /// <summary>
-    ///     Replcace the first byte match with a literal byte array
+    ///     Replace the first byte match with a literal byte array
     /// </summary>
     /// <param name="haystack">The value to replace matches in</param>
     /// <param name="replacement">The value to replace with</param>
@@ -28,7 +28,7 @@ public partial class Regex
     }
 
     /// <summary>
-    ///     Replcace the first byte match with a dynamic string
+    ///     Replace the first byte match with a dynamic string
     /// </summary>
     /// <param name="haystack">The value to replace matches in</param>
     /// <param name="replacement">The match evaluator to replace with</param>
@@ -38,7 +38,7 @@ public partial class Regex
     }
 
     /// <summary>
-    ///     Replcace the first byte match with a dynamic byte array
+    ///     Replace the first byte match with a dynamic byte array
     /// </summary>
     /// <param name="haystack">The value to replace matches in</param>
     /// <param name="replacement">The match evaluator to replace with</param>
@@ -68,7 +68,7 @@ public partial class Regex
     }
 
     /// <summary>
-    ///     Replcace the first byte match with a dynamic string
+    ///     Replace the first byte match with a dynamic string
     /// </summary>
     /// <param name="haystack">The value to replace matches in</param>
     /// <param name="replacement">The match evaluator to replace with</param>
@@ -78,7 +78,7 @@ public partial class Regex
     }
 
     /// <summary>
-    ///     Replcace the first byte match with a dynamic byte array
+    ///     Replace the first byte match with a dynamic byte array
     /// </summary>
     /// <param name="haystack">The value to replace matches in</param>
     /// <param name="replacement">The match evaluator to replace with</param>
@@ -113,7 +113,7 @@ public partial class Regex
 
 
     /// <summary>
-    ///     Replcace the first byte match with a literal byte array
+    ///     Replace the first byte match with a literal byte array
     /// </summary>
     /// <param name="haystack">The value to replace matches in</param>
     /// <param name="replacement">The match evaluator to replace with</param>
