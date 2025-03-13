@@ -5,22 +5,48 @@ using System.Runtime.InteropServices;
 
 namespace IronRure;
 
-internal class CaptureNamesEnumerator(Regex regex) : IDisposable, IEnumerator<string>
+internal class CaptureNamesEnumerator(Regex regex) : IEnumerator<string>
 {
-    private readonly CaptureNamesHandle _handle = RureFfi.rure_iter_capture_names_new(regex.Raw);
+    private readonly CaptureNamesHandle? _handle = regex?.Raw != null ?
+        RureFfi.rure_iter_capture_names_new(regex.Raw) : null;
+    private bool _disposed;
 
     public void Dispose()
     {
-        _handle?.Dispose();
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
-    public string Current { get; protected set; }
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+        {
+            return;
+        }
 
-    object IEnumerator.Current => Current;
+        if (disposing && _handle != null)
+        {
+            _handle.Dispose();
+            regex.Dispose();
+        }
+        _disposed = true;
+    }
 
+    // Implement non-nullable Current for IEnumerator<string>
+    string IEnumerator<string>.Current => Current ?? string.Empty;
+
+    // Internal implementation can be nullable
+    public string? Current { get; private set; }
+
+    object? IEnumerator.Current => Current;
 
     public bool MoveNext()
     {
+        if (_handle == null)
+        {
+            return false;
+        }
+
         while (RureFfi.rure_iter_capture_names_next(_handle, out var name))
         {
             Current = Marshal.PtrToStringAnsi(name);
@@ -30,6 +56,7 @@ internal class CaptureNamesEnumerator(Regex regex) : IDisposable, IEnumerator<st
             }
         }
 
+        Current = null;
         return false;
     }
 
