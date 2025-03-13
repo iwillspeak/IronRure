@@ -7,7 +7,7 @@ namespace IronRure;
 ///     An enumerator of regex matches. Uses the underlying Rure
 ///     regex iterator.
 /// </summary>
-public class MatchIter : RegexIter, IEnumerator
+public sealed class MatchIter : RegexIter, IEnumerator
 {
     private RureMatch _matchInfo;
 
@@ -24,12 +24,12 @@ public class MatchIter : RegexIter, IEnumerator
     /// <summary>
     /// The current match.
     /// </summary>
-    public Match? Current { get; private set; }
+    public Match Current { get; private set; }
 
     /// <summary>
     /// Gets the current element in the collection.
     /// </summary>
-    object? IEnumerator.Current => Current;
+    object IEnumerator.Current => Current;
 
     /// <summary>
     /// Advances the enumerator to the next element of the collection.

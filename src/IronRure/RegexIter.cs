@@ -24,17 +24,17 @@ public abstract class RegexIter : IDisposable
     /// <summary>
     /// The raw handle to the iterator.
     /// </summary>
-    protected RegexIterHandle? Raw { get; }
+    protected RegexIterHandle Raw { get; }
 
     /// <summary>
     /// The pattern that this iterator is using.
     /// </summary>
-    protected Regex? Pattern { get; }
+    protected Regex Pattern { get; }
 
     /// <summary>
     /// The haystack being searched.
     /// </summary>
-    protected byte[]? Haystack { get; }
+    protected byte[] Haystack { get; }
 
     /// <summary>
     /// Disposes the iterator handle.

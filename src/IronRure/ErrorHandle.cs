@@ -26,7 +26,7 @@ public sealed class ErrorHandle : SafeHandle
     ///         objecct and return it.
     ///     </para>
     /// </summary>
-    public string? Message
+    public string Message
     {
         get
         {

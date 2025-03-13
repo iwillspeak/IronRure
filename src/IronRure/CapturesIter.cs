@@ -26,10 +26,10 @@ public class CapturesIter : RegexIter, IEnumerator<Captures>
     /// <summary>
     ///     Gets or sets the current capture.
     /// </summary>
-    public Captures? Current { get; set; }
+    public Captures Current { get; set; }
 
     /// <inheritdoc />
-    object? IEnumerator.Current => Current;
+    object IEnumerator.Current => Current;
 
     /// <inheritdoc />
     public bool MoveNext()
