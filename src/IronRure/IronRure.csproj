@@ -11,8 +11,8 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="IronRure.Batteries-Darwin" Version="154.1.0" />
-		<PackageReference Include="IronRure.Batteries-Linux" Version="154.1.0" />
-		<PackageReference Include="IronRure.Batteries-Windows" Version="154.1.0" />
+		<PackageReference Include="IronRure.Batteries-Darwin" Version="154.1.1" />
+		<PackageReference Include="IronRure.Batteries-Linux" Version="154.1.1" />
+		<PackageReference Include="IronRure.Batteries-Windows" Version="154.1.1" />
 	</ItemGroup>
 </Project>
