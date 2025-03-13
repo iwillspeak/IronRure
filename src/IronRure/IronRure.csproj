@@ -9,6 +9,7 @@
 			Bindings to the Rust `regex` crate from .NET.
 		</Description>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="IronRure.Batteries-Darwin" Version="154.1.0" />
