@@ -42,12 +42,6 @@ jobs:
         with:
           dotnet-version: '9.0.x'
     
-      # - name: Add GitHub Packages NuGet Source
-      #   run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/crispthinking/index.json"
-
-      - name: Add GitHub Packages NuGet Source
-        run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/oscarjaergren/index.json"
-    
       - name: Restore dependencies
         run: dotnet restore IronRure.sln
     
