@@ -5,9 +5,9 @@ using System.Collections.Generic;
 namespace IronRure;
 
 /// <summary>
-///     A set of captures for a given regex.
+/// A set of captures for a given regex.
 /// </summary>
-public class Captures : IDisposable, IEnumerable<Match>
+public sealed class Captures : IDisposable, IEnumerable<Match>
 {
     private readonly byte[] _haystack;
     private readonly Regex _reg;
@@ -21,45 +21,50 @@ public class Captures : IDisposable, IEnumerable<Match>
     }
 
     /// <summary>
-    ///     Get the Match at a given capture index
-    ///     <para>
-    ///         Returns detailed match information for the given capture group.
-    ///     </para>
+    /// Gets the Match at a given capture index.
+    /// <para>Returns detailed match information for the given capture group.</para>
     /// </summary>
     public Match this[int index]
     {
         get
         {
-            var matched = RureFfi.rure_captures_at(Raw,
-                new UIntPtr((uint)index),
-                out var match);
+            var matched = RureFfi.rure_captures_at(Raw, new UIntPtr((uint)index), out var match);
             return new Match(_haystack, matched, checked((uint)match.start), checked((uint)match.end));
         }
     }
 
     /// <summary>
-    ///     Get the match for a given capture name.
+    /// Gets the match for a given capture name.
     /// </summary>
     public Match this[string group] => this[_reg[group]];
 
     /// <summary>
-    ///     The number of groups in the capture set
+    /// Gets the number of groups in the capture set.
     /// </summary>
     public int Length => (int)RureFfi.rure_captures_len(Raw);
 
-    /// <summary>Overall match status for the pattern.</summary>
+    /// <summary>
+    /// Overall match status for the pattern.
+    /// </summary>
     public bool Matched { get; internal set; }
 
     /// <summary>
-    ///     The raw, unmanaged, handle to the captures group
+    /// Gets the raw, unmanaged handle to the captures group.
     /// </summary>
     public CapturesHandle Raw { get; }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Releases all resources used by this instance.
+    /// </summary>
     public void Dispose()
     {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+        if (_disposed)
+        {
+            return;
+        }
+
+        Raw?.Dispose();
+        _disposed = true;
     }
 
     /// <inheritdoc />
@@ -73,40 +78,5 @@ public class Captures : IDisposable, IEnumerable<Match>
     }
 
     /// <inheritdoc />
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-
-    /// <summary>
-    ///     Finalizer
-    /// </summary>
-    ~Captures()
-    {
-        Dispose(false);
-    }
-
-    /// <summary>
-    ///     Releases the unmanaged resources used by the Captures and optionally releases the managed resources.
-    /// </summary>
-    /// <param name="disposing">
-    ///     true to release both managed and unmanaged resources; false to release only unmanaged
-    ///     resources.
-    /// </param>
-    protected virtual void Dispose(bool disposing)
-    {
-        if (_disposed)
-        {
-            return;
-        }
-
-        if (disposing)
-        {
-            // Dispose managed resources
-            Raw?.Dispose();
-        }
-
-        // Dispose unmanaged resources
-        _disposed = true;
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
