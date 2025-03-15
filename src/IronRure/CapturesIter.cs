@@ -60,6 +60,6 @@ public class CapturesIter : RegexIter, IEnumerator<Captures>
     /// <inheritdoc />
     public void Reset()
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 }
