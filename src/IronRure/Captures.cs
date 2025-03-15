@@ -63,7 +63,7 @@ public sealed class Captures : IDisposable, IEnumerable<Match>
             return;
         }
 
-        Raw?.Dispose();
+        Raw.Dispose();
         _disposed = true;
     }
 

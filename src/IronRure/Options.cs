@@ -26,8 +26,7 @@ public sealed class Options : IDisposable
     {
         set
         {
-            if (_disposed)
-                throw new ObjectDisposedException(nameof(Options));
+            ObjectDisposedException.ThrowIf(_disposed, nameof(Options));
             RureFfi.rure_options_size_limit(Raw, new UIntPtr(value));
         }
     }
@@ -39,8 +38,7 @@ public sealed class Options : IDisposable
     {
         set
         {
-            if (_disposed)
-                throw new ObjectDisposedException(nameof(Options));
+            ObjectDisposedException.ThrowIf(_disposed, nameof(Options));
             RureFfi.rure_options_dfa_size_limit(Raw, new UIntPtr(value));
         }
     }
@@ -55,7 +53,7 @@ public sealed class Options : IDisposable
             return;
         }
 
-        Raw?.Dispose();
+        Raw.Dispose();
         _disposed = true;
     }
 }
