@@ -46,12 +46,12 @@ public sealed class Captures : IDisposable, IEnumerable<Match>
     /// <summary>
     /// Overall match status for the pattern.
     /// </summary>
-    public bool Matched { get; internal set; }
+    public bool Matcheds { get; internal set; }
 
     /// <summary>
     /// Gets the raw, unmanaged handle to the captures group.
     /// </summary>
-    public CapturesHandle Raw { get; }
+    internal CapturesHandle Raw { get; }
 
     /// <summary>
     /// Releases all resources used by this instance.
