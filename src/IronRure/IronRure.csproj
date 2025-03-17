@@ -1,21 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>netstandard1.4;netstandard2.0</TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net45</TargetFrameworks>
-    <VersionPrefix>2.0.1</VersionPrefix>
-    <Author>Will Speak (@iwillspeak)</Author>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Description>
-      Bindings to the Rust `regex` crate from .NET.
-    </Description>
-  </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' != '.NETFramework'">
-    <PackageReference Include="IronRure.Batteries-Darwin" Version="154.0.1" />
-    <PackageReference Include="IronRure.Batteries-Linux" Version="154.0.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="IronRure.Batteries-Windows" Version="154.0.1" >
-	  <PrivateAssets>none</PrivateAssets>
-	</PackageReference>
-  </ItemGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net9.0</TargetFrameworks>
+		<LangVersion>preview</LangVersion>
+		<VersionPrefix>2.0.7</VersionPrefix>
+		<Author>Will Speak (@iwillspeak)</Author>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Description>
+			Bindings to the Rust `regex` crate from .NET.
+		</Description>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="IronRure.Batteries-Darwin" Version="1111.0.7" />
+		<PackageReference Include="IronRure.Batteries-Linux" Version="1111.0.7" />
+		<PackageReference Include="IronRure.Batteries-Windows" Version="1111.0.7" />
+	</ItemGroup>
 </Project>

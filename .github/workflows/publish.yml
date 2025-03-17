@@ -1,0 +1,38 @@
+name: Publish IronRure
+on:
+  release:
+    types:
+      - published # Run the workflow when a new GitHub release is published
+  workflow_dispatch: # Allow manual triggering from the GitHub UI
+
+# Set permissions for the workflow.
+permissions:
+  contents: write
+  packages: write
+  checks: write          
+  pull-requests: write  
+
+jobs:
+  build:
+    uses: ./.github/workflows/ci.yml
+
+  publish:
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download Package
+        uses: actions/download-artifact@v4
+        with:
+          name: artifacts
+          path: bin/artifacts/
+
+      # Publish all NuGet packages to NuGet.org
+      # Use --skip-duplicate to prevent errors if a package with the same version already exists.
+      # If you retry a failed workflow, already published packages will be skipped without error.
+      - name: Publish NuGet Packages to GitHub Packages
+        run: dotnet nuget push bin/artifacts/**/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --skip-duplicate
+
+      - name: Publish NuGet package
+        run: |
+          dotnet nuget push bin/artifacts/**/*.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source "https://api.nuget.org/v3/index.json" --skip-duplicate

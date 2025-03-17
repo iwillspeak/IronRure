@@ -2,36 +2,37 @@
 using System.Linq;
 using IronRure;
 
-namespace filtering
+namespace filtering;
+
+internal class Program
 {
-    class Program
+    private static readonly string[] BadWords = ["red", "green", "blue"];
+
+    private static void Main()
     {
-        private static readonly string[] BadWords = new[] { "red", "green","blue" };
+        RegexSet set = new(BadWords);
+        var expressions = BadWords.Select(p => new Regex(p)).ToList();
 
-        static void Main(string[] args)
+        while (Console.ReadLine() is { } line)
         {
-            var set = new RegexSet(BadWords);
-            var expressions = BadWords.Select(p => new Regex(p)).ToList();
-
-            string line;
-            while ((line = Console.ReadLine()) != null)
+            var match = set.Matches(line);
+            if (match.Matched)
             {
-                var match = set.Matches(line);
-                if (match.Matched)
+                for (var i = 0; i < match.Matches.Length; i++)
                 {
-                    for (int i = 0; i < match.Matches.Length; i++)
+                    if (!match.Matches[i])
                     {
-                        if (match.Matches[i])
-                        {
-                            foreach (var found in expressions[i].FindAll(line))
-                            {
-                                line = line.Replace(found.ExtractedString, new string('*', found.ExtractedString.Length));
-                            }
-                        }
+                        continue;
+                    }
+
+                    foreach (var found in expressions[i].FindAll(line))
+                    {
+                        line = line.Replace(found.ExtractedString, new string('*', found.ExtractedString.Length));
                     }
                 }
-                Console.WriteLine(line);
             }
+
+            Console.WriteLine(line);
         }
     }
 }

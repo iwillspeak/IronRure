@@ -1,31 +1,53 @@
 using System;
 
-namespace IronRure
+namespace IronRure;
+
+/// <summary>
+/// Regex match iterator.
+/// </summary>
+public abstract class RegexIter : IDisposable
 {
-    /// <summary>Regex match iterator.</summary>
-    public abstract class RegexIter : IDisposable
+    private bool _disposed;
+
+    /// <summary>
+    /// Regex match iterator.
+    /// </summary>
+    /// <param name="pattern">The pattern for the iterator.</param>
+    /// <param name="haystack">The haystack being searched.</param>
+    protected RegexIter(Regex pattern, byte[] haystack)
     {
-        /// <summary>Initalise a the regex iterator for the given haystack.</summary>
-        protected RegexIter(Regex pattern, byte[] haystack)
+        Raw = pattern?.Raw != null ? RureFfi.rure_iter_new(pattern.Raw) : null;
+        Pattern = pattern;
+        Haystack = haystack;
+    }
+
+    /// <summary>
+    /// The raw handle to the iterator.
+    /// </summary>
+    protected RegexIterHandle Raw { get; }
+
+    /// <summary>
+    /// The pattern that this iterator is using.
+    /// </summary>
+    protected Regex Pattern { get; }
+
+    /// <summary>
+    /// The haystack being searched.
+    /// </summary>
+    protected byte[] Haystack { get; }
+
+    /// <summary>
+    /// Disposes the iterator handle.
+    /// </summary>
+    public void Dispose()
+    {
+        if (_disposed)
         {
-            Raw = RureFfi.rure_iter_new(pattern.Raw);
-            Pattern = pattern;
-            Haystack = haystack;
+            return;
         }
 
-        /// <summary>The raw handle to the iterator.</summary>
-        protected RegexIterHandle Raw { get; }
-        
-        /// <summary>The pattern that this iterator is using.</summary>
-        protected Regex Pattern { get; }
-
-        /// <summary>The haystack being serched.</summary>
-        protected byte[] Haystack { get; }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            Raw.Dispose();
-        }
+        Raw?.Dispose();
+        _disposed = true;
+        GC.SuppressFinalize(this);
     }
 }
