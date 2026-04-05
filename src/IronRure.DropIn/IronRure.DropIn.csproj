@@ -1,7 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>preview</LangVersion>
+    <VersionPrefix>2.0.7</VersionPrefix>
+    <Author>Will Speak (@iwillspeak)</Author>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Description>
+      Drop-in replacement for System.Text.RegularExpressions backed by
+      the Rust `regex` crate via IronRure.
+    </Description>
   </PropertyGroup>
 
   <ItemGroup>

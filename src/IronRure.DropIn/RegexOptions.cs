@@ -2,6 +2,9 @@ using System;
 
 namespace IronRure.DropIn
 {
+    /// <summary>
+    ///   Provides enumerated values to use to set regular expression options.
+    /// </summary>
     [Flags]
     public enum RegexOptions
     {

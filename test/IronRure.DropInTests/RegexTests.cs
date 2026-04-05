@@ -135,7 +135,7 @@ namespace IronRure.DropInTests
         public void MatchesEmptyCollectionOnNoMatch()
         {
             var mc = new Regex(@"\d+").Matches("no digits");
-            Assert.Equal(0, mc.Count);
+            Assert.Empty(mc);
         }
 
         [Fact]

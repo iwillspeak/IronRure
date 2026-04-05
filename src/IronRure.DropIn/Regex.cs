@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using SysRegex = System.Text.RegularExpressions.Regex;
 
-/// <summary>
-///   IronRure DropIn - System.Text.RegularExpressions compatible API
-///   to the IronRure package.
-/// </summary>
 namespace IronRure.DropIn
 {
     /// <summary>

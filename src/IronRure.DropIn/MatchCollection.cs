@@ -25,6 +25,7 @@ namespace IronRure.DropIn
 
         bool ICollection<Match>.IsReadOnly => true;
 
+        /// <inheritdoc />
         public IEnumerator<Match> GetEnumerator() => _matches.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => _matches.GetEnumerator();

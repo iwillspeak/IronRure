@@ -45,6 +45,7 @@ namespace IronRure.DropIn
 
         bool ICollection<Group>.IsReadOnly => true;
 
+        /// <inheritdoc />
         public IEnumerator<Group> GetEnumerator() => _groups.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => _groups.GetEnumerator();
