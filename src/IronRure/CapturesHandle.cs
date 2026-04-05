@@ -1,21 +1,24 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace IronRure
+namespace IronRure;
+
+/// <summary>Raw handle to a captures info object</summary>
+public sealed class CapturesHandle : SafeHandle
 {
-    public sealed class CapturesHandle : SafeHandle
+    /// <summary>Initialise a captures handle with the default value</summary>
+    public CapturesHandle()
+        : base(IntPtr.Zero, true)
     {
-        public CapturesHandle()
-            : base(IntPtr.Zero, true)
-        {
-        }
+    }
 
-        public override bool IsInvalid => handle == IntPtr.Zero;
+    /// <inheritdoc />
+    public override bool IsInvalid => handle == IntPtr.Zero;
 
-        protected override bool ReleaseHandle()
-        {
-            RureFfi.rure_captures_free(handle);
-            return true;
-        }
+    /// <inheritdoc />
+    protected override bool ReleaseHandle()
+    {
+        RureFfi.rure_captures_free(handle);
+        return true;
     }
 }

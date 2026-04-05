@@ -1,12 +1,11 @@
 ﻿using BenchmarkDotNet.Running;
 
-namespace Alice
+namespace Alice;
+
+public static class Program
 {
-    public static class Program
+    public static void Main()
     {
-        static void Main(string[] args)
-        {
-            var summary = BenchmarkRunner.Run<AliceBenchTask>();
-        }
+        BenchmarkRunner.Run<AliceBenchTask>();
     }
 }
