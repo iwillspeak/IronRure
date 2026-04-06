@@ -18,6 +18,7 @@ namespace IronRure.DropIn
     {
         private readonly IronRure.Regex _pattern;
         private readonly string _patternString;
+        private readonly int _captureCount;
 
         /// <summary>
         ///   Create a Regex which matches the given pattern.
@@ -49,6 +50,10 @@ namespace IronRure.DropIn
             var rureFlags = RureFlagsFromOptions(options);
             _pattern = new IronRure.Regex(pattern, rureOptions, rureFlags);
             MatchTimeout = timeout;
+            // Determine the total number of capture groups (including group 0)
+            // by creating a temporary Captures object from the regex itself.
+            using var dummyCaps = _pattern.Captures(Array.Empty<byte>());
+            _captureCount = dummyCaps.Length;
         }
 
         /// <summary>
@@ -88,7 +93,9 @@ namespace IronRure.DropIn
         /// </summary>
         public bool IsMatch(string haystack, int offset)
         {
-            var byteOffset = Encoding.UTF8.GetByteCount(haystack.ToCharArray(), 0, offset);
+            if (offset < 0 || offset > haystack.Length)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            var byteOffset = Encoding.UTF8.GetByteCount(haystack.AsSpan(0, offset));
             return _pattern.IsMatch(haystack, (uint)byteOffset);
         }
 
@@ -318,7 +325,7 @@ namespace IronRure.DropIn
         public string[] Split(string input, int count, int startat)
         {
             var results = new List<string>();
-            int pos = startat;
+            int pos = 0;
             int splitCount = 0;
             var m = Match(input, startat);
 
@@ -359,13 +366,23 @@ namespace IronRure.DropIn
         /// <summary>
         ///   Returns an array of the names of all the capturing groups in the
         ///   regular expression.  Group 0 (the whole match) is always included.
+        ///   Unnamed groups are represented by their numeric string (e.g. <c>"1"</c>).
         /// </summary>
         public string[] GetGroupNames()
         {
-            var names = new List<string> { "0" };
+            // Build an index-to-name map for named groups
+            var indexToName = new Dictionary<int, string>();
             foreach (var name in _pattern.CaptureNames())
-                names.Add(name);
-            return names.ToArray();
+            {
+                int idx = _pattern[name];
+                if (idx >= 0)
+                    indexToName[idx] = name;
+            }
+
+            var names = new string[_captureCount];
+            for (int i = 0; i < _captureCount; i++)
+                names[i] = indexToName.TryGetValue(i, out var name) ? name : i.ToString();
+            return names;
         }
 
         /// <summary>
@@ -374,10 +391,10 @@ namespace IronRure.DropIn
         /// </summary>
         public int[] GetGroupNumbers()
         {
-            var numbers = new List<int> { 0 };
-            foreach (var name in _pattern.CaptureNames())
-                numbers.Add(_pattern[name]);
-            return numbers.ToArray();
+            var numbers = new int[_captureCount];
+            for (int i = 0; i < _captureCount; i++)
+                numbers[i] = i;
+            return numbers;
         }
 
         /// <summary>
@@ -467,9 +484,10 @@ namespace IronRure.DropIn
 
         private Match MatchAtByteOffset(string haystack, byte[] haystackBytes, int byteOffset)
         {
-            // Guard: Rure has undefined behaviour when offset >= length, and can
-            // return spurious results in that range.
-            if (byteOffset >= haystackBytes.Length)
+            // Guard: Rure has undefined behaviour when offset > length.
+            // Equality (offset == length) is allowed so patterns like $ can
+            // match at the very end of the input.
+            if (byteOffset > haystackBytes.Length)
                 return DropIn.Match.Empty;
 
             // Use Find (rure_find) to determine whether there is a match and to
@@ -484,14 +502,16 @@ namespace IronRure.DropIn
             int startByte = (int)found.Start;
             int endByte = (int)found.End;
 
-            // Now fetch captures for group information.
-            var caps = _pattern.Captures(haystackBytes, (uint)byteOffset);
-
             int startChar = Encoding.UTF8.GetCharCount(haystackBytes, 0, startByte);
             int lengthChar = Encoding.UTF8.GetCharCount(haystackBytes, startByte, endByte - startByte);
             string value = haystack.Substring(startChar, lengthChar);
 
-            var groups = BuildGroupCollection(haystack, haystackBytes, caps, startChar, lengthChar, value);
+            // Now fetch captures for group information and dispose after use.
+            GroupCollection groups;
+            using (var caps = _pattern.Captures(haystackBytes, (uint)byteOffset))
+            {
+                groups = BuildGroupCollection(haystack, haystackBytes, caps, startChar, lengthChar, value);
+            }
 
             // Calculate where the next search should begin (in bytes).
             // If the match was zero-length we advance by one byte to avoid an
@@ -521,8 +541,14 @@ namespace IronRure.DropIn
             IronRure.Captures caps,
             int matchStartChar, int matchLengthChar, string matchValue)
         {
-            // Build name → index mapping for named groups
-            var nameMap = new Dictionary<string, int>();
+            // Build name → index mapping.
+            // Start with numeric names for all groups (these may be overridden
+            // below for named groups that have an explicit name).
+            var nameMap = new Dictionary<string, int>(caps.Length);
+            for (int i = 0; i < caps.Length; i++)
+                nameMap[i.ToString()] = i;
+
+            // Add named captures, overriding the numeric name where applicable.
             foreach (var name in _pattern.CaptureNames())
             {
                 int idx = _pattern[name];
@@ -547,11 +573,7 @@ namespace IronRure.DropIn
                 int lenChar = Encoding.UTF8.GetCharCount(haystackBytes, startByte, endByte - startByte);
                 string val = haystack.Substring(startChar, lenChar);
 
-                if (i == 0)
-                    // Group 0 is the overall match – return as a Group-typed Match wrapper
-                    groups.Add(new Group(true, val, startChar, lenChar));
-                else
-                    groups.Add(new Group(true, val, startChar, lenChar));
+                groups.Add(new Group(true, val, startChar, lenChar));
             }
 
             return new GroupCollection(groups, nameMap);

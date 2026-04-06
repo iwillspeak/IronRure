@@ -29,6 +29,8 @@ namespace IronRure.DropIn
 
         /// <summary>
         ///   Get a group by its name. Returns an unsuccessful group if not found.
+        ///   Numeric strings (e.g. <c>"0"</c>, <c>"1"</c>) are resolved to the
+        ///   corresponding numbered group.
         /// </summary>
         public Group this[string groupname]
         {
@@ -36,6 +38,9 @@ namespace IronRure.DropIn
             {
                 if (_nameMap.TryGetValue(groupname, out int idx))
                     return this[idx];
+                // Fall back to numeric index if the name parses as a non-negative integer
+                if (int.TryParse(groupname, out int n) && n >= 0)
+                    return this[n];
                 return new Group(false, string.Empty, 0, 0);
             }
         }

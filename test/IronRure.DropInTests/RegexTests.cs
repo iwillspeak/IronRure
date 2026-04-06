@@ -11,7 +11,7 @@ namespace IronRure.DropInTests
         [Fact]
         public void CreateWithSimplePattern()
         {
-            var rege = new Regex("hello world");
+            _ = new Regex("hello world");
         }
 
         [Fact]
@@ -322,6 +322,89 @@ namespace IronRure.DropInTests
             var m = new Regex(@"(\w+)\s(\w+)").Match("hello world");
             Assert.True(m.Success);
             Assert.Equal("world hello", m.Result("$2 $1"));
+        }
+
+        // -----------------------------------------------------------------------
+        // RegexOptions values
+        // -----------------------------------------------------------------------
+
+        [Fact]
+        public void RegexOptionsValuesMatchBcl()
+        {
+            Assert.Equal((int)System.Text.RegularExpressions.RegexOptions.None,          (int)RegexOptions.None);
+            Assert.Equal((int)System.Text.RegularExpressions.RegexOptions.IgnoreCase,     (int)RegexOptions.IgnoreCase);
+            Assert.Equal((int)System.Text.RegularExpressions.RegexOptions.Multiline,      (int)RegexOptions.Multiline);
+            Assert.Equal((int)System.Text.RegularExpressions.RegexOptions.ExplicitCapture,(int)RegexOptions.ExplicitCapture);
+            Assert.Equal((int)System.Text.RegularExpressions.RegexOptions.Compiled,       (int)RegexOptions.Compiled);
+            Assert.Equal((int)System.Text.RegularExpressions.RegexOptions.Singleline,     (int)RegexOptions.Singleline);
+            Assert.Equal((int)System.Text.RegularExpressions.RegexOptions.IgnorePatternWhitespace, (int)RegexOptions.IgnorePatternWhitespace);
+            Assert.Equal((int)System.Text.RegularExpressions.RegexOptions.RightToLeft,    (int)RegexOptions.RightToLeft);
+            Assert.Equal((int)System.Text.RegularExpressions.RegexOptions.ECMAScript,     (int)RegexOptions.ECMAScript);
+            Assert.Equal((int)System.Text.RegularExpressions.RegexOptions.CultureInvariant,(int)RegexOptions.CultureInvariant);
+        }
+
+        // -----------------------------------------------------------------------
+        // IsMatch offset validation
+        // -----------------------------------------------------------------------
+
+        [Fact]
+        public void IsMatchThrowsOnNegativeOffset()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Regex(@"\d").IsMatch("123", -1));
+        }
+
+        [Fact]
+        public void IsMatchThrowsOnOffsetBeyondEnd()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Regex(@"\d").IsMatch("123", 4));
+        }
+
+        // -----------------------------------------------------------------------
+        // GroupCollection numeric name indexer
+        // -----------------------------------------------------------------------
+
+        [Fact]
+        public void GroupsIndexedByNumericString()
+        {
+            var m = new Regex(@"(\d{4})-(\d{2})-(\d{2})").Match("2024-03-15");
+            Assert.True(m.Success);
+            Assert.Equal("2024-03-15", m.Groups["0"].Value);
+            Assert.Equal("2024", m.Groups["1"].Value);
+            Assert.Equal("03", m.Groups["2"].Value);
+            Assert.Equal("15", m.Groups["3"].Value);
+        }
+
+        // -----------------------------------------------------------------------
+        // GetGroupNames / GetGroupNumbers include unnamed groups
+        // -----------------------------------------------------------------------
+
+        [Fact]
+        public void GetGroupNamesIncludesUnnamedNumberedGroups()
+        {
+            var regex = new Regex(@"(\d{4})-(?P<month>\d{2})-(\d{2})");
+            var names = regex.GetGroupNames();
+            // Group 0 = overall match, 1 = unnamed, "month" = named, 3 = unnamed
+            Assert.Equal(new[] { "0", "1", "month", "3" }, names);
+        }
+
+        [Fact]
+        public void GetGroupNumbersIncludesAllGroups()
+        {
+            var regex = new Regex(@"(\d+)-(\d+)");
+            var numbers = regex.GetGroupNumbers();
+            Assert.Equal(new[] { 0, 1, 2 }, numbers);
+        }
+
+        // -----------------------------------------------------------------------
+        // Split with startat preserves prefix
+        // -----------------------------------------------------------------------
+
+        [Fact]
+        public void SplitWithStartAtPreservesPrefix()
+        {
+            // Start matching at position 2, so "a," prefix is returned intact
+            var parts = new Regex(@",").Split("a,b,c", 0, 2);
+            Assert.Equal(new[] { "a,b", "c" }, parts);
         }
     }
 }
