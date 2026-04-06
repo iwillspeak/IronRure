@@ -51,7 +51,9 @@ namespace IronRure.DropIn
             _pattern = new IronRure.Regex(pattern, rureOptions, rureFlags);
             MatchTimeout = timeout;
             // Determine the total number of capture groups (including group 0)
-            // by creating a temporary Captures object from the regex itself.
+            // once at construction time by creating a temporary Captures handle.
+            // rure_captures_new() is a lightweight struct allocation; the result
+            // is cached in _captureCount for all subsequent calls.
             using var dummyCaps = _pattern.Captures(Array.Empty<byte>());
             _captureCount = dummyCaps.Length;
         }

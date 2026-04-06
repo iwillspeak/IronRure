@@ -402,7 +402,9 @@ namespace IronRure.DropInTests
         [Fact]
         public void SplitWithStartAtPreservesPrefix()
         {
-            // Start matching at position 2, so "a," prefix is returned intact
+            // startat=2 means matching begins at position 2, so the split
+            // at position 1 (the first comma) is not seen, and the result
+            // is the prefix up to the first matched delimiter plus the trailing part.
             var parts = new Regex(@",").Split("a,b,c", 0, 2);
             Assert.Equal(new[] { "a,b", "c" }, parts);
         }
