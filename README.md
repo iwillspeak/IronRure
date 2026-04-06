@@ -2,11 +2,17 @@
 
 Rure is the [**Ru**st **R**egular **E**xpression crate](https://github.com/rust-lang/regex). This repo provides a set of bindings so that it can be used from .NET.
 
-[![Build Status](https://dev.azure.com/iwillspeak/GitHub/_apis/build/status/iwillspeak.IronRure?branchName=refs%2Ftags%2Fv2.0.3)](https://dev.azure.com/iwillspeak/GitHub/_build/latest?definitionId=6&branchName=refs%2Ftags%2Fv2.0.3)
+[![CI](https://github.com/iwillspeak/IronRure/actions/workflows/ci.yml/badge.svg)](https://github.com/iwillspeak/IronRure/actions/workflows/ci.yml)
+[![Publish](https://github.com/iwillspeak/IronRure/actions/workflows/publish.yml/badge.svg)](https://github.com/iwillspeak/IronRure/actions/workflows/publish.yml)
 
 ## Getting Started
 
 IronRure targets the .NET Standard runtime. It's available to install on NuGet:
+
+| Package | Version |
+|---------|---------|
+| IronRure | [![NuGet](https://img.shields.io/nuget/v/IronRure)](https://www.nuget.org/packages/IronRure) |
+| IronRure.DropIn | [![NuGet](https://img.shields.io/nuget/v/IronRure.DropIn)](https://www.nuget.org/packages/IronRure.DropIn) |
 
     > Install-Package IronRure
 
