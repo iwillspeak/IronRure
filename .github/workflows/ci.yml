@@ -44,6 +44,8 @@ jobs:
     
       - name: Restore dependencies
         run: dotnet restore IronRure.sln
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
       - name: Build
         run: dotnet build IronRure.sln --configuration Release --no-restore
